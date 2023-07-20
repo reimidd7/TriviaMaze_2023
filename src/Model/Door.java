@@ -14,13 +14,11 @@ public interface Door {
     /**
      * Randomly selects the type of question that will be attached to the Door.
      */
-     void setQuestion();
+     void setQuestionType();
 
     /**
      * Gets the current Question that was set.
      * @return the current question.
      */
     Question getCurrQuestion();
-
-
 }

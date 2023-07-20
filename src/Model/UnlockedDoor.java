@@ -3,7 +3,11 @@ package Model;
 import java.util.Random;
 
 public class UnlockedDoor implements Door {
-    Question currQuestion;
+    private Question currQuestion;
+
+    private UnlockedDoor () {
+        this.currQuestion = getCurrQuestion();
+    }
 
     @Override
     public boolean getDoorStatus() {
@@ -11,7 +15,8 @@ public class UnlockedDoor implements Door {
     }
 
     @Override
-    public void setQuestion() {
+    public void setQuestionType() {
+        // Chooses the type of question based on a random number.
         Random ran = new Random();
         int choice = ran.nextInt(1,3);
         switch (choice) {
@@ -25,4 +30,6 @@ public class UnlockedDoor implements Door {
     public Question getCurrQuestion() {
         return currQuestion;
     }
+
+
 }
