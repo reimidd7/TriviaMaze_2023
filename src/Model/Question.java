@@ -22,7 +22,7 @@ public abstract class Question {
         this.myQuestion = myQuestion;
     }
 
-    private String getQuestion() {
+    String getQuestion() {
         return myQuestion;
     }
 
@@ -38,4 +38,5 @@ public abstract class Question {
     public int getQuestionID() {
         return myQuestionID;
     }
+    public abstract String getCorrectAnswer();
 }

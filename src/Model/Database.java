@@ -6,7 +6,6 @@ import java.sql.SQLException;
 public class Database {
     private static final String DB_URL = "jdbc:sqlite:questions.db"; // URL to the database file
 
-    // Method to create a connection to the database
     public static Connection connect() throws SQLException {
         Connection connection = null;
         try {

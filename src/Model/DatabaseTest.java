@@ -7,16 +7,11 @@ import java.sql.Statement;
 
 public class DatabaseTest {
     public static void main(String[] args) {
-        // Test the database connection
         try (Connection connection = Database.connect()) {
             if (connection != null) {
                 System.out.println("Database connection successful!");
-
-                // Show the information from the Questions table
                 System.out.println("Questions table:");
                 displayQuestions(connection);
-
-                // Show the information from the Answers table
                 System.out.println("Answers table:");
                 displayAnswers(connection);
             }
@@ -25,7 +20,6 @@ public class DatabaseTest {
         }
     }
 
-    // Method to display the data from the Questions table
     private static void displayQuestions(Connection connection) throws SQLException {
         String query = "SELECT * FROM Questions";
         try (Statement stmt = connection.createStatement();
@@ -43,7 +37,6 @@ public class DatabaseTest {
         }
     }
 
-    // Method to display the data from the Answers table
     private static void displayAnswers(Connection connection) throws SQLException {
         String query = "SELECT * FROM Answers";
         try (Statement stmt = connection.createStatement();
