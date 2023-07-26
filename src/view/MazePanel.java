@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -9,11 +9,12 @@ import java.awt.Color;
 //ADD A WAY TO MARK THE USERS PATH
 public class MazePanel extends JPanel {
 
+    /**
+     * ADD JAVA DOC!
+     */
     public MazePanel() {
         //size is set by default layout in TriviaMazeGUI
-
         super();
-        //setSize(200,200);
         setBackground(Color.MAGENTA);
         setVisible(true);
     }

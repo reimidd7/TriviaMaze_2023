@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -14,7 +14,7 @@ import java.beans.PropertyChangeListener;
  * @author Reilly Middlebrooks
  * @version Summer 2023
  */
-public class TriviaMazeFrame extends JFrame implements PropertyChangeListener{
+public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     /**
      * Default frame height.
@@ -53,19 +53,18 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener{
      * @return the completed menu.
      */
     private JMenuBar createFileMenu() {
-        JMenuBar bar = new JMenuBar();
+        final JMenuBar bar = new JMenuBar();
 
-        JMenu newGame = new JMenu("New Game");
-        JMenu saveGame = new JMenu("Save Game");
-        JMenu exitGame = new JMenu("Exit Game");
-        JMenu help = new JMenu("Help");
+        final JMenu newGame = new JMenu("New Game");
+        final JMenu saveGame = new JMenu("Save Game");
+        final JMenu exitGame = new JMenu("Exit Game");
+        final JMenu help = new JMenu("Help");
 
 
         help.add(instructionSubMenu("Game Controls", "This is Game Controls"));
         help.add(instructionSubMenu("Goal", "This is the goal"));
-        help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, " +
-                                    "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
-
+        help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, "
+                + "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
 
 
         bar.add(newGame);

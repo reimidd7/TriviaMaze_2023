@@ -1,6 +1,4 @@
-package Model;
-
-import java.util.List;
+package model;
 
 /**
  * The abstract class question that will be use in MCQuestion, SAnsQuestion, and TFQuestion.
