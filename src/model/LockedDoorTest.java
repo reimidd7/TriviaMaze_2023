@@ -1,8 +1,8 @@
-package Model;
+package model;
 
 public class LockedDoorTest {
     public static void main(String[] args) {
-        Door lockedDoor = new LockedDoor();
+        Doors lockedDoor = new Doors();
 
         for (int i = 0; i < 5; i++) {
             System.out.println("Round " + (i + 1) + ":");

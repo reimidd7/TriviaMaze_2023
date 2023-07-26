@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 // Separate Room into different class?
 public class Room {
