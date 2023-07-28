@@ -24,17 +24,8 @@ public abstract class Question {
         return myQuestion;
     }
 
-    /**
-     * Sets the question.
-     *
-     * @param question the question being asked.
-     */
-    private void setQuestion(String question) { this.myQuestion = question; }
-    public String getQuestionTypeType() {
-        return myQuestionType;
-    }
-    public int getQuestionID() {
-        return myQuestionID;
-    }
     public abstract String getCorrectAnswer();
+
+
+
 }

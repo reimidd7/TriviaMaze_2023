@@ -1,39 +1,75 @@
 package model;
 
+/**
+ * The door class is for the doors used in trivial maze.
+ * each door has status and holds a question.
+ */
 public class Doors {
     /**
-     * ADD JAVADOC!!!
+     * Unlock status of the doors.
+     * false means locked.
+     * true means unlocked.
      */
-    private final boolean myIsUnlocked;
+    private boolean myIsUnlocked;
     /**
-     * ADD JAVADOC!!!
+     * The current question displayed on the door.
      */
     private Question myCurrQuestion;
     /**
-     * ADD JAVADOC!!!
+     * Used to retrieve question data for the doors.
      */
-    private final QuestionData myQuestionData;
+    private QuestionData myQuestionData = new QuestionData();
 
     /**
-     * ADD JAVADOC!!
+     * The specific door ID. This ID prevents duplication of doors to rooms.
      */
-    public Doors() {
-        this.myIsUnlocked = false;
-        this.myCurrQuestion = null;
-        this.myQuestionData = new QuestionData();
+    final private int doorId;
+
+    /**
+     * Constructor for doors class. Unlocked and question by default.
+     *
+     * @param doorId the specific id to label the doors (prevents duplication).
+     */
+    public Doors(int doorId) {
+        //is the door unlocked?
+        this.myIsUnlocked = true; //by default
+
+        // adds the question data to the variable myCurrQuestion
+        this.myCurrQuestion = myQuestionData.retrieveQuestion();
+
+        this.doorId = doorId;
+
     }
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * Gets the specific Doors' ID.
+     * @return the door ID.
+     */
+    public int getDoorId() {
+        return doorId;
+    }
+
+    /**
+     * Get the status of doors.
+     * @return true if unlocked or false is locked.
      */
     public boolean getDoorStatus() {
-
         return myIsUnlocked;
     }
 
     /**
-     * ADD JAVADOC!!
+     * Sets if the door is locked or unlocked.
+     *
+     * @param theLocked true if locked, false if unlocked.
+     */
+    public void setLocked(boolean theLocked) {
+        myIsUnlocked = theLocked;
+    }
+
+
+    /**
+     * set question type by retrieving random question from database.
+     * then it will become current question on the door.
      */
     public void setQuestionType() {
         // Retrieve a random question
@@ -41,10 +77,11 @@ public class Doors {
     }
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * Get the current question displayed on the doors.
+     * @return current question.
      */
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
+
 }
