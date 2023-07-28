@@ -1,21 +1,28 @@
 package model;
 
+/**
+ * The door class is for the doors used in trivial maze.
+ * each door has status and holds a question.
+ */
 public class Doors {
     /**
-     * ADD JAVADOC!!!
+     * Unlock status of the doors.
+     * false mean locked.
+     * true mean unlocked.
      */
     private final boolean myIsUnlocked;
     /**
-     * ADD JAVADOC!!!
+     * The current question displayed on the door.
      */
     private Question myCurrQuestion;
     /**
-     * ADD JAVADOC!!!
+     * Used to retrieve question for the doors.
      */
     private final QuestionData myQuestionData;
 
     /**
-     * ADD JAVADOC!!
+     * Constructor for doors class.
+     * locked and no question by default.
      */
     public Doors() {
         this.myIsUnlocked = false;
@@ -24,8 +31,8 @@ public class Doors {
     }
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * Get the status of doors.
+     * @return true if unlocked or false is locked.
      */
     public boolean getDoorStatus() {
 
@@ -33,7 +40,8 @@ public class Doors {
     }
 
     /**
-     * ADD JAVADOC!!
+     * set question type by retrieving random question from database.
+     * then it will become current question on the door.
      */
     public void setQuestionType() {
         // Retrieve a random question
@@ -41,8 +49,8 @@ public class Doors {
     }
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * Get the current question displayed on the doors.
+     * @return current question.
      */
     public Question getCurrQuestion() {
         return myCurrQuestion;
