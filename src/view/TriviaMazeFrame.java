@@ -21,11 +21,11 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     /**
      * Default frame height.
      */
-    private static final int FRAME_HEIGHT = 16 * 30;
+    private static final int FRAME_HEIGHT = 16 * 30; //480
     /**
      * Default frame width.
      */
-    private static final int FRAME_WIDTH = 16 * 55;
+    private static final int FRAME_WIDTH = 16 * 55; //880
 
 
     /**

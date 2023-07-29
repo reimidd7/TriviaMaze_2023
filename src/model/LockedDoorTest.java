@@ -2,7 +2,7 @@ package model;
 
 public class LockedDoorTest {
     public static void main(String[] args) {
-        Doors lockedDoor = new Doors();
+        Doors lockedDoor = new Doors(1);
 
         for (int i = 0; i < 5; i++) {
             System.out.println("Round " + (i + 1) + ":");

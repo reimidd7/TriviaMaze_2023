@@ -7,27 +7,46 @@ package model;
 public class Doors {
     /**
      * Unlock status of the doors.
-     * false mean locked.
-     * true mean unlocked.
+     * false means locked.
+     * true means unlocked.
      */
-    private final boolean myIsUnlocked;
+    private boolean myIsUnlocked;
     /**
      * The current question displayed on the door.
      */
     private Question myCurrQuestion;
     /**
-     * Used to retrieve question for the doors.
+     * Used to retrieve question data for the doors.
      */
-    private final QuestionData myQuestionData;
+    private QuestionData myQuestionData = new QuestionData();
 
     /**
-     * Constructor for doors class.
-     * locked and no question by default.
+     * The specific door ID. This ID prevents duplication of doors to rooms.
      */
-    public Doors() {
-        this.myIsUnlocked = false;
-        this.myCurrQuestion = null;
-        this.myQuestionData = new QuestionData();
+    final private int doorId;
+
+    /**
+     * Constructor for doors class. Unlocked and question by default.
+     *
+     * @param doorId the specific id to label the doors (prevents duplication).
+     */
+    public Doors(int doorId) {
+        //is the door unlocked?
+        this.myIsUnlocked = true; //by default
+
+        // adds the question data to the variable myCurrQuestion
+        this.myCurrQuestion = myQuestionData.retrieveQuestion();
+
+        this.doorId = doorId;
+
+    }
+
+    /**
+     * Gets the specific Doors' ID.
+     * @return the door ID.
+     */
+    public int getDoorId() {
+        return doorId;
     }
 
     /**
@@ -35,9 +54,18 @@ public class Doors {
      * @return true if unlocked or false is locked.
      */
     public boolean getDoorStatus() {
-
         return myIsUnlocked;
     }
+
+    /**
+     * Sets if the door is locked or unlocked.
+     *
+     * @param theLocked true if locked, false if unlocked.
+     */
+    public void setLocked(boolean theLocked) {
+        myIsUnlocked = theLocked;
+    }
+
 
     /**
      * set question type by retrieving random question from database.
@@ -55,4 +83,5 @@ public class Doors {
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
+
 }
