@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
- *  Added is a file menu to assist the player.
+ * Added is a file menu to assist the player.
  *
  * @author Reilly Middlebrooks
  * @version Summer 2023
@@ -28,7 +30,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     /**
      * Constructor to create the Frame for Trivia Maze.
-     *  Uses JFrame as super.
+     * Uses JFrame as super.
      */
     public TriviaMazeFrame() {
         super();
@@ -50,6 +52,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     /**
      * Creates the menu bar for the frame.
+     *
      * @return the completed menu.
      */
     private JMenuBar createFileMenu() {
@@ -75,6 +78,29 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         return bar;
     }
 
+    /**
+     * not done! finding a way to implementing it correctly.
+     */
+    private static void saveSerial(Serializable data, String fileName) throws Exception {
+        try
+    }
+    private void saveGame() {
+        try (ObjectOutpututSteam outputStream = new ObjectOutputStream(new FileOutputSteam("dont know file path yet"))) {
+            GameData gameData = getGameState();
+            ObjectOutPutSteam state = new ObjectOutputStream(new FileOutputSteam());
+            outputStream.writeObject(state);
+            System.out.println("Game Data Saved!");
+        } catch (Exception e) {
+            ex.printStackTrace();
+        }
+    }
+
+    private gameData getGameData implements
+    void Serializable
+    {
+
+    }
+
     private JMenuItem instructionSubMenu(final String theText, final String theCommand) {
         final JMenuItem item = new JMenuItem(theText);
         item.addActionListener(new ActionListener() {
@@ -85,7 +111,6 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         });
         return item;
     }
-
 
 
     @Override

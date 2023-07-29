@@ -9,32 +9,54 @@ public abstract class Question {
      */
     protected String myQuestion;
     /**
-     * Answer string.
+     * Type of question string.
      */
     protected String myQuestionType;
+    /**
+     * QuestionID string.
+     */
     protected int myQuestionID;
 
+    /**
+     * Constructor to initialize the questions,
+     * @param myQuestionID
+     * @param myQuestionType
+     * @param myQuestion
+     */
     public Question(int myQuestionID, String myQuestionType, String myQuestion) {
         this.myQuestionID = myQuestionID;
         this.myQuestionType = myQuestionType;
         this.myQuestion = myQuestion;
     }
 
+    /**
+     * Getter to get the question.
+     */
     String getQuestion() {
         return myQuestion;
     }
 
     /**
-     * Sets the question.
-     *
-     * @param question the question being asked.
+     * Setter to set the question.
      */
     private void setQuestion(String question) { this.myQuestion = question; }
+
+    /**
+     * Getter to get the question type.
+     */
     public String getQuestionTypeType() {
         return myQuestionType;
     }
+
+    /**
+     * Getter to get the questionID
+     */
     public int getQuestionID() {
         return myQuestionID;
     }
+
+    /**
+     * Abstract method to be implemented by subclass to get correct answer.
+     */
     public abstract String getCorrectAnswer();
 }

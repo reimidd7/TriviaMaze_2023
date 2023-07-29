@@ -1,13 +1,18 @@
 package model;
 
+/**
+ * The SAnsQuestion question class for the short answer
+ * question type and extends the abstract question class.
+ */
 public class SAnsQuestion extends Question {
     /**
-     * ADD JAVADOC!!!
+     * correct answer string
      */
     private String myCorrectAnswer;
 
     /**
-     * ADD JAVADOC!!!
+     * Constructor to create short answer question.
+     *
      * @param theQuestionID
      * @param theQuestion
      * @param theCorrectAnswer
@@ -20,15 +25,17 @@ public class SAnsQuestion extends Question {
     }
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * Retrieve the correct answer for SAns question.
+     *
+     * @return correct answer for short answer question.
      */
     public String getCorrectAnswer() {
         return myCorrectAnswer;
     }
 
     /**
-     * ADD JAVADOC!!
+     * set the correct answer for the short answer question.
+     *
      * @param theCorrectAnswer
      */
     public void setCorrectAnswer(final String theCorrectAnswer) {

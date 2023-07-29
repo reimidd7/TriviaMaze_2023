@@ -1,4 +1,8 @@
 package model;
+/**
+ * Database for the question and answers.
+ * Also hold the get random question and the get answer from data base.
+ */
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,16 +12,16 @@ import java.sql.SQLException;
 
 public class QuestionData {
     /**
-     * ADD JAVADOC!!
+     * URL to the database file.
      */
     private static final String DB_URL = "jdbc:sqlite:questions.db";
     /**
-     * ADD JAVADOC!!
+     * Database connection used to interact with the question database.
      */
     private final Connection myDBConnection;
 
     /**
-     * ADD JAVADOC!!
+     * contractor to establishes a database connection.
      */
     public QuestionData() {
         this.myDBConnection = connect();
@@ -25,8 +29,8 @@ public class QuestionData {
 
 
     /**
-     * ADD JAVADOC!!
-     * @return
+     * retrieves a random question from database either TF, SAns or Multiply choice.
+     * @return question
      */
     public Question retrieveQuestion() {
         Question question = null;
@@ -66,7 +70,10 @@ public class QuestionData {
         return question;
     }
 
-    //ADD A QUICK COMMENT AS TO WHY WE NEED THIS METHOD
+    /**
+     * Establishes connection to the question database.
+     * @return connection
+     */
     private Connection connect() {
         Connection connection = null;
         try {
@@ -78,7 +85,12 @@ public class QuestionData {
         return connection;
     }
 
-    //ADD A QUICK COMMENT AS TO WHY WE NEED THIS METHOD
+    /**
+     * Retrieve the correct answer for the question.
+     * @param theQuestionID
+     * @return CorrectAnswer
+     * @throws SQLException
+     */
     private String getCorrectAnswerForQuestion(final int theQuestionID) throws SQLException {
         String correctAnswer = null;
         final String query = "SELECT Answers FROM Answers WHERE QuestionID = ?";
