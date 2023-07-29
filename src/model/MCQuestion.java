@@ -1,11 +1,22 @@
 package model;
 
+/**
+ * The multiple choice question class for the multiple choice
+ * question type and extends the abstract question class.
+ */
 public class MCQuestion extends Question {
     /**
-     * ADD JAVADOC!!!
+     * correct answer string
      */
     private String myCorrectAnswer;
 
+    /**
+     * Constructor to create multiple choice question.
+     *
+     * @param theQuestionID
+     * @param theQuestion
+     * @param theCorrectAnswer
+     */
     public MCQuestion(final int theQuestionID, final String theQuestion,
                       final String theCorrectAnswer) {
 
@@ -13,11 +24,20 @@ public class MCQuestion extends Question {
         this.myCorrectAnswer = theCorrectAnswer;
     }
 
-
+    /**
+     * Retrieve the correct answer for multiple choice question.
+     *
+     * @return correct answer for multiple choice question.
+     */
     public String getCorrectAnswer() {
         return myCorrectAnswer;
     }
 
+    /**
+     * set the correct answer for the multiple choice question.
+     *
+     * @param theCorrectAnswer
+     */
     public void setCorrectAnswer(final String theCorrectAnswer) {
         this.myCorrectAnswer = theCorrectAnswer;
     }

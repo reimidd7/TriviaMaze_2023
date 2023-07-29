@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
- *  Added is a file menu to assist the player.
+ * Added is a file menu to assist the player.
  *
  * @author Reilly Middlebrooks
  * @version Summer 2023
@@ -28,7 +30,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     /**
      * Constructor to create the Frame for Trivia Maze.
-     *  Uses JFrame as super.
+     * Uses JFrame as super.
      */
     public TriviaMazeFrame() {
         super();
@@ -50,6 +52,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     /**
      * Creates the menu bar for the frame.
+     *
      * @return the completed menu.
      */
     private JMenuBar createFileMenu() {
@@ -108,7 +111,6 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         });
         return item;
     }
-
 
 
     @Override
