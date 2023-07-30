@@ -1,13 +1,12 @@
 package view;
 
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
@@ -17,6 +16,8 @@ import java.io.ObjectOutputStream;
  * @version Summer 2023
  */
 public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
+
+    private MazePanel gameState;
 
     /**
      * Default frame height.
@@ -57,49 +58,78 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private JMenuBar createFileMenu() {
         final JMenuBar bar = new JMenuBar();
-
-        final JMenu newGame = new JMenu("New Game");
-        final JMenu saveGame = new JMenu("Save Game");
-        final JMenu exitGame = new JMenu("Exit Game");
+        final JMenu fileclick = new JMenu("File");
+        final JMenuItem newGame = new JMenuItem("New Game");
         final JMenu help = new JMenu("Help");
+        final JMenuItem saveGame = new JMenuItem("Save Game");
+        saveGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    save(gameState, "gameState");
+                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
+
+                }
+            }
+        });
+
+        final JMenuItem loadGame = new JMenuItem("Load Game");
+        loadGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    load("gameState.dat");
+                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loaded");
+                }
+
+            }
+        });
+        final JMenuItem exitGame = new JMenuItem("Exit Game");
+        exitGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e){
+                exitGame();
+            }
+        });
 
 
         help.add(instructionSubMenu("Game Controls", "This is Game Controls"));
         help.add(instructionSubMenu("Goal", "This is the goal"));
         help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, "
                 + "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
-
-
-        bar.add(newGame);
-        bar.add(saveGame);
-        bar.add(exitGame);
+        fileclick.add(newGame);
+        fileclick.add(saveGame);
+        fileclick.add(loadGame);
+        fileclick.add(exitGame);
+        bar.add(fileclick);
         bar.add(help);
-
         return bar;
     }
 
-//    /**
-//     * not done! finding a way to implementing it correctly.
-//     */
-//    private static void saveSerial(Serializable data, String fileName) throws Exception {
-//        try
-//    }
-//    private void saveGame() {
-//        try (ObjectOutpututSteam outputStream = new ObjectOutputStream(new FileOutputSteam("dont know file path yet"))) {
-//            GameData gameData = getGameState();
-//            ObjectOutPutSteam state = new ObjectOutputStream(new FileOutputSteam());
-//            outputStream.writeObject(state);
-//            System.out.println("Game Data Saved!");
-//        } catch (Exception e) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private gameData getGameData implements
-//    void Serializable
-//    {
-//
-//    }
+    private void exitGame(){
+        int result = JOptionPane.showConfirmDialog(this,"Are you sure you want to exit?","Yes or No", JOptionPane.YES_NO_OPTION);
+        if(result == JOptionPane.YES_NO_OPTION) {
+            dispose();
+            System.exit(0);
+        }
+
+    }
+    private static void save(Serializable data, String fileName) throws Exception {
+        try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            saveData.writeObject(data);
+        }
+    }
+
+    private static Object load(String fileName) throws Exception {
+        try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
+            return loadData.readObject();
+        }
+    }
+
 
     private JMenuItem instructionSubMenu(final String theText, final String theCommand) {
         final JMenuItem item = new JMenuItem(theText);

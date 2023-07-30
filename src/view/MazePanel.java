@@ -5,12 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 //DISPLAY THE MAZE
 //ADD DOORS LOCKED AND UNLOCKED (THIS WILL BE UPDATED)
 //ADD A CHARACTER?
 //ADD A WAY TO MARK THE USERS PATH
-public class MazePanel extends JPanel {
+public class MazePanel extends JPanel  implements Serializable {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
