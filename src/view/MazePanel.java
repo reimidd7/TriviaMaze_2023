@@ -11,6 +11,7 @@ import java.io.Serializable;
 //ADD DOORS LOCKED AND UNLOCKED (THIS WILL BE UPDATED)
 //ADD A CHARACTER?
 //ADD A WAY TO MARK THE USERS PATH
+//NEED TO CHANGER IMPLEMENTS Serializable to the data storage.
 public class MazePanel extends JPanel  implements Serializable {
     private static final int ROWS = 5;
     private static final int COLS = 5;

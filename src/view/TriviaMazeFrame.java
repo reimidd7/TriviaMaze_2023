@@ -58,7 +58,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private JMenuBar createFileMenu() {
         final JMenuBar bar = new JMenuBar();
-        final JMenu fileclick = new JMenu("File");
+        final JMenu fileClick = new JMenu("File");
         final JMenuItem newGame = new JMenuItem("New Game");
         final JMenu help = new JMenu("Help");
         final JMenuItem saveGame = new JMenuItem("Save Game");
@@ -74,10 +74,11 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
                 }
             }
         });
-
+        // Create load game menu item and add ActionListener.
         final JMenuItem loadGame = new JMenuItem("Load Game");
         loadGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                //load game when clicked.
                 try {
                     load("gameState.dat");
                     JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
@@ -88,6 +89,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
             }
         });
+        // Create exit game menu item and add ActionListener.
         final JMenuItem exitGame = new JMenuItem("Exit Game");
         exitGame.addActionListener(new ActionListener() {
             @Override
@@ -101,11 +103,11 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         help.add(instructionSubMenu("Goal", "This is the goal"));
         help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, "
                 + "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
-        fileclick.add(newGame);
-        fileclick.add(saveGame);
-        fileclick.add(loadGame);
-        fileclick.add(exitGame);
-        bar.add(fileclick);
+        fileClick.add(newGame);
+        fileClick.add(saveGame);
+        fileClick.add(loadGame);
+        fileClick.add(exitGame);
+        bar.add(fileClick);
         bar.add(help);
         return bar;
     }
