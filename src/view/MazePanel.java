@@ -12,7 +12,7 @@ import java.io.Serializable;
 //ADD A CHARACTER?
 //ADD A WAY TO MARK THE USERS PATH
 //NEED TO CHANGER IMPLEMENTS Serializable to the data storage.
-public class MazePanel extends JPanel  implements Serializable {
+public class MazePanel extends JPanel implements Serializable {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
@@ -20,7 +20,7 @@ public class MazePanel extends JPanel  implements Serializable {
 
     private static final int GRID_SIZE = 85;
 
-
+    private boolean[][] doorsLayout;
 
 
     /**
@@ -31,6 +31,16 @@ public class MazePanel extends JPanel  implements Serializable {
         super();
         setBackground(Color.MAGENTA);
         setVisible(true);
+        doorsLayout = new boolean[ROWS][COLS];
+    }
+
+    public void setDoorsLayout(boolean[][] doorsLayout) {
+        if (doorsLayout.length == ROWS && doorsLayout[0].length == COLS) {
+            this.doorsLayout = doorsLayout;
+            repaint(); // Redraw the maze with the new doors layout
+        } else {
+            throw new IllegalArgumentException("Invalid doors layout dimensions.");
+        }
     }
 //    public void createMazeGrid() {
 //        JPanel grid = new JPanel();
@@ -50,12 +60,23 @@ public class MazePanel extends JPanel  implements Serializable {
         super.paintComponent(theGraphics);
         Graphics2D g2d = (Graphics2D) theGraphics;
 
-        g2d.setPaint(Color.BLACK);
-
-        for (int row = 0; row < getHeight(); row++) {
-            for (int col = 0; col < getWidth(); col++) {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (doorsLayout[row][col]) {
+                    g2d.setPaint(getDoorColor(row, col));
+                } else {
+                    g2d.setPaint(Color.BLUE);
+                }
                 g2d.drawRect(col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE);
             }
+        }
+    }
+
+    private Color getDoorColor(int row, int col) {
+        if (row == 0 || col == COLS - 1) {
+            return Color.BLACK;
+        } else {
+            return Color.BLUE;
         }
     }
 }

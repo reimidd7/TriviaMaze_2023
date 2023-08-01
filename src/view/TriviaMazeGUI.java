@@ -13,7 +13,9 @@ public class TriviaMazeGUI {
 
     public TriviaMazeGUI() {
         final TriviaMazeFrame frame = new TriviaMazeFrame();
-        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel();
+        final JLabel questionLabel = new JLabel();
+        final JLabel questionTypeLabel = new JLabel();
+        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(questionLabel, questionTypeLabel);
         final MazePanel mazePanel = new MazePanel();
         final UserControlsPanel controlsPanel = new UserControlsPanel();
         final JPanel eastInfo = new JPanel();
@@ -27,6 +29,14 @@ public class TriviaMazeGUI {
         frame.add(eastInfo);
 
         frame.setVisible(true);
-
+        questionPanel.homeDisplay();
+        boolean[][] doorsLayout = {
+                {true, true, true, true, true},
+                {true, true, true, true, true},
+                {true, true, true, true, true},
+                {true, true, true, true, true},
+                {true, true, true, true, true}
+        };
+        mazePanel.setDoorsLayout(doorsLayout);
     }
 }
