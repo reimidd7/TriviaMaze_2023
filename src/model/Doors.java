@@ -23,7 +23,7 @@ public class Doors {
     /**
      * The specific door ID. This ID prevents duplication of doors to rooms.
      */
-    final private int doorId;
+    private final int doorId;
 
     /**
      * Constructor for doors class. Unlocked and question by default.
