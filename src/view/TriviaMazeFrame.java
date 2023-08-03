@@ -81,25 +81,25 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     /**
      * not done! finding a way to implementing it correctly.
      */
-    private static void saveSerial(Serializable data, String fileName) throws Exception {
-        try
-    }
-    private void saveGame() {
-        try (ObjectOutpututSteam outputStream = new ObjectOutputStream(new FileOutputSteam("dont know file path yet"))) {
-            GameData gameData = getGameState();
-            ObjectOutPutSteam state = new ObjectOutputStream(new FileOutputSteam());
-            outputStream.writeObject(state);
-            System.out.println("Game Data Saved!");
-        } catch (Exception e) {
-            ex.printStackTrace();
-        }
-    }
-
-    private gameData getGameData implements
-    void Serializable
-    {
-
-    }
+    //private static void saveSerial(Serializable data, String fileName) throws Exception {
+    //    try
+    //}
+//    private void saveGame() {
+//        try (ObjectOutpututSteam outputStream = new ObjectOutputStream(new FileOutputSteam("dont know file path yet"))) {
+//            GameData gameData = getGameState();
+//            ObjectOutPutSteam state = new ObjectOutputStream(new FileOutputSteam());
+//            outputStream.writeObject(state);
+//            System.out.println("Game Data Saved!");
+//        } catch (Exception e) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private gameData getGameData implements
+//    void Serializable
+//    {
+//
+//    }
 
     private JMenuItem instructionSubMenu(final String theText, final String theCommand) {
         final JMenuItem item = new JMenuItem(theText);
