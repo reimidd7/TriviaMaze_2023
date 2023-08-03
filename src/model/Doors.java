@@ -25,6 +25,7 @@ public class Doors {
      */
     private final int doorId;
 
+
     /**
      * Constructor for doors class. Unlocked and question by default.
      *

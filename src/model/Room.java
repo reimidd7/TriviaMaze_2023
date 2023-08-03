@@ -1,7 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Room object has a list of doors attached to it.
@@ -15,7 +15,7 @@ public class Room {
     /**
      * This list is the doors attached to the Room.
      */
-    private final List<Doors> myListOfDoors;
+    private final Map<Doors, Direction> myMapOfDoors;
     /**
      * Room label to allow for attachment of doors.
      */
@@ -47,7 +47,7 @@ public class Room {
         this.myRoomId = theRoomId;
         this.myDescription = theDescription;
         this.myIsLocked = false;
-        myListOfDoors =  new ArrayList<>();
+        myMapOfDoors =  new HashMap<>();
     }
 
     /**
@@ -84,18 +84,19 @@ public class Room {
 
     /**
      * Gets the list of doors attached to the certain room.
-     * @return a list of doors.
+     * @return a Map of doors and their Directions.
      */
-    public List<Doors> getListOfDoors() {
-        return myListOfDoors;
+    public Map<Doors, Direction> getMapOfDoorsAndDir() {
+        return myMapOfDoors;
     }
 
     /**
      * Adds a door to the current room.
      * @param theDoor which door to add based upon the door ID.
      */
-    public void addDoor(final Doors theDoor) {
-        myListOfDoors.add(theDoor);
+    public void addDoor(final Doors theDoor, final Direction theDirection) {
+
+        myMapOfDoors.put(theDoor, theDirection);
     }
 
     /**
@@ -104,7 +105,7 @@ public class Room {
      * @return true when there are unlocked doors, false if not.
      */
     public boolean hasUnlockedDoors() {
-        for (Doors door: myListOfDoors) {
+        for (Doors door: myMapOfDoors.keySet()) {
             if (door.getDoorStatus()) {
                 return true;
             }
@@ -119,7 +120,7 @@ public class Room {
      * @return a Doors object
      */
     public Doors getDoorById(final int theDoorId) {
-        for (Doors door: myListOfDoors) {
+        for (Doors door: myMapOfDoors.keySet()) {
             if (door.getDoorId() == theDoorId) {
                 return door;
             }

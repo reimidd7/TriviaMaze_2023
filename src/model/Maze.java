@@ -58,8 +58,9 @@ public class Maze {
             for (int col = 0; col < 5; col++) {
                 Room currentRoom = maze.getRoom(row, col);
                 System.out.println("[" + row + "][" + col + "]    " + "Room: " + currentRoom.getDescription());
-                for (Doors door : currentRoom.getListOfDoors()) {
-                    System.out.println(" Door " + door.getDoorId());
+                for (Doors door : currentRoom.getMapOfDoorsAndDir().keySet()) {
+                    Direction d = currentRoom.getMapOfDoorsAndDir().get(door);
+                    System.out.println(" Door " + door.getDoorId() + " " + d);
                 }
             }
         }
@@ -193,8 +194,15 @@ public class Maze {
         final Room room1 = getRoom(row1, col1);
         final Room room2 = getRoom(row2, col2);
         if (room1 != null && room2 != null) {
-            room1.addDoor(theDoor);
-            room2.addDoor(theDoor);
+            if (row1 == row2) {
+                room1.addDoor(theDoor, Direction.EAST);
+                room2.addDoor(theDoor, Direction.WEST);
+            }
+            if (col1 == col2) {
+                room1.addDoor(theDoor, Direction.SOUTH);
+                room2.addDoor(theDoor, Direction.NORTH);
+            }
+
         }
     }
 

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class RoomTest {
 
@@ -24,8 +26,8 @@ class RoomTest {
 
         // Add Doors to Rooms
         room = new Room(1, "Room 1");
-        room.addDoor(doors.get(0));
-        room.addDoor(doors.get(1));
+        room.addDoor(doors.get(0), Direction.EAST);
+        room.addDoor(doors.get(1), Direction.SOUTH);
     }
 
     @AfterEach
@@ -54,16 +56,16 @@ class RoomTest {
     }
 
     @Test
-    void testGetListOfDoorsSize() {
-        List<Doors> roomDoors = room.getListOfDoors();
+    void testGetMapOfDoorsSize() {
+        Map<Doors, Direction> roomDoors = room.getMapOfDoorsAndDir();
         assertEquals(doors.size(), roomDoors.size());
     }
 
     @Test
-    void testGetListOfDoors() {
-        List<Doors> roomDoors = room.getListOfDoors();
-        assertEquals(doors.get(0), roomDoors.get(0));
-        assertEquals(doors.get(1), roomDoors.get(1));
+    void testGetMapOfDoorsAndDir() {
+        Map<Doors, Direction> roomDoors = room.getMapOfDoorsAndDir();
+        assertTrue(roomDoors.containsKey(doors.get(0)));
+        assertTrue(roomDoors.containsKey(doors.get(1)));
     }
 
     @Test
