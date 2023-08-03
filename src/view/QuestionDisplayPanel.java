@@ -14,6 +14,12 @@ public class QuestionDisplayPanel extends JPanel {
     private JLabel questionLabel;
     private JLabel questionTypeLabel;
 
+    /**
+     * Constructor for QuestionDisplayPanel.
+     * @param questionLabel Display question text.
+     * @param questionTypeLabel Display question type.
+     */
+
     public QuestionDisplayPanel(JLabel questionLabel, JLabel questionTypeLabel) {
         this.questionLabel = questionLabel;
         this.questionTypeLabel = questionTypeLabel;
@@ -21,6 +27,9 @@ public class QuestionDisplayPanel extends JPanel {
         basePanel();
     }
 
+    /**
+     * Sets the base appearance and layout.
+     */
     private void basePanel() {
         setBackground(Color.BLACK);
         setLayout(new BorderLayout());
@@ -32,6 +41,10 @@ public class QuestionDisplayPanel extends JPanel {
         add(questionTypeLabel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Displays the door base on the provided door.
+     * @param door
+     */
     private void displayQuestion(Doors door) {
         if (door != null) {
             Question currentQuestion = door.getCurrQuestion();
@@ -48,7 +61,9 @@ public class QuestionDisplayPanel extends JPanel {
         }
     }
 
-
+    /**
+     * Display a default message.
+     */
     public void homeDisplay() {
         questionLabel.setText("Choose a doorway");
         questionTypeLabel.setText("Question incoming....");

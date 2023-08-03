@@ -1,18 +1,18 @@
 package view;
 
+import model.Doors;
+import model.Maze;
+import model.Room;
+
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.io.Serializable;
+import java.util.List;
 
-//DISPLAY THE MAZE
-//ADD DOORS LOCKED AND UNLOCKED (THIS WILL BE UPDATED)
-//ADD A CHARACTER?
-//ADD A WAY TO MARK THE USERS PATH
-//NEED TO CHANGER IMPLEMENTS Serializable to the data storage.
-public class MazePanel extends JPanel implements Serializable {
+// DISPLAY THE MAZE
+public class MazePanel extends JPanel {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
@@ -20,63 +20,69 @@ public class MazePanel extends JPanel implements Serializable {
 
     private static final int GRID_SIZE = 85;
 
-    private boolean[][] doorsLayout;
-
+    private Maze maze; // The Maze object to be displayed
 
     /**
-     * ADD JAVA DOC!
+     * Constructor for MazePanel.
+     *
+     * @param maze The Maze object to be displayed.
      */
-    public MazePanel() {
-        //size is set by default layout in TriviaMazeGUI
-        super();
+    public MazePanel(Maze maze) {
+        this.maze = maze;
         setBackground(Color.MAGENTA);
         setVisible(true);
-        doorsLayout = new boolean[ROWS][COLS];
     }
-
-    public void setDoorsLayout(boolean[][] doorsLayout) {
-        if (doorsLayout.length == ROWS && doorsLayout[0].length == COLS) {
-            this.doorsLayout = doorsLayout;
-            repaint(); // Redraw the maze with the new doors layout
-        } else {
-            throw new IllegalArgumentException("Invalid doors layout dimensions.");
-        }
-    }
-//    public void createMazeGrid() {
-//        JPanel grid = new JPanel();
-//        grid.setPreferredSize(MAZE_SIZE);
-//        grid.setLocation(40,40);
-//        grid.paintComponents();
-//    }
 
     public static Dimension getMazeSize() {
         return MAZE_SIZE;
     }
-
-
 
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
         Graphics2D g2d = (Graphics2D) theGraphics;
 
+        g2d.setPaint(Color.BLACK);
+
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                if (doorsLayout[row][col]) {
-                    g2d.setPaint(getDoorColor(row, col));
+                int x = col * GRID_SIZE;
+                int y = row * GRID_SIZE;
+                Room room = maze.getRoom(row, col);
+
+                // Draw room rectangle
+                if (room.isEntrance()) {
+                    g2d.setPaint(Color.GREEN);
+                } else if (room.isExit()) {
+                    g2d.setPaint(Color.RED);
                 } else {
-                    g2d.setPaint(Color.BLUE);
+                    g2d.setPaint(Color.WHITE);
                 }
-                g2d.drawRect(col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+                g2d.fillRect(x, y, GRID_SIZE, GRID_SIZE);
+
+                g2d.setPaint(Color.BLACK);
+                List<Doors> doors = room.getListOfDoors();
+                for (Doors door : doors) {
+                    int doorId = door.getDoorId();
+                    int doorX = x;
+                    int doorY = y;
+
+                    if (doorId == 1) {
+                        doorX += GRID_SIZE / 2;
+                    } else if (doorId == 2) {
+                        doorX += GRID_SIZE;
+                        doorY += GRID_SIZE / 2;
+                    } else if (doorId == 3) {
+                        doorX += GRID_SIZE / 2;
+                        doorY += GRID_SIZE;
+                    } else if (doorId == 4) {
+                        doorY += GRID_SIZE / 2;
+                    }
+
+                    g2d.fillRect(doorX, doorY, GRID_SIZE / 4, GRID_SIZE / 4);
+                }
             }
         }
     }
-
-    private Color getDoorColor(int row, int col) {
-        if (row == 0 || col == COLS - 1) {
-            return Color.BLACK;
-        } else {
-            return Color.BLUE;
-        }
-    }
 }
+
