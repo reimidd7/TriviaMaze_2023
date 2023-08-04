@@ -1,8 +1,8 @@
 package model;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to organize the rooms and doors and create the maze functional.
@@ -47,22 +47,39 @@ public class Maze {
         createMaze();
         setEntrance();
         setExit();
+
     }
 
     /**
      * Maze testing.
      */
-    public static void main (String [] args) {
+    public static void main(String [] args) {
         Maze maze = new Maze(5, 5);
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
                 Room currentRoom = maze.getRoom(row, col);
                 System.out.println("[" + row + "][" + col + "]    " + "Room: " + currentRoom.getDescription());
-                for (Doors door : currentRoom.getListOfDoors()) {
-                    System.out.println(" Door " + door.getDoorId());
+                for (Doors door : currentRoom.getMapOfDoorsAndDir().keySet()) {
+                    Direction d = currentRoom.getMapOfDoorsAndDir().get(door);
+                     System.out.println(" Door " + door.getDoorId() + " " + d);
                 }
             }
         }
+    }
+
+    /**
+     * TODO: Might not need this...
+     * When given a certain Room, it will return the map of Doors and Directions.
+     *  ** MIGHT WANT TO CHANGE THE PARAMETER TO THE ROOMID.
+     *
+     * @param theCurrentRoom current room that we need to know the Doors and Directions of.
+     * @return map of doors and directions
+     */
+    public Map<Doors, Direction>
+                        getDoorsAndDirectionOfACertainRoom(final Room theCurrentRoom) {
+        final Map<Doors, Direction> doorsDirectionMap;
+        doorsDirectionMap = theCurrentRoom.getMapOfDoorsAndDir();
+        return doorsDirectionMap;
     }
 
     /**
@@ -126,7 +143,6 @@ public class Maze {
                 roomId++;
             }
         }
-
         // Adding doors to the rooms
         connectRoomsToDoors(currDoors);
 
@@ -193,8 +209,15 @@ public class Maze {
         final Room room1 = getRoom(row1, col1);
         final Room room2 = getRoom(row2, col2);
         if (room1 != null && room2 != null) {
-            room1.addDoor(theDoor);
-            room2.addDoor(theDoor);
+            if (row1 == row2) {
+                room1.addDoor(theDoor, Direction.EAST);
+                room2.addDoor(theDoor, Direction.WEST);
+            }
+            if (col1 == col2) {
+                room1.addDoor(theDoor, Direction.SOUTH);
+                room2.addDoor(theDoor, Direction.NORTH);
+            }
+
         }
     }
 
