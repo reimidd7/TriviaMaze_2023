@@ -32,7 +32,7 @@ public abstract class Question {
     /**
      * Getter to get the question.
      */
-    String getQuestion() {
+   public String getQuestion() {
         return myQuestion;
     }
 
