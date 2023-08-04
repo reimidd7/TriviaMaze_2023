@@ -18,7 +18,8 @@ public abstract class Question {
     protected int myQuestionID;
 
     /**
-     * Constructor to initialize the questions,
+     * Constructor to initialize the questions.
+     *
      * @param myQuestionID
      * @param myQuestionType
      * @param myQuestion

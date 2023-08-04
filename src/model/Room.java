@@ -13,7 +13,7 @@ import java.util.Map;
 public class Room {
 
     /**
-     * This list is the doors attached to the Room.
+     * This Map is the Doors/Directions attached to the Room.
      */
     private final Map<Doors, Direction> myMapOfDoors;
     /**
@@ -83,7 +83,7 @@ public class Room {
     }
 
     /**
-     * Gets the list of doors attached to the certain room.
+     * Gets the Map of doors/direction attached to the current room.
      * @return a Map of doors and their Directions.
      */
     public Map<Doors, Direction> getMapOfDoorsAndDir() {

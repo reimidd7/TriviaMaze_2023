@@ -128,6 +128,38 @@ public class Maze {
         return null;
     }
 
+    /**
+     * Gets the number of rows in the maze.
+     *
+     * @return The number of rows.
+     */
+    public int getRows() {
+        return myRows;
+    }
+    /**
+     * Gets the number of columns in the maze.
+     *
+     * @return The number of columns.
+     */
+    public int getCols() {
+        return myCols;
+    }
+    /**
+     * Gets a list of all doors in the maze.
+     *
+     * @return A list of doors.
+     */
+    public List<Doors> getDoors() {
+        final List<Doors> allDoors = new ArrayList<>();
+        for (int row = 0; row < myRows; row++) {
+            for (int col = 0; col < myCols; col++) {
+                allDoors.addAll(myRooms[row][col].getMapOfDoorsAndDir().keySet());
+            }
+        }
+        return allDoors;
+    }
+
+
     /*
      * This method creates the maze using a list of Doors and Room.
      * Connects the Doors to two Rooms with no duplication.
@@ -217,7 +249,6 @@ public class Maze {
                 room1.addDoor(theDoor, Direction.SOUTH);
                 room2.addDoor(theDoor, Direction.NORTH);
             }
-
         }
     }
 

@@ -1,131 +1,141 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+/**
+ * Class to test the Room class. Uses JUnit5 tests.
+ *
+ * @author Reilly Middlebrooks
+ * @version Summer 2023
+ */
 class RoomTest {
 
-    private Room room;
-    private List<Doors> doors;
+    /**
+     * Room object for testing.
+     */
+    private Room myRoom;
+    /**
+     * List of door objects for testing.
+     */
+    private List<Doors> myDoors;
 
     @BeforeEach
     void setUp() {
-        doors = new ArrayList<>();
+        myDoors = new ArrayList<>();
 
         // Add doors for testing
-        doors.add(new Doors(1));
-        doors.add(new Doors(2));
+        myDoors.add(new Doors(1));
+        myDoors.add(new Doors(2));
 
         // Add Doors to Rooms
-        room = new Room(1, "Room 1");
-        room.addDoor(doors.get(0), Direction.EAST);
-        room.addDoor(doors.get(1), Direction.SOUTH);
-    }
-
-    @AfterEach
-    void tearDown() {
+        myRoom = new Room(1, "Room 1");
+        myRoom.addDoor(myDoors.get(0), Direction.EAST);
+        myRoom.addDoor(myDoors.get(1), Direction.SOUTH);
     }
 
     @Test
     void testGetRoomId() {
-        assertEquals(1, room.getRoomId(), "Room Id not gotten correctly");
+        assertEquals(1, myRoom.getRoomId(), "Room Id not gotten correctly");
     }
 
     @Test
     void testGetDescription() {
-        assertEquals("Room 1", room.getDescription(), "Room Description is incorrect");
+        assertEquals("Room 1", myRoom.getDescription(), "Room Description is incorrect");
     }
 
     @Test
     void testIsLockedDefaultFalse() {
-        assertFalse(room.isLocked(), "The Room is unlocked");
+        assertFalse(myRoom.isLocked(), "The Room is unlocked");
     }
 
     @Test
     void testIsLockedTrue() {
-        room.setLocked(true);
-        assertTrue(room.isLocked(), "The Room is locked");
+        myRoom.setLocked(true);
+        assertTrue(myRoom.isLocked(), "The Room is locked");
     }
 
     @Test
     void testGetMapOfDoorsSize() {
-        Map<Doors, Direction> roomDoors = room.getMapOfDoorsAndDir();
-        assertEquals(doors.size(), roomDoors.size());
+        final Map<Doors, Direction> roomDoors = myRoom.getMapOfDoorsAndDir();
+        assertEquals(myDoors.size(), roomDoors.size());
     }
 
     @Test
     void testGetMapOfDoorsAndDir() {
-        Map<Doors, Direction> roomDoors = room.getMapOfDoorsAndDir();
-        assertTrue(roomDoors.containsKey(doors.get(0)));
-        assertTrue(roomDoors.containsKey(doors.get(1)));
+        final Map<Doors, Direction> roomDoors = myRoom.getMapOfDoorsAndDir();
+        assertTrue(roomDoors.containsKey(myDoors.get(0)));
+        assertTrue(roomDoors.containsKey(myDoors.get(1)));
     }
 
     @Test
     void testHasUnlockedDoorsDefaultTrue() {
-        assertTrue(room.hasUnlockedDoors(), "The default the doors are unlocked");
+        assertTrue(myRoom.hasUnlockedDoors(), "The default the doors are unlocked");
     }
 
     @Test
     void testHasUnlockedDoorsFalse() {
-        doors.get(1).setLocked(false);
-        doors.get(0).setLocked(false);
-        assertFalse(room.hasUnlockedDoors(), "There should be no unlocked doors");
+        myDoors.get(1).setLocked(false);
+        myDoors.get(0).setLocked(false);
+        assertFalse(myRoom.hasUnlockedDoors(), "There should be no unlocked doors");
     }
 
     @Test
     void testHasUnlockedDoorsMisMatch() {
         // if one door is unlocked and one is locked == true
-        doors.get(1).setLocked(true);
-        doors.get(0).setLocked(false);
-        assertTrue(room.hasUnlockedDoors(), "There should be unlocked doors");
+        myDoors.get(1).setLocked(true);
+        myDoors.get(0).setLocked(false);
+        assertTrue(myRoom.hasUnlockedDoors(), "There should be unlocked doors");
     }
 
     @Test
     void testGetDoorByIdNoDoorWithTheID() {
-        assertNull(room.getDoorById(3));
+        assertNull(myRoom.getDoorById(3));
     }
 
     @Test
     void testGetDoorById() {
-        assertEquals(doors.get(0), room.getDoorById(1));
+        assertEquals(myDoors.get(0), myRoom.getDoorById(1));
     }
 
     @Test
     void testHasDoorYes() {
-        assertTrue(room.hasDoor(1), "Should have door 1");
+        assertTrue(myRoom.hasDoor(1), "Should have door 1");
     }
 
     @Test
     void testHasDoorNo() {
-        assertFalse(room.hasDoor(3), "Should not have door 3");
+        assertFalse(myRoom.hasDoor(3), "Should not have door 3");
     }
 
     @Test
     void testIsEntranceYes() {
-        room.setEntrance(true);
-        assertTrue(room.isEntrance());
+        myRoom.setEntrance(true);
+        assertTrue(myRoom.isEntrance());
     }
 
     @Test
     void testIsEntranceNo() {
-        assertFalse(room.isEntrance());
+        assertFalse(myRoom.isEntrance());
     }
 
     @Test
     void testIsExitYes() {
-        room.setExit(true);
-        assertTrue(room.isExit());
+        myRoom.setExit(true);
+        assertTrue(myRoom.isExit());
     }
 
     @Test
     void testIsExitNo() {
-        assertFalse(room.isExit());
+        assertFalse(myRoom.isExit());
     }
 }

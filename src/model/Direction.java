@@ -21,6 +21,9 @@ public enum Direction {
      */
     EAST('E');
 
+    /**
+     * Letter of the Enum.
+     */
     private final char myLetter;
 
     Direction(final char theLetter) {

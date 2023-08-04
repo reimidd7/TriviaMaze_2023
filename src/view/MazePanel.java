@@ -61,7 +61,7 @@ public class MazePanel extends JPanel {
                 g2d.fillRect(x, y, GRID_SIZE, GRID_SIZE);
 
                 g2d.setPaint(Color.BLACK);
-                List<Doors> doors = room.getListOfDoors();
+                List<Doors> doors = (List<Doors>) room.getMapOfDoorsAndDir().keySet(); //TODO: This needs to be refactored now that the Doors are stored in a Map<Doors, Directions>
                 for (Doors door : doors) {
                     int doorId = door.getDoorId();
                     int doorX = x;
