@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 class RoomTest {
 
@@ -88,7 +87,6 @@ class RoomTest {
         assertTrue(room.hasUnlockedDoors(), "There should be unlocked doors");
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
     @Test
     void testGetDoorByIdNoDoorWithTheID() {
         assertNull(room.getDoorById(3));
