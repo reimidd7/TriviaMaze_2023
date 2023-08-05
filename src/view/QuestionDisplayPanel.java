@@ -4,32 +4,69 @@ package view;
 //DISPLAY NOTHING/AN IMAGE WHEN THE USER IS IN BETWEEN QUESTIONS
 //LOWER RIGHT HAND SIDE OF THE FRAME
 
+import model.Doors;
+import model.Question;
+
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
 
 public class QuestionDisplayPanel extends JPanel {
-    public QuestionDisplayPanel() {
-        //size is set by default layout in TriviaMazeGUI
-        super();
+    private JLabel questionLabel;
+    private JLabel questionTypeLabel;
+
+    /**
+     * Constructor for QuestionDisplayPanel.
+     * @param questionLabel Display question text.
+     * @param questionTypeLabel Display question type.
+     */
+
+    public QuestionDisplayPanel(JLabel questionLabel, JLabel questionTypeLabel) {
+        this.questionLabel = questionLabel;
+        this.questionTypeLabel = questionTypeLabel;
+
         basePanel();
-
     }
 
+    /**
+     * Sets the base appearance and layout.
+     */
     private void basePanel() {
-        //the base panel that will contain the questions and waiting screen
         setBackground(Color.BLACK);
-        setVisible(true);
+        setLayout(new BorderLayout());
 
+        questionLabel.setForeground(Color.WHITE);
+        questionTypeLabel.setForeground(Color.WHITE);
+
+        add(questionLabel, BorderLayout.CENTER);
+        add(questionTypeLabel, BorderLayout.SOUTH);
     }
 
-    private void displayQuestion() {
-        //will display the question
-        //will this handle the answer clicks?
-
+    /**
+     * Displays the door base on the provided door.
+     * @param door
+     */
+    private void displayQuestion(Doors door) {
+        if (door != null) {
+            Question currentQuestion = door.getCurrQuestion();
+            if (currentQuestion != null) {
+                questionLabel.setText("Question: " + currentQuestion.getQuestion());
+                questionTypeLabel.setText("Type: " + currentQuestion.getQuestionTypeType());
+            } else {
+                questionLabel.setText("No question available.");
+                questionTypeLabel.setText("");
+            }
+        } else {
+            questionLabel.setText("Invalid door.");
+            questionTypeLabel.setText("");
+        }
     }
 
-    private void homeDisplay() {
-        //will display "Choose a doorway"
-        //"question incoming...."
+    /**
+     * Display a default message.
+     */
+    public void homeDisplay() {
+        questionLabel.setText("Choose a doorway");
+        questionTypeLabel.setText("Question incoming....");
     }
 }
+

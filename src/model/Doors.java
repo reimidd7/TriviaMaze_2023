@@ -3,6 +3,10 @@ package model;
 /**
  * The door class is for the doors used in trivial maze.
  * each door has status and holds a question.
+ *
+ * @author Kevin Than
+ * @author Reilly Middlebrooks, Danie Oum
+ * @version Summer 2023
  */
 public class Doors {
     /**
@@ -18,26 +22,27 @@ public class Doors {
     /**
      * Used to retrieve question data for the doors.
      */
-    private QuestionData myQuestionData = new QuestionData();
+    private final QuestionData myQuestionData = new QuestionData();
 
     /**
      * The specific door ID. This ID prevents duplication of doors to rooms.
      */
-    final private int doorId;
+    private final int myDoorId;
+
 
     /**
      * Constructor for doors class. Unlocked and question by default.
      *
-     * @param doorId the specific id to label the doors (prevents duplication).
+     * @param theDoorId the specific id to label the doors (prevents duplication).
      */
-    public Doors(int doorId) {
+    public Doors(final int theDoorId) {
         //is the door unlocked?
         this.myIsUnlocked = true; //by default
 
         // adds the question data to the variable myCurrQuestion
         this.myCurrQuestion = myQuestionData.retrieveQuestion();
 
-        this.doorId = doorId;
+        this.myDoorId = theDoorId;
 
     }
 
@@ -46,7 +51,7 @@ public class Doors {
      * @return the door ID.
      */
     public int getDoorId() {
-        return doorId;
+        return myDoorId;
     }
 
     /**
@@ -62,7 +67,7 @@ public class Doors {
      *
      * @param theLocked true if locked, false if unlocked.
      */
-    public void setLocked(boolean theLocked) {
+    public void setLocked(final boolean theLocked) {
         myIsUnlocked = theLocked;
     }
 

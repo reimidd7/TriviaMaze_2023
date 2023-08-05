@@ -1,7 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Room object has a list of doors attached to it.
@@ -13,41 +13,41 @@ import java.util.List;
 public class Room {
 
     /**
-     * This list is the doors attached to the Room.
+     * This Map is the Doors/Directions attached to the Room.
      */
-    List<Doors> listOfDoors;
+    private final Map<Doors, Direction> myMapOfDoors;
     /**
      * Room label to allow for attachment of doors.
      */
-    private final int roomId;
+    private final int myRoomId;
 
     /**
      * Room name. Mainly for testing purposes. (Room_ID)
      */
-    private final String description;
+    private final String myDescription;
     /**
      * If the Room has all locked doors, the Room is locked.
      */
-    private boolean isLocked;
+    private boolean myIsLocked;
     /**
      * If the Room is the entrance, true.
      */
-    private boolean isEntrance;
+    private boolean myIsEntrance;
     /**
      * If the Room is the exit, true.
      */
-    private boolean isExit;
+    private boolean myIsExit;
 
     /**
      * Creates the default Room.
-     * @param roomId the room number.
-     * @param description the room name.
+     * @param theRoomId the room number.
+     * @param theDescription the room name.
      */
-    public Room(int roomId, String description) {
-        this.roomId = roomId;
-        this.description = description;
-        this.isLocked = false;
-        listOfDoors =  new ArrayList<>();
+    public Room(final int theRoomId, final String theDescription) {
+        this.myRoomId = theRoomId;
+        this.myDescription = theDescription;
+        this.myIsLocked = false;
+        myMapOfDoors =  new HashMap<>();
     }
 
     /**
@@ -55,7 +55,7 @@ public class Room {
      * @return the Room number.
      */
     public int getRoomId() {
-        return roomId;
+        return myRoomId;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Room {
      * @return the room name.
      */
     public String getDescription() {
-        return description;
+        return myDescription;
     }
 
     /**
@@ -71,31 +71,32 @@ public class Room {
      * @return true if locked, false if unlocked.
      */
     public boolean isLocked() {
-        return isLocked;
+        return myIsLocked;
     }
 
     /**
      * Sets id the room is locked. This happens when all the doors are locked.
-     * @param locked true if locked, false if unlocked.
+     * @param theLocked true if locked, false if unlocked.
      */
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public void setLocked(final boolean theLocked) {
+        myIsLocked = theLocked;
     }
 
     /**
-     * Gets the list of doors attached to the certain room.
-     * @return a list of doors.
+     * Gets the Map of doors/direction attached to the current room.
+     * @return a Map of doors and their Directions.
      */
-    public List<Doors> getListOfDoors () {
-        return listOfDoors;
+    public Map<Doors, Direction> getMapOfDoorsAndDir() {
+        return myMapOfDoors;
     }
 
     /**
      * Adds a door to the current room.
-     * @param door which door to add based upon the door ID.
+     * @param theDoor which door to add based upon the door ID.
      */
-    public void addDoor(Doors door) {
-        listOfDoors.add(door);
+    public void addDoor(final Doors theDoor, final Direction theDirection) {
+
+        myMapOfDoors.put(theDoor, theDirection);
     }
 
     /**
@@ -104,8 +105,8 @@ public class Room {
      * @return true when there are unlocked doors, false if not.
      */
     public boolean hasUnlockedDoors() {
-        for (Doors door: listOfDoors) {
-            if (!door.getDoorStatus()) {
+        for (Doors door: myMapOfDoors.keySet()) {
+            if (door.getDoorStatus()) {
                 return true;
             }
         }
@@ -115,12 +116,12 @@ public class Room {
     /**
      * Gets the door by its ID. Helpful when changing
      *      its status or calling a question.
-     * @param doorId the door ID
+     * @param theDoorId the door ID
      * @return a Doors object
      */
-    public Doors getDoorById(int doorId) {
-        for (Doors door: listOfDoors) {
-            if (door.getDoorId() == doorId) {
+    public Doors getDoorById(final int theDoorId) {
+        for (Doors door: myMapOfDoors.keySet()) {
+            if (door.getDoorId() == theDoorId) {
                 return door;
             }
         }
@@ -129,11 +130,11 @@ public class Room {
 
     /**
      * Does the room have the door in question?
-     * @param doorId the door ID in question.
+     * @param theDoorId the door ID in question.
      * @return true if the room has that door, false if not.
      */
-    public boolean hasDoor(int doorId) {
-        return getDoorById(doorId) != null;
+    public boolean hasDoor(final int theDoorId) {
+        return getDoorById(theDoorId) != null;
     }
 
     /**
@@ -141,15 +142,15 @@ public class Room {
      * @return true if it is the entrance, false if not.
      */
     public boolean isEntrance() {
-        return isEntrance;
+        return myIsEntrance;
     }
 
     /**
      * Sets the entrance Room of the maze.
-     * @param entrance true if it is the entrance, false if not.
+     * @param theEntrance true if it is the entrance, false if not.
      */
-    public void setEntrance(boolean entrance) {
-        isEntrance = entrance;
+    public void setEntrance(final boolean theEntrance) {
+        myIsEntrance = theEntrance;
     }
 
     /**
@@ -157,15 +158,15 @@ public class Room {
      * @return true if it is the exit, false if not.
      */
     public boolean isExit() {
-        return isExit;
+        return myIsExit;
     }
 
     /**
      * Sets the exit Room of the maze.
-     * @param exit true if it is the exit, false if not.
+     * @param theExit true if it is the exit, false if not.
      */
-    public void setExit(boolean exit) {
-        isExit = exit;
+    public void setExit(final boolean theExit) {
+        myIsExit = theExit;
     }
 
 }
