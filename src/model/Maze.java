@@ -1,5 +1,10 @@
 package model;
 
+import view.PropertyChangeEnabledTriviaMazeControls;
+
+import java.awt.Point;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +15,7 @@ import java.util.Map;
  * @author Danie Oum, Reilly Middlebrooks, Kevin Than
  * @version 2023 20 July
  */
-public class Maze {
+public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     /**
      * The total amount of doors needed for our 5x5 maze.
      */
@@ -34,6 +39,11 @@ public class Maze {
      */
     private final int myCols;
 
+    private Point myPlayerLoc;
+
+    private final PropertyChangeSupport myPcs;
+
+
     /**
      * This method initializes the rows and columns of the maze and calls other methods.
      *
@@ -41,31 +51,160 @@ public class Maze {
      * @param theCols The columns of the maze
      */
     public Maze(final int theRows, final int theCols) {
+        super();
         this.myRows = theRows;
         this.myCols = theCols;
         this.myRooms = new Room[theRows][theCols];
+//        createMaze();
+//        setEntrance();
+//        setExit();
+        newGame();
+        this.myPcs = new PropertyChangeSupport(this);
+    }
+
+
+    @Override
+    public void newGame() {
+        myPlayerLoc = new Point(0,0); // This should come from get entrance but idk how to do that rn
         createMaze();
         setEntrance();
         setExit();
 
+        // Change any states? player location. door status?
     }
+
+    @Override
+    public void down() {
+        Point oldPlayerLoc = myPlayerLoc;
+        // checks if the room has a door to the south and if it's unlocked.
+        boolean checkForSouth = getRoom(myPlayerLoc).getDoorByDirection(Direction.SOUTH).getDoorStatus();
+
+        if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
+            myPlayerLoc.translate(1, 0);
+            notifyObseversOfLocationChange();
+        }
+
+        // CHANGE LOCATION STATE?
+        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
+    }
+
+
+
+    @Override
+    public void up() {
+        Point oldPlayerLoc = myPlayerLoc;
+
+        // checks if the room has a door to the south and if it's unlocked.
+        boolean checkForNorth = getRoom(myPlayerLoc).getDoorByDirection(Direction.NORTH).getDoorStatus();
+
+        if (myPlayerLoc.x > 0 && checkForNorth) {
+            myPlayerLoc.translate(-1, 0);
+            notifyObseversOfLocationChange();
+        }
+        // CHANGE LOCATION STATE?
+        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
+    }
+
+    @Override
+    public void left() {
+        Point oldPlayerLoc = myPlayerLoc;
+
+        // checks if the room has a door to the south and if it's unlocked.
+        boolean checkForWest = getRoom(myPlayerLoc).getDoorByDirection(Direction.WEST).getDoorStatus();
+
+        if (myPlayerLoc.y > 0 && checkForWest) {
+            myPlayerLoc.translate(0, -1);
+            notifyObseversOfLocationChange();
+        }
+        // CHANGE LOCATION STATE?
+        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
+
+    }
+
+    @Override
+    public void right() {
+        Point oldPlayerLoc = myPlayerLoc;
+
+        // checks if the room has a door to the south and if it's unlocked.
+        boolean checkForEast = getRoom(myPlayerLoc).getDoorByDirection(Direction.EAST).getDoorStatus();
+
+        if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
+            myPlayerLoc.translate(0, 1);
+            notifyObseversOfLocationChange();
+        }
+        // CHANGE LOCATION STATE?
+        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
+
+    }
+
+    @Override
+    public Point getPlayerLocation() {
+
+        return new Point(myPlayerLoc);
+
+        // CHANGE LOCATION STATE?
+
+
+    }
+
+    @Override
+    public void checkDoors() { //TODO: IDK if we need this. Maybe as a private method?
+        Room playerRoom = getRoom(myPlayerLoc);
+        Map<Doors, Direction> map = playerRoom.getMapOfDoorsAndDir();
+        playerRoom.hasUnlockedDoors();
+
+    }
+
+    @Override
+    public void updateDoors() { //TODO: Change status us the user gets the Q wrong
+        //CHANGE DOOR STATE?
+
+    }
+
+    private void notifyObseversOfLocationChange() {
+    }
+    // ------------------------------------- ^^^ For property change stuff
+
+    //TODO IDK this can be used in the checkFor... variable....I think
+    public boolean isDoorUnlockedByDirection(Point thePlayerLoc, Direction theDir) {
+        Room currRoom = getRoom(thePlayerLoc); //room where the player is located
+        Doors currDoor = null;
+        for (Doors d: currRoom.getMapOfDoorsAndDir().keySet()) {
+            Direction dirOfCurrDoor = currRoom.getMapOfDoorsAndDir().get(d);
+            if (dirOfCurrDoor.equals(theDir)) {
+                currDoor = d;
+            }
+        }
+        if (currDoor.getDoorStatus()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    // --------------------------------^^ NEW stuff
+
 
     /**
      * Maze testing.
      */
-    public static void main(String [] args) {
-        Maze maze = new Maze(5, 5);
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 5; col++) {
-                Room currentRoom = maze.getRoom(row, col);
-                System.out.println("[" + row + "][" + col + "]    " + "Room: " + currentRoom.getDescription());
-                for (Doors door : currentRoom.getMapOfDoorsAndDir().keySet()) {
-                    Direction d = currentRoom.getMapOfDoorsAndDir().get(door);
-                     System.out.println(" Door " + door.getDoorId() + " " + d);
-                }
-            }
-        }
-    }
+//    public static void main(String [] args) {
+//        Maze maze = new Maze(5, 5);
+//        for (int row = 0; row < 5; row++) {
+//            for (int col = 0; col < 5; col++) {
+//                Room currentRoom = maze.getRoom(row, col);
+//                System.out.println("[" + row + "][" + col + "]    " + "Room: " + currentRoom.getDescription());
+//                for (Doors door : currentRoom.getMapOfDoorsAndDir().keySet()) {
+//                    Direction d = currentRoom.getMapOfDoorsAndDir().get(door);
+//                     System.out.println(" Door " + door.getDoorId() + " " + d);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * TODO: Might not need this...
@@ -75,12 +214,12 @@ public class Maze {
      * @param theCurrentRoom current room that we need to know the Doors and Directions of.
      * @return map of doors and directions
      */
-    public Map<Doors, Direction>
-                        getDoorsAndDirectionOfACertainRoom(final Room theCurrentRoom) {
-        final Map<Doors, Direction> doorsDirectionMap;
-        doorsDirectionMap = theCurrentRoom.getMapOfDoorsAndDir();
-        return doorsDirectionMap;
-    }
+//    public Map<Doors, Direction>
+//                        getDoorsAndDirectionOfACertainRoom(final Room theCurrentRoom) {
+//        final Map<Doors, Direction> doorsDirectionMap;
+//        doorsDirectionMap = theCurrentRoom.getMapOfDoorsAndDir();
+//        return doorsDirectionMap;
+//    }
 
     /**
      * Gets the Room at the given index.
@@ -92,6 +231,15 @@ public class Maze {
     public Room getRoom(final int theRow, final int theCol) {
         if (theRow >= 0 && theRow < myRows && theCol >= 0 && theCol < myCols) {
             return myRooms[theRow][theCol];
+        }
+        return null;
+    }
+
+    public Room getRoom(Point thePlayerLoc) {
+        int row = thePlayerLoc.x;
+        int col = thePlayerLoc.y;
+        if (row >= 0 && row < myRows && col >= 0 && col < myCols) {
+            return myRooms[row][col];
         }
         return null;
     }
@@ -136,6 +284,7 @@ public class Maze {
     public int getRows() {
         return myRows;
     }
+
     /**
      * Gets the number of columns in the maze.
      *
@@ -149,14 +298,14 @@ public class Maze {
      *
      * @return A list of doors.
      */
-    public List<Doors> getDoors() {
-        final List<Doors> allDoors = new ArrayList<>();
-        for (int row = 0; row < myRows; row++) {
-            for (int col = 0; col < myCols; col++) {
-                allDoors.addAll(myRooms[row][col].getMapOfDoorsAndDir().keySet());
-            }
+    public Doors getDoor(Point thePlayerLoc, Direction thedir) {
+        Room currRoom = getRoom(thePlayerLoc);
+        Doors doorInDirection = null;
+
+        if (currRoom.hasDoorInDirection(thedir)) {
+            doorInDirection = currRoom.getDoorByDirection(thedir);
         }
-        return allDoors;
+        return doorInDirection;
     }
 
 
@@ -257,11 +406,57 @@ public class Maze {
         myRooms[0][0].setEntrance(true);
     }
 
-    /**
-     * This method sets the exit of the maze.
-     */
-    public void setExit() {
+    // This method sets the exit of the maze.
+    private void setExit() {
         myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener theListener) {
+
+    }
+
+    @Override
+    public void addPropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
+
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener theListener) {
+
+    }
+
+    @Override
+    public void removePropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
+
     }
 
 }
