@@ -162,7 +162,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void updateDoors() { //TODO: Change status us the user gets the Q wrong
         //CHANGE DOOR STATE?
-
     }
 
     private void notifyObseversOfLocationChange() {
