@@ -76,25 +76,25 @@ public class MazePanel extends JPanel {
                     int playerY = y + GRID_SIZE / 4;
                     g2d.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
                 }
-                List<Doors> doors = room.getListOfDoors();
-                for (Doors door : doors) {
-                    int doorId = door.getDoorId();
-                    int doorX = x;
-                    int doorY = y;
+//                List<Doors> doors = room.getListOfDoors();
+//                for (Doors door : doors) {
+//                    int doorId = door.getDoorId();
+//                    int doorX = x;
+//                    int doorY = y;
+//
+//                    if (doorId == 1) {
+//                        doorX += GRID_SIZE / 2;
+//                    } else if (doorId == 2) {
+//                        doorX += GRID_SIZE;
+//                        doorY += GRID_SIZE / 2;
+//                    } else if (doorId == 3) {
+//                        doorX += GRID_SIZE / 2;
+//                        doorY += GRID_SIZE;
+//                    } else if (doorId == 4) {
+//                        doorY += GRID_SIZE / 2;
+//                    }
 
-                    if (doorId == 1) {
-                        doorX += GRID_SIZE / 2;
-                    } else if (doorId == 2) {
-                        doorX += GRID_SIZE;
-                        doorY += GRID_SIZE / 2;
-                    } else if (doorId == 3) {
-                        doorX += GRID_SIZE / 2;
-                        doorY += GRID_SIZE;
-                    } else if (doorId == 4) {
-                        doorY += GRID_SIZE / 2;
-                    }
-
-                    g2d.drawImage(flowerImage, doorX, doorY, GRID_SIZE / 2, GRID_SIZE / 2, this);
+                   // g2d.drawImage(flowerImage, doorX, doorY, GRID_SIZE / 2, GRID_SIZE / 2, this);
                     g2d.setColor(Color.BLACK);
                     g2d.drawLine(x, y, x + GRID_SIZE, y);
                     g2d.drawLine(x, y + GRID_SIZE, x + GRID_SIZE, y + GRID_SIZE);
