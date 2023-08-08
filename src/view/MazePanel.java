@@ -94,13 +94,12 @@ public class MazePanel extends JPanel {
 //                        doorY += GRID_SIZE / 2;
 //                    }
 
-                   // g2d.drawImage(flowerImage, doorX, doorY, GRID_SIZE / 2, GRID_SIZE / 2, this);
-                    g2d.setColor(Color.BLACK);
-                    g2d.drawLine(x, y, x + GRID_SIZE, y);
-                    g2d.drawLine(x, y + GRID_SIZE, x + GRID_SIZE, y + GRID_SIZE);
-                    g2d.drawLine(x, y, x, y + GRID_SIZE);
-                    g2d.drawLine(x + GRID_SIZE, y, x + GRID_SIZE, y + GRID_SIZE);
-                }
+                // g2d.drawImage(flowerImage, doorX, doorY, GRID_SIZE / 2, GRID_SIZE / 2, this);
+                g2d.setColor(Color.BLACK);
+                g2d.drawLine(x, y, x + GRID_SIZE, y);
+                g2d.drawLine(x, y + GRID_SIZE, x + GRID_SIZE, y + GRID_SIZE);
+                g2d.drawLine(x, y, x, y + GRID_SIZE);
+                g2d.drawLine(x + GRID_SIZE, y, x + GRID_SIZE, y + GRID_SIZE);
             }
         }
     }
