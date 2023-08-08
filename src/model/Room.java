@@ -128,6 +128,27 @@ public class Room {
         return null;
     }
 
+    //------------------new
+    public boolean hasDoorInDirection(Direction theDir) {
+        boolean hasDoor = false;
+        for (Doors door: myMapOfDoors.keySet()) {
+            hasDoor = myMapOfDoors.get(door).equals(theDir);
+        }
+        return hasDoor;
+    }
+
+    public Doors getDoorByDirection(Direction theDir) {
+        Doors doorInDirection = null;
+        for (Doors d: myMapOfDoors.keySet()) {
+            if (myMapOfDoors.get(d).equals(theDir)) {
+                doorInDirection = d;
+            }
+        }
+        return doorInDirection;
+    }
+
+    //----------------^^^new
+
     /**
      * Does the room have the door in question?
      * @param theDoorId the door ID in question.
