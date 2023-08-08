@@ -13,7 +13,7 @@ import java.util.Map;
  * Class to organize the rooms and doors and create the maze functional.
  *
  * @author Danie Oum, Reilly Middlebrooks, Kevin Than
- * @version 2023 20 July
+ * @version Summer 2023
  */
 public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     /**
