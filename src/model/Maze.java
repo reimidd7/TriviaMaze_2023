@@ -1,6 +1,7 @@
 package model;
 
 import view.PropertyChangeEnabledTriviaMazeControls;
+import view.TriviaMazeControls;
 
 import java.awt.Point;
 import java.beans.PropertyChangeListener;
@@ -55,18 +56,20 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         this.myRows = theRows;
         this.myCols = theCols;
         this.myRooms = new Room[theRows][theCols];
+        this.myPcs = new PropertyChangeSupport(this);
 //        createMaze();
 //        setEntrance();
 //        setExit();
         newGame();
-        this.myPcs = new PropertyChangeSupport(this);
+
     }
 
 
     @Override
     public void newGame() {
-        myPlayerLoc = new Point(0,0); // This should come from get entrance but idk how to do that rn
+
         createMaze();
+        myPlayerLoc = new Point(0,0); // This should come from get entrance but idk how to do that rn
         setEntrance();
         setExit();
 
@@ -77,15 +80,17 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     public void down() {
         Point oldPlayerLoc = myPlayerLoc;
         // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForSouth = getRoom(myPlayerLoc).getDoorByDirection(Direction.SOUTH).getDoorStatus();
+        //boolean checkForSouth = getRoom(myPlayerLoc).getDoorByDirection(Direction.SOUTH).getDoorStatus();
 
-        if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
+        if (myPlayerLoc.x < getRows() - 1 ) {
             myPlayerLoc.translate(1, 0);
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
         }
 
         // CHANGE LOCATION STATE?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+        //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
 
     }
 
@@ -96,14 +101,17 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         Point oldPlayerLoc = myPlayerLoc;
 
         // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForNorth = getRoom(myPlayerLoc).getDoorByDirection(Direction.NORTH).getDoorStatus();
+        //boolean checkForNorth = getRoom(myPlayerLoc).getDoorByDirection(Direction.NORTH).getDoorStatus();
 
-        if (myPlayerLoc.x > 0 && checkForNorth) {
+        if (myPlayerLoc.x > 0 ) {
             myPlayerLoc.translate(-1, 0);
+            //myPlayerLoc.move(-1, 0);
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
         }
         // CHANGE LOCATION STATE?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+       // myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
 
     }
 
@@ -112,14 +120,16 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         Point oldPlayerLoc = myPlayerLoc;
 
         // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForWest = getRoom(myPlayerLoc).getDoorByDirection(Direction.WEST).getDoorStatus();
+        //boolean checkForWest = getRoom(myPlayerLoc).getDoorByDirection(Direction.WEST).getDoorStatus();
 
-        if (myPlayerLoc.y > 0 && checkForWest) {
+        if (myPlayerLoc.y > 0 ) {
             myPlayerLoc.translate(0, -1);
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
         }
         // CHANGE LOCATION STATE?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+        //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
 
 
     }
@@ -129,14 +139,16 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         Point oldPlayerLoc = myPlayerLoc;
 
         // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForEast = getRoom(myPlayerLoc).getDoorByDirection(Direction.EAST).getDoorStatus();
+       // boolean checkForEast = getRoom(myPlayerLoc).getDoorByDirection(Direction.EAST).getDoorStatus();
 
-        if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
+        if (myPlayerLoc.y < getCols() - 1 ) {
             myPlayerLoc.translate(0, 1);
+            //myPlayerLoc.move(0,1);
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
+
         }
         // CHANGE LOCATION STATE?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, myPlayerLoc);
 
 
     }
@@ -165,6 +177,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     }
 
     private void notifyObseversOfLocationChange() {
+        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null, new Point(myPlayerLoc));
     }
     // ------------------------------------- ^^^ For property change stuff
 

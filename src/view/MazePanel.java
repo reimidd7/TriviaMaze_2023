@@ -5,13 +5,17 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 // DISPLAY THE MAZE
-public class MazePanel extends JPanel {
+public class MazePanel extends JPanel implements PropertyChangeListener {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
@@ -21,7 +25,7 @@ public class MazePanel extends JPanel {
 
     private Maze maze; // The Maze object to be displayed
 
-    private Player player;
+    private Point player;
     private BufferedImage entranceImage;
     private BufferedImage exitImage;
     private BufferedImage floorImage;
@@ -35,7 +39,7 @@ public class MazePanel extends JPanel {
      */
     public MazePanel(Maze maze) {
         this.maze = maze;
-        this.player = new Player(0, 0);
+        //this.player = new Point(0, 0);
         try {
             entranceImage = ImageIO.read(new File("start.png"));
             exitImage = ImageIO.read(new File("mirror.png"));
@@ -56,11 +60,16 @@ public class MazePanel extends JPanel {
         super.paintComponent(theGraphics);
         Graphics2D g2d = (Graphics2D) theGraphics;
 
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
         drawMazeGridWithGraphics(g2d);
 
-        drawPlayer(g2d);
+
 
         drawDoors(g2d);
+
+        drawPlayer(g2d);
 
     }
 
@@ -89,17 +98,22 @@ public class MazePanel extends JPanel {
 
     private void drawPlayer(final Graphics2D theG2D) {
         // Moves the player around the maze?
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                int x = col * GRID_SIZE;
-                int y = row * GRID_SIZE;
-                if (player.getCurrentRow() == row && player.getCurrentCol() == col) {
-                    int playerX = x + GRID_SIZE / 4;
-                    int playerY = y + GRID_SIZE / 4;
-                    theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
-                }
-            }
-        }
+//        for (int row = 0; row < ROWS; row++) {
+//            for (int col = 0; col < COLS; col++) {
+//                int x = col * GRID_SIZE;
+//                int y = row * GRID_SIZE;
+//                if (player.getY() == row && player.getX() == col) {
+//                    int playerX = x + GRID_SIZE / 4;
+//                    int playerY = y + GRID_SIZE / 4;
+//                    theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
+//                }
+//            }
+//        }
+        Point currLoc = maze.getPlayerLocation();
+//        int pX = maze.getPlayerLocation().x * GRID_SIZE + GRID_SIZE / 4;
+//        int pY = maze.getPlayerLocation().y * GRID_SIZE + GRID_SIZE / 4;
+        theG2D.drawImage( playerImage, (int) currLoc.getX() * GRID_SIZE, (int) currLoc.getY() * GRID_SIZE, GRID_SIZE / 2, GRID_SIZE / 2, this);
+
     }
 
     private void drawDoors(final Graphics2D theG2D) {
@@ -150,6 +164,21 @@ public class MazePanel extends JPanel {
 
         }
     }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (Maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
+            final Point playerLocation = (Point) evt.getNewValue();
+
+            maze.getPlayerLocation().setLocation(playerLocation);
+
+            repaint();
+
+        }
+    }
+
+
+
 }
 
 
