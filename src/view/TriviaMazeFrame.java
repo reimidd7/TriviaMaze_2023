@@ -21,7 +21,7 @@ import java.io.*;
  */
 public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
-    private MazePanel gameState;
+    //private MazePanel gameState;
 
     /**
      * Default frame height.
@@ -42,7 +42,6 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     public TriviaMazeFrame(Maze theMaze) {
         super();
         myMaze = theMaze;
-        addKeyListener(new ControlKeyListener());
         setFocusable(true);
         requestFocus();
         createFrame();
@@ -76,7 +75,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         saveGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    save(gameState, "gameState");
+                    //save(gameState, "gameState");
                     JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -161,23 +160,4 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    class ControlKeyListener extends KeyAdapter {
-        @Override
-        public void keyPressed(final KeyEvent theEvent) {
-            if (theEvent.getKeyCode() == KeyEvent.VK_LEFT) {
-                myMaze.left();
-                System.out.println("left");
-            } else if (theEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
-                myMaze.right();
-                System.out.println("right");
-            } else if (theEvent.getKeyCode() == KeyEvent.VK_UP) {
-                myMaze.up();
-                System.out.println("up");
-            } else if (theEvent.getKeyCode() == KeyEvent.VK_DOWN) {
-                myMaze.down();
-                System.out.println("down");
-            }
-
-        }
-    }
 }

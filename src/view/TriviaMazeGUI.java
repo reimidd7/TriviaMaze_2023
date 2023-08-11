@@ -23,7 +23,7 @@ public class TriviaMazeGUI implements PropertyChangeListener {
         final TriviaMazeFrame frame = new TriviaMazeFrame(maze);
         final JLabel questionLabel = new JLabel();
         final JLabel questionTypeLabel = new JLabel();
-        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(questionLabel, questionTypeLabel);
+        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(maze);
 
         // Pass the Maze object to the MazePanel constructor
         final MazePanel mazePanel = new MazePanel(maze);
@@ -45,7 +45,7 @@ public class TriviaMazeGUI implements PropertyChangeListener {
 
 
         frame.setVisible(true);
-        questionPanel.homeDisplay();
+
 
 
 

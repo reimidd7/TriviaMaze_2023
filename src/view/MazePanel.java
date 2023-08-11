@@ -6,12 +6,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 // DISPLAY THE MAZE
-public class MazePanel extends JPanel {
+public class MazePanel extends JPanel implements PropertyChangeListener {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
@@ -35,7 +37,7 @@ public class MazePanel extends JPanel {
      */
     public MazePanel(Maze maze) {
         this.maze = maze;
-        this.player = new Player(0, 0);
+        this.player = maze.getPlayer();
         try {
             entranceImage = ImageIO.read(new File("start.png"));
             exitImage = ImageIO.read(new File("mirror.png"));
@@ -93,7 +95,7 @@ public class MazePanel extends JPanel {
             for (int col = 0; col < COLS; col++) {
                 int x = col * GRID_SIZE;
                 int y = row * GRID_SIZE;
-                if (player.getCurrentRow() == row && player.getCurrentCol() == col) {
+                if (player.getPlayerLoc().x == row && player.getPlayerLoc().y == col) {
                     int playerX = x + GRID_SIZE / 4;
                     int playerY = y + GRID_SIZE / 4;
                     theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
@@ -149,6 +151,11 @@ public class MazePanel extends JPanel {
             }
 
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }
 

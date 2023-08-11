@@ -1,16 +1,28 @@
 package model;
 
+import java.awt.Point;
+
 public class Player {
-    private int currentRow;
-    private int currentCol;
-    public Player(int theRow, int theCol) {
-        this.currentRow = theRow;
-        this.currentCol = theCol;
+
+    private Point myPlayerLoc;
+
+    private Direction myPlayerDir;
+
+    public Player(Point theLoc, Direction theDir) {
+        this.myPlayerLoc = theLoc;
+        this.myPlayerDir = theDir;
     }
-    public int getCurrentRow() {
-        return currentRow;
+
+    public Point getPlayerLoc() {
+        return myPlayerLoc;
     }
-    public int getCurrentCol() {
-        return currentCol;
+
+    public void setPlayerLoc(Point thePlayerLoc) {
+        this.myPlayerLoc = thePlayerLoc;
     }
+
+    public Direction getPlayerDir() {
+        return myPlayerDir;
+    }
+
 }
