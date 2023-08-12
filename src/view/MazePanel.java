@@ -5,12 +5,16 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
 
 // DISPLAY THE MAZE
 public class MazePanel extends JPanel implements PropertyChangeListener {
@@ -53,6 +57,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
     public static Dimension getMazeSize() {
         return MAZE_SIZE;
     }
+
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
@@ -115,7 +120,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                 int x = col * GRID_SIZE;
                 int y = row * GRID_SIZE;
 
-                for (Doors door: currRoom.getMapOfDoorsAndDir().keySet()) {
+                for (Doors door : currRoom.getMapOfDoorsAndDir().keySet()) {
                     Direction dir = currRoom.getMapOfDoorsAndDir().get(door);
 
                     if (dir.equals(Direction.SOUTH)) {
@@ -155,7 +160,37 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(Maze.PROPERTY_LOCATION_CHANGE)) {
+            Player newPlayerLocation = (Player) evt.getNewValue();
+            player.setPlayerLoc(newPlayerLocation.getPlayerLoc());
+            repaint();
+        }
 
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                maze.up();
+                break;
+            case KeyEvent.VK_DOWN:
+                maze.down();
+                break;
+            case KeyEvent.VK_LEFT:
+                maze.left();
+                break;
+            case KeyEvent.VK_RIGHT:
+                maze.right();
+                break;
+        }
+        repaint();
     }
 }
 
