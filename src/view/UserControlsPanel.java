@@ -1,11 +1,5 @@
 package view;
 
-//NOT COMPLETE - need to make sure the buttons enable and disable correctly
-//ARROWS LIKE A CONTROLLER
-//ONLY HIGHLIGHT THE DIRECTIONS AVAILABLE
-//ADD ARROW KEYS LABELS
-//CONNECT TO GAME MAZE CONTROLS
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,11 +7,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Class for the controls of the user.
+ *
+ * @author Danie Oum, Reilly Middlebrooks, Kevin Than
+ * @version Summer 2023
+ */
 public class UserControlsPanel extends JPanel {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(UserControlsPanel::createAndShowGUI);
     }
 
+    /**
+     * This method creates and shows the GUI. It includes the arrow buttons.
+     */
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Control Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,6 +68,13 @@ public class UserControlsPanel extends JPanel {
         frame.setVisible(true);
     }
 
+    /**
+     * This method is to highlight the direction of the buttons when pressed.
+     *
+     * @param keyCode The key code for the buttons
+     * @param highlight The buttons will highlight green
+     * @param buttons The buttons
+     */
     private static void highlightDirection(int keyCode, boolean highlight, JButton... buttons) {
         for (JButton button : buttons) {
             button.setBackground(null);
