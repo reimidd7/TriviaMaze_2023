@@ -9,13 +9,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import model.Direction;
 import model.Doors;
@@ -24,7 +25,7 @@ import model.Player;
 import model.Question;
 import model.Room;
 
-public class QuestionDisplayPanel extends JPanel {
+public class QuestionDisplayPanel extends JPanel implements PropertyChangeListener {
     private static final Font LARGE_FONT = new Font("SanSerif", Font.BOLD, 14);
 
     private static final int MAX_CHARS = 50;
@@ -35,13 +36,18 @@ public class QuestionDisplayPanel extends JPanel {
     private final Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
+    private final Room myRoom;
+    private Doors myDoor;
 
     /**
      * Constructor for QuestionDisplayPanel.
      */
     public QuestionDisplayPanel(final Maze theMaze) {
+        super();
         this.myMaze = theMaze;
-        myPlayer = myMaze.getPlayer();
+        this.myPlayer = myMaze.getPlayer();
+        this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
+        this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
 
         if (determineDoorQuestionType(myPlayer).equals("MC")) {
             mcDisplay(myPlayer); //yellow
@@ -53,16 +59,13 @@ public class QuestionDisplayPanel extends JPanel {
             homeDisplay();
         }
 
+        setFocusable(true);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
     }
 
     private String determineDoorQuestionType(final Player thePlayer) {
-        final Direction playerDir = thePlayer.getPlayerDir();
-        final Point playerLoc = thePlayer.getPlayerLoc();
-        final Room room = myMaze.getRoom(playerLoc);
-        final Doors door = room.getDoorByDirection(playerDir);
-        final Question q = door.getCurrQuestion();
+        final Question q = myDoor.getCurrQuestion();
 
         return q.getQuestionTypeType();
 
@@ -70,11 +73,9 @@ public class QuestionDisplayPanel extends JPanel {
 
     private void mcDisplay(final Player thePlayer) {
         final ArrayList<String> split = new ArrayList<>();
-        final Room room = myMaze.getRoom(thePlayer.getPlayerLoc());
-        final Doors door = room.getDoorByDirection(thePlayer.getPlayerDir());
-        final Question ques = door.getCurrQuestion();
+        final Question ques = myDoor.getCurrQuestion();
         final String qString = ques.getQuestion();
-        String answer = ques.getCorrectAnswer();
+        final String answer = ques.getCorrectAnswer();
 
         final Scanner s = new Scanner(qString);
         while (s.hasNextLine()) {
@@ -92,10 +93,14 @@ public class QuestionDisplayPanel extends JPanel {
         header.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Answers
-        final JRadioButton cA = new JRadioButton(choiceA);
-        final JRadioButton cB = new JRadioButton(choiceB);
-        final JRadioButton cC = new JRadioButton(choiceC);
-        final JRadioButton cD = new JRadioButton(choiceD);
+        final JButton cA = new JButton(choiceA);
+        buttonFunctionality(cA,  answer);
+        final JButton cB = new JButton(choiceB);
+        buttonFunctionality(cB, answer);
+        final JButton cC = new JButton(choiceC);
+        buttonFunctionality(cC, answer);
+        final JButton cD = new JButton(choiceD);
+        buttonFunctionality(cD, answer);
 
         cA.setAlignmentX(Component.CENTER_ALIGNMENT);
         cB.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -106,30 +111,7 @@ public class QuestionDisplayPanel extends JPanel {
         add(filler);
 
         // Question String
-        if (ask.length() > MAX_CHARS) {
-            final int h = ask.lastIndexOf(" ", MAX_CHARS);
-            final String one = ask.substring(0, h);
-            final String two = ask.substring(h, ask.length());
-
-            final JLabel question1 = new JLabel(one);
-            final JLabel question2 = new JLabel(two);
-
-            question1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question1.setFont(LARGE_FONT);
-            question2.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question2.setFont(LARGE_FONT);
-
-            add(question1);
-            add(question2);
-
-        } else {
-            final JLabel question = new JLabel(ask);
-
-            question.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question.setFont(LARGE_FONT);
-
-            add(question);
-        }
+        questionFormatter(ask);
 
         add(filler2);
         add(cA);
@@ -140,11 +122,9 @@ public class QuestionDisplayPanel extends JPanel {
     }
 
     public void tfDisplay(final Player thePlayer) {
-        final Room room = myMaze.getRoom(thePlayer.getPlayerLoc());
-        final Doors door = room.getDoorByDirection(thePlayer.getPlayerDir());
-        final Question ques = door.getCurrQuestion();
+        final Question ques = myDoor.getCurrQuestion();
         final String qString = ques.getQuestion();
-        String answer = ques.getCorrectAnswer();
+        final String answer = ques.getCorrectAnswer();
 
         // Question Type
         final JLabel header = new JLabel("True or False");
@@ -152,7 +132,9 @@ public class QuestionDisplayPanel extends JPanel {
 
         // Answers
         final JButton bTrue = new JButton("True");
+        buttonFunctionality(bTrue, answer);
         final JButton bFalse = new JButton("False");
+        buttonFunctionality(bFalse, answer);
         bTrue.setAlignmentX(Component.CENTER_ALIGNMENT);
         bFalse.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -160,30 +142,7 @@ public class QuestionDisplayPanel extends JPanel {
         add(filler);
 
         // Question String
-        if (qString.length() > MAX_CHARS) {
-            final int h = qString.lastIndexOf(" ", MAX_CHARS);
-            final String one = qString.substring(0, h);
-            final String two = qString.substring(h, qString.length());
-
-            final JLabel question1 = new JLabel(one);
-            question1.setFont(LARGE_FONT);
-            final JLabel question2 = new JLabel(two);
-            question2.setFont(LARGE_FONT);
-
-            question1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question2.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            add(question1);
-            add(question2);
-
-        } else {
-            final JLabel question = new JLabel(qString);
-
-            question.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question.setFont(LARGE_FONT);
-
-            add(question);
-        }
+        questionFormatter(qString);
 
         add(filler2);
         add(bTrue);
@@ -192,11 +151,9 @@ public class QuestionDisplayPanel extends JPanel {
     }
 
     public void sAnsDisplay(final Player thePlayer) {
-        final Room room = myMaze.getRoom(thePlayer.getPlayerLoc());
-        final Doors door = room.getDoorByDirection(thePlayer.getPlayerDir());
-        final Question ques = door.getCurrQuestion();
+        final Question ques = myDoor.getCurrQuestion();
         final String qString = ques.getQuestion();
-        String answer = ques.getCorrectAnswer();
+        final String answer = ques.getCorrectAnswer();
 
         // Question Type
         final JLabel header = new JLabel("Short Answer");
@@ -207,38 +164,32 @@ public class QuestionDisplayPanel extends JPanel {
         shortAns.setMaximumSize(TEXTBOX);
         shortAns.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Submit button
+        final JButton submit = new JButton("Submit");
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // read input
+        submit.addActionListener(e -> {
+            final String userAns = shortAns.getText().toLowerCase().replaceAll("\\s", "");
+            final String ans = answer.toLowerCase().replaceAll("\\s", "");
+            System.out.println(userAns + "   real:   " + ans);
+            if (userAns.equals(ans)) {
+                System.out.println("Correct!" + myDoor.getDoorStatus());
+            } else {
+                myMaze.updateDoors(myDoor);
+                System.out.println("incorrect!" + myDoor.getDoorStatus());
+            }
+        });
+
         add(header);
         add(filler);
 
         // Question String
-        if (qString.length() > MAX_CHARS) {
-            final int h = qString.lastIndexOf(" ", MAX_CHARS);
-            final String one = qString.substring(0, h);
-            final String two = qString.substring(h, qString.length());
-
-            final JLabel question1 = new JLabel(one);
-            final JLabel question2 = new JLabel(two);
-
-            question1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question1.setFont(LARGE_FONT);
-            question2.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question2.setFont(LARGE_FONT);
-
-
-            add(question1);
-            add(question2);
-
-        } else {
-            final JLabel question = new JLabel(qString);
-
-            question.setAlignmentX(Component.CENTER_ALIGNMENT);
-            question.setFont(LARGE_FONT);
-
-            add(question);
-        }
+        questionFormatter(qString);
 
         add(filler2);
         add(shortAns);
+        add(submit);
         setBackground(Color.GRAY);
 
     }
@@ -250,6 +201,59 @@ public class QuestionDisplayPanel extends JPanel {
         final JLabel home = new JLabel("Choose a Doorway... Have fun!");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
+    }
+
+    private void buttonFunctionality(final JButton theButton, final String theAnswer) {
+        final char firstButton = theButton.getText().charAt(0);
+        final char firstAns = theAnswer.charAt(0);
+
+        theButton.addActionListener(e -> {
+            if (firstButton == firstAns) {
+                System.out.println("Correct!" + myDoor.getDoorStatus());
+            } else {
+                myMaze.updateDoors(myDoor);
+                System.out.println("incorrect!" + myDoor.getDoorStatus());
+            }
+
+        });
+
+    }
+
+
+    private void questionFormatter(final String theQString) {
+        if (theQString.length() > MAX_CHARS) {
+            final int h = theQString.lastIndexOf(" ", MAX_CHARS);
+            final String one = theQString.substring(0, h);
+            final String two = theQString.substring(h, theQString.length());
+
+            final JLabel question1 = new JLabel(one);
+            final JLabel question2 = new JLabel(two);
+
+            question1.setAlignmentX(Component.CENTER_ALIGNMENT);
+            question1.setFont(LARGE_FONT);
+            question2.setAlignmentX(Component.CENTER_ALIGNMENT);
+            question2.setFont(LARGE_FONT);
+
+
+            add(question1);
+            add(question2);
+
+        } else {
+            final JLabel question = new JLabel(theQString);
+
+            question.setAlignmentX(Component.CENTER_ALIGNMENT);
+            question.setFont(LARGE_FONT);
+
+            add(question);
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent theEvt) {
+        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
+            myDoor = (Doors) theEvt.getNewValue();
+            repaint();
+        }
     }
 }
 

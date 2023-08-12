@@ -1,5 +1,6 @@
 package view;
 
+import model.Doors;
 import model.Maze;
 
 import javax.swing.*;
@@ -42,8 +43,6 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     public TriviaMazeFrame(Maze theMaze) {
         super();
         myMaze = theMaze;
-        setFocusable(true);
-        requestFocus();
         createFrame();
         setVisible(true);
     }
@@ -154,10 +153,44 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         return item;
     }
 
+    public static void createAndShowGui() {
+        // Create the Maze object here
+        Maze maze = new Maze(5, 5);
+        maze.newGame();
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+        final TriviaMazeFrame frame = new TriviaMazeFrame(maze);
+        //maze.addPropertyChangeListener(frame);
+
+        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(maze);
+        maze.addPropertyChangeListener(questionPanel);
+
+        // Pass the Maze object to the MazePanel constructor
+        final MazePanel mazePanel = new MazePanel(maze);
+        maze.addPropertyChangeListener(mazePanel);
+
+
+        final UserControlsPanel controlsPanel = new UserControlsPanel();
+
+        final JPanel eastInfo = new JPanel();
+        eastInfo.setLayout(new GridLayout(2,1, 0, 16));
+        eastInfo.add(controlsPanel);
+        eastInfo.add(questionPanel);
+
+        frame.setLayout(new GridLayout(1,2,16,0));
+        frame.add(mazePanel);
+        frame.add(eastInfo);
+
+
+
+        frame.setVisible(true);
 
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (myMaze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName()) ||
+                Maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
+            repaint();
+        }
+    }
 }
