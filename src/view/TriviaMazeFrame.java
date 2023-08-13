@@ -1,9 +1,13 @@
 package view;
 
+import model.Maze;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
@@ -17,7 +21,7 @@ import java.io.*;
  */
 public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
-    private MazePanel gameState;
+    //private MazePanel gameState;
 
     /**
      * Default frame height.
@@ -28,14 +32,20 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
+    private final Maze myMaze;
+
 
     /**
      * Constructor to create the Frame for Trivia Maze.
      * Uses JFrame as super.
      */
-    public TriviaMazeFrame() {
+    public TriviaMazeFrame(Maze theMaze) {
         super();
+        myMaze = theMaze;
+        setFocusable(true);
+        requestFocus();
         createFrame();
+        setVisible(true);
     }
 
     /**
@@ -65,7 +75,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         saveGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    save(gameState, "gameState");
+                    //save(gameState, "gameState");
                     JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -112,7 +122,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         return bar;
     }
 
-    private void exitGame(){
+    private void exitGame() {
         int result = JOptionPane.showConfirmDialog(this,"Are you sure you want to exit?","Yes or No", JOptionPane.YES_NO_OPTION);
         if(result == JOptionPane.YES_NO_OPTION) {
             dispose();
@@ -149,4 +159,5 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
 
     }
+
 }

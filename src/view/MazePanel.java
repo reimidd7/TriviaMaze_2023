@@ -5,13 +5,19 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
 
 // DISPLAY THE MAZE
-public class MazePanel extends JPanel {
+public class MazePanel extends JPanel implements PropertyChangeListener {
     private static final int ROWS = 5;
     private static final int COLS = 5;
 
@@ -35,7 +41,7 @@ public class MazePanel extends JPanel {
      */
     public MazePanel(Maze maze) {
         this.maze = maze;
-        this.player = new Player(0, 0);
+        this.player = maze.getPlayer();
         try {
             entranceImage = ImageIO.read(new File("start.png"));
             exitImage = ImageIO.read(new File("mirror.png"));
@@ -51,6 +57,7 @@ public class MazePanel extends JPanel {
     public static Dimension getMazeSize() {
         return MAZE_SIZE;
     }
+
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
@@ -93,7 +100,7 @@ public class MazePanel extends JPanel {
             for (int col = 0; col < COLS; col++) {
                 int x = col * GRID_SIZE;
                 int y = row * GRID_SIZE;
-                if (player.getCurrentRow() == row && player.getCurrentCol() == col) {
+                if (player.getPlayerLoc().x == row && player.getPlayerLoc().y == col) {
                     int playerX = x + GRID_SIZE / 4;
                     int playerY = y + GRID_SIZE / 4;
                     theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
@@ -113,7 +120,7 @@ public class MazePanel extends JPanel {
                 int x = col * GRID_SIZE;
                 int y = row * GRID_SIZE;
 
-                for (Doors door: currRoom.getMapOfDoorsAndDir().keySet()) {
+                for (Doors door : currRoom.getMapOfDoorsAndDir().keySet()) {
                     Direction dir = currRoom.getMapOfDoorsAndDir().get(door);
 
                     if (dir.equals(Direction.SOUTH)) {
@@ -149,6 +156,41 @@ public class MazePanel extends JPanel {
             }
 
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(Maze.PROPERTY_LOCATION_CHANGE)) {
+            Player newPlayerLocation = (Player) evt.getNewValue();
+            player.setPlayerLoc(newPlayerLocation.getPlayerLoc());
+            repaint();
+        }
+
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                maze.up();
+                break;
+            case KeyEvent.VK_DOWN:
+                maze.down();
+                break;
+            case KeyEvent.VK_LEFT:
+                maze.left();
+                break;
+            case KeyEvent.VK_RIGHT:
+                maze.right();
+                break;
+        }
+        repaint();
     }
 }
 
