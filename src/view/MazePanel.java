@@ -176,7 +176,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(Maze.PROPERTY_LOCATION_CHANGE)) {
+        if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
             Player newPlayer = (Player) evt.getNewValue();
             player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
             repaint();

@@ -33,7 +33,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     private static final Dimension TEXTBOX = new Dimension(200, 30);
 
     private final Maze myMaze;
-    private final Player myPlayer;
+    private Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
     private final Room myRoom;
@@ -66,9 +66,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     private String determineDoorQuestionType(final Player thePlayer) {
         final Question q = myDoor.getCurrQuestion();
-
         return q.getQuestionTypeType();
-
     }
 
     private void mcDisplay(final Player thePlayer) {
@@ -252,6 +250,11 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     public void propertyChange(final PropertyChangeEvent theEvt) {
         if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
             myDoor = (Doors) theEvt.getNewValue();
+            repaint();
+        }
+        if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
+            Player newPlayer = (Player) theEvt.getNewValue();
+            myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
             repaint();
         }
     }
