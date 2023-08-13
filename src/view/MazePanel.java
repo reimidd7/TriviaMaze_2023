@@ -21,10 +21,8 @@ import java.awt.event.KeyEvent;
 public class MazePanel extends JPanel implements PropertyChangeListener {
     private static final int ROWS = 5;
     private static final int COLS = 5;
-
-    private static final Dimension MAZE_SIZE = new Dimension(ROWS * 50, COLS * 50);
-
     private static final int GRID_SIZE = 85;
+    private static final Dimension MAZE_SIZE = new Dimension(ROWS * GRID_SIZE, COLS * GRID_SIZE);
 
     private Maze maze; // The Maze object to be displayed
 
@@ -32,7 +30,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
     private BufferedImage entranceImage;
     private BufferedImage exitImage;
     private BufferedImage floorImage;
-    private BufferedImage flowerImage;
     private BufferedImage playerImage;
 
     private Doors door;
@@ -49,14 +46,10 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         super();
         this.maze = maze;
         this.player = maze.getPlayer();
-        this.room = maze.getRoom(player.getPlayerLoc());
-        this.door = room.getDoorByDirection(player.getPlayerDir());
-
         try {
             entranceImage = ImageIO.read(new File("start.png"));
             exitImage = ImageIO.read(new File("mirror.png"));
             floorImage = ImageIO.read(new File("floor.png"));
-            flowerImage = ImageIO.read(new File("flower.png"));
             playerImage = ImageIO.read(new File("player.png"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,23 +66,17 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
     }
 
     @Override
-    public void paintComponent(final Graphics theGraphics) {
-        super.paintComponent(theGraphics);
-        Graphics2D g2d = (Graphics2D) theGraphics;
+    protected void paintComponent(final Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-        drawMazeGridWithGraphics(g2d);
-
+        drawMazeGrid(g2d);
         drawPlayer(g2d);
-
         drawDoors(g2d);
-
-
     }
 
-    private void drawMazeGridWithGraphics(final Graphics2D theG2D) {
+    private void drawMazeGrid (final Graphics2D theG2D) {
         // Creates the Maze grid. With entrance, exit, and floor images
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -182,17 +169,14 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
-            Player newPlayer = (Player) evt.getNewValue();
-            player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
+        if (maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
+            player = (Player) evt.getNewValue();
             repaint();
-        }
-        if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
-            Doors updatedDoor = (Doors) evt.getNewValue();
-            door = updatedDoor;
+        } else if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
             repaint();
         }
     }
+
     private class BoardKeyListener extends KeyAdapter {
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
@@ -214,8 +198,9 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                     System.out.println("right");
                     break;
             }
-            //repaint();
         }
     }
+
 }
+
 

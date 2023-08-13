@@ -43,6 +43,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
      * Constructor for QuestionDisplayPanel.
      */
     public QuestionDisplayPanel(final Maze theMaze) {
+
         super();
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
@@ -66,7 +67,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     private String determineDoorQuestionType(final Player thePlayer) {
         final Question q = myDoor.getCurrQuestion();
-        return q.getQuestionTypeType();
+        return q.getQuestionType().name();
     }
 
     private void mcDisplay(final Player thePlayer) {
@@ -172,10 +173,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             final String ans = answer.toLowerCase().replaceAll("\\s", "");
             System.out.println(userAns + "   real:   " + ans);
             if (userAns.equals(ans)) {
-                System.out.println("Correct!" + myDoor.getDoorStatus());
+                System.out.println("Correct!");  myDoor.setLocked(false);
             } else {
-                myMaze.updateDoors(myDoor);
-                System.out.println("incorrect!" + myDoor.getDoorStatus());
+                System.out.println("incorrect");
+                myDoor.setLocked(true);
             }
         });
 

@@ -42,23 +42,20 @@ public class QuestionData {
                 final int questionID = rs.getInt("QuestionID");
                 final String questionText = rs.getString("Question");
                 final String questionType = rs.getString("QuestionType");
+                final String correctAnswer = getCorrectAnswerForQuestion(questionID);
 
                 switch (questionType) {
                     case "MC" -> {
-                        final String correctAnswerMC = getCorrectAnswerForQuestion(questionID);
-                        question = new MCQuestion(questionID, questionText, correctAnswerMC);
+                        question = new Question(questionID, Question.QuestionType.MC, questionText, correctAnswer);
                     }
                     case "TF" -> {
-                        final String correctAnswerTF = getCorrectAnswerForQuestion(questionID);
-                        question = new TFQuestion(questionID, questionText, correctAnswerTF);
+                        question = new Question(questionID, Question.QuestionType.TF, questionText, correctAnswer);
                     }
                     case "SAns" -> {
-                        final String correctAnswerSAns =
-                                getCorrectAnswerForQuestion(questionID);
-                        question = new SAnsQuestion(questionID,
-                                questionText, correctAnswerSAns);
+                        question = new Question(questionID, Question.QuestionType.SAns, questionText, correctAnswer);
                     }
                     default -> {
+                        // Handle unexpected question type if needed
                     }
                 }
             }
@@ -69,6 +66,7 @@ public class QuestionData {
 
         return question;
     }
+
 
     /**
      * Establishes connection to the question database.

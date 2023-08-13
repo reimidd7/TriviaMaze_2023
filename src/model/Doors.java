@@ -48,6 +48,7 @@ public class Doors {
 
     /**
      * Gets the specific Doors' ID.
+     *
      * @return the door ID.
      */
     public int getDoorId() {
@@ -56,6 +57,7 @@ public class Doors {
 
     /**
      * Get the status of doors.
+     *
      * @return true if unlocked or false is locked.
      */
     public boolean getDoorStatus() {
@@ -83,10 +85,15 @@ public class Doors {
 
     /**
      * Get the current question displayed on the doors.
+     *
      * @return current question.
      */
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
 
+    public Question getQuestionIfUnlocked() {
+        return myIsUnlocked ? myQuestionData.retrieveQuestion() : null;
+    }
 }
+

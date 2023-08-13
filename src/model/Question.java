@@ -3,19 +3,30 @@ package model;
 /**
  * The abstract class question that will be use in MCQuestion, SAnsQuestion, and TFQuestion.
  */
-public abstract class Question {
+public class Question {
     /**
      * Question string.
      */
     protected String myQuestion;
+
     /**
-     * Type of question string.
+     * Type of question.
      */
-    protected String myQuestionType;
+    public enum QuestionType {
+        TF, SAns, MC
+    }
+
+    protected QuestionType myQuestionType;
+
     /**
      * QuestionID string.
      */
     protected int myQuestionID;
+
+    /**
+     * Correct answer string
+     */
+    protected String myCorrectAnswer;
 
     /**
      * Constructor to initialize the questions.
@@ -23,41 +34,36 @@ public abstract class Question {
      * @param myQuestionID
      * @param myQuestionType
      * @param myQuestion
+     * @param myCorrectAnswer
      */
-    public Question(int myQuestionID, String myQuestionType, String myQuestion) {
+    public Question(int myQuestionID, QuestionType myQuestionType, String myQuestion, String myCorrectAnswer) {
         this.myQuestionID = myQuestionID;
         this.myQuestionType = myQuestionType;
         this.myQuestion = myQuestion;
+        this.myCorrectAnswer = myCorrectAnswer;
     }
 
-    /**
-     * Getter to get the question.
-     */
-   public String getQuestion() {
+    public String getQuestion() {
         return myQuestion;
     }
 
-    /**
-     * Setter to set the question.
-     */
-    private void setQuestion(String question) { this.myQuestion = question; }
+    public void setQuestion(String question) {
+        this.myQuestion = question;
+    }
 
-    /**
-     * Getter to get the question type.
-     */
-    public String getQuestionTypeType() {
+    public QuestionType getQuestionType() {
         return myQuestionType;
     }
 
-    /**
-     * Getter to get the questionID
-     */
     public int getQuestionID() {
         return myQuestionID;
     }
 
-    /**
-     * Abstract method to be implemented by subclass to get correct answer.
-     */
-    public abstract String getCorrectAnswer();
+    public String getCorrectAnswer() {
+        return myCorrectAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.myCorrectAnswer = correctAnswer;
+    }
 }

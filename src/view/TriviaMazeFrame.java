@@ -169,11 +169,8 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         maze.addPropertyChangeListener(mazePanel);
 
 
-        final UserControlsPanel controlsPanel = new UserControlsPanel();
-
         final JPanel eastInfo = new JPanel();
         eastInfo.setLayout(new GridLayout(2,1, 0, 16));
-        eastInfo.add(controlsPanel);
         eastInfo.add(questionPanel);
 
         frame.setLayout(new GridLayout(1,2,16,0));
