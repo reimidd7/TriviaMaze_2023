@@ -1,11 +1,15 @@
 package view;
 
+import model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Class for the controls of the user.
@@ -13,43 +17,34 @@ import java.awt.event.KeyEvent;
  * @author Danie Oum, Reilly Middlebrooks, Kevin Than
  * @version Summer 2023
  */
-public class UserControlsPanel extends JPanel {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(UserControlsPanel::createAndShowGUI);
-    }
+public class UserControlsPanel extends JPanel implements PropertyChangeListener {
+    private final JButton upButton;
+    private final JButton downButton;
+    private final JButton leftButton;
+    private final JButton rightButton;
 
-    /**
-     * This method creates and shows the GUI. It includes the arrow buttons.
-     */
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Control Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 3, 10, 10));
+    public UserControlsPanel() {
+        setLayout(new GridLayout(2, 3, 10, 10));
 
         JButton blankButton = new JButton("");
-        JButton upButton = new JButton("↑"); // Up arrow
-        blankButton.setEnabled(false);
         JButton blankButton2 = new JButton("");
+        blankButton.setEnabled(false);
         blankButton2.setEnabled(false);
 
-        JButton leftButton = new JButton("←"); // Left arrow
-        JButton downButton = new JButton("↓"); // Down arrow
-        JButton rightButton = new JButton("→"); // Right arrow
+        upButton = new JButton("↑"); // Up arrow
+        leftButton = new JButton("←"); // Left arrow
+        downButton = new JButton("↓"); // Down arrow
+        rightButton = new JButton("→"); // Right arrow
 
-        panel.add(blankButton);
-        panel.add(upButton);
-        panel.add(blankButton2);
-        panel.add(leftButton);
-        panel.add(downButton);
-        panel.add(rightButton);
+        add(blankButton);
+        add(upButton);
+        add(blankButton2);
+        add(leftButton);
+        add(downButton);
+        add(rightButton);
 
-        frame.add(panel);
-
-        // Attach a KeyAdapter to the frame to listen for arrow key events
-        frame.addKeyListener(new KeyAdapter() {
+        // Attach a KeyAdapter to the panel to listen for arrow key events
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
@@ -63,19 +58,12 @@ public class UserControlsPanel extends JPanel {
             }
         });
 
-        frame.setFocusable(true);
-        frame.requestFocus();
-        frame.setVisible(true);
+        setFocusable(true);
+        requestFocus();
+        setVisible(true);
     }
 
-    /**
-     * This method is to highlight the direction of the buttons when pressed.
-     *
-     * @param keyCode The key code for the buttons
-     * @param highlight The buttons will highlight green
-     * @param buttons The buttons
-     */
-    private static void highlightDirection(int keyCode, boolean highlight, JButton... buttons) {
+    private void highlightDirection(int keyCode, boolean highlight, JButton... buttons) {
         for (JButton button : buttons) {
             button.setBackground(null);
         }
@@ -94,5 +82,10 @@ public class UserControlsPanel extends JPanel {
                 buttons[3].setBackground(highlight ? Color.GREEN : null);
                 break;
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // Handle property changes here if needed
     }
 }
