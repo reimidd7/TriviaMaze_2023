@@ -23,6 +23,9 @@ public class UserControlsPanel extends JPanel implements PropertyChangeListener 
     private final JButton leftButton;
     private final JButton rightButton;
 
+    /**
+     * This method creates and shows the GUI. It includes the arrow buttons and key listeners.
+     */
     public UserControlsPanel() {
         setLayout(new GridLayout(2, 3, 10, 10));
 
@@ -63,6 +66,13 @@ public class UserControlsPanel extends JPanel implements PropertyChangeListener 
         setVisible(true);
     }
 
+    /**
+     * This method is to highlight the direction of the buttons when pressed.
+     *
+     * @param keyCode The key code for the buttons
+     * @param highlight The buttons will highlight green
+     * @param buttons The buttons
+     */
     private void highlightDirection(int keyCode, boolean highlight, JButton... buttons) {
         for (JButton button : buttons) {
             button.setBackground(null);
