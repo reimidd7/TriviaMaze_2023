@@ -138,13 +138,12 @@ public class Room {
     }
 
     public Doors getDoorByDirection(Direction theDir) {
-        Doors doorInDirection = null;
         for (Doors d: myMapOfDoors.keySet()) {
             if (myMapOfDoors.get(d).equals(theDir)) {
-                doorInDirection = d;
+                return d;
             }
         }
-        return doorInDirection;
+        return null;
     }
 
     //----------------^^^new
