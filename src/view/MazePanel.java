@@ -62,9 +62,9 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             e.printStackTrace();
         }
 
-        addKeyListener(new BoardKeyListener());
-        setFocusable(true);
-        requestFocus();
+//        addKeyListener(new BoardKeyListener());
+//        setFocusable(true);
+//        requestFocus();
         setVisible(true);
     }
 
@@ -85,6 +85,8 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         drawPlayer(g2d);
 
         drawDoors(g2d);
+
+        repaint();
 
 
     }
@@ -193,29 +195,29 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             repaint();
         }
     }
-    private class BoardKeyListener extends KeyAdapter {
-        public void keyPressed(KeyEvent e) {
-            int keyCode = e.getKeyCode();
-            switch (keyCode) {
-                case KeyEvent.VK_UP:
-                    maze.up();
-                    System.out.println("up");
-                    break;
-                case KeyEvent.VK_DOWN:
-                    maze.down();
-                    System.out.println("down");
-                    break;
-                case KeyEvent.VK_LEFT:
-                    maze.left();
-                    System.out.println("left");
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    maze.right();
-                    System.out.println("right");
-                    break;
-            }
-            //repaint();
-        }
-    }
+//    private class BoardKeyListener extends KeyAdapter {
+//        public void keyPressed(KeyEvent e) {
+//            int keyCode = e.getKeyCode();
+//            switch (keyCode) {
+//                case KeyEvent.VK_UP:
+//                    maze.up();
+//                    System.out.println("up");
+//                    break;
+//                case KeyEvent.VK_DOWN:
+//                    maze.down();
+//                    System.out.println("down");
+//                    break;
+//                case KeyEvent.VK_LEFT:
+//                    maze.left();
+//                    System.out.println("left");
+//                    break;
+//                case KeyEvent.VK_RIGHT:
+//                    maze.right();
+//                    System.out.println("right");
+//                    break;
+//            }
+//            //repaint();
+//        }
+//    }
 }
 

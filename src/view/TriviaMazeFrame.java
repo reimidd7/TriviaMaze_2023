@@ -20,7 +20,7 @@ import java.io.*;
  * @author Reilly Middlebrooks
  * @version Summer 2023
  */
-public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
+public class TriviaMazeFrame extends JFrame  {
 
     //private MazePanel gameState;
 
@@ -33,16 +33,19 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
-    private final Maze myMaze;
+    private final TriviaMazeControls myMaze;
 
 
     /**
      * Constructor to create the Frame for Trivia Maze.
      * Uses JFrame as super.
      */
-    public TriviaMazeFrame(Maze theMaze) {
+    public TriviaMazeFrame(TriviaMazeControls theMaze) {
         super();
         myMaze = theMaze;
+        addKeyListener(new BoardKeyListener());
+        setFocusable(true);
+        requestFocus();
         createFrame();
         setVisible(true);
     }
@@ -186,11 +189,28 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (myMaze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName()) ||
-                Maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
-            repaint();
+    private class BoardKeyListener extends KeyAdapter {
+        public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.VK_UP:
+                    myMaze.up();
+                    System.out.println("up");
+                    break;
+                case KeyEvent.VK_DOWN:
+                    myMaze.down();
+                    System.out.println("down");
+                    break;
+                case KeyEvent.VK_LEFT:
+                    myMaze.left();
+                    System.out.println("left");
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    myMaze.right();
+                    System.out.println("right");
+                    break;
+            }
+            //repaint();
         }
     }
 }

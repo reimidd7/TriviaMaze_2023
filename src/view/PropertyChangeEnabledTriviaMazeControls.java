@@ -7,9 +7,8 @@ public interface PropertyChangeEnabledTriviaMazeControls extends TriviaMazeContr
 
     String PROPERTY_DOOR_STATUS = " THIS IS FOR WHEN A PLAYER ANSWER CHANGES THE DOOR STATUS";
 
-    String PROPERTY_UNLOCK_CHANGE = " THIS IS FOR WHEN A PLAYER UNLOCKS A DOOR";
+    String PROPERTY_NEW_QUESTION = " THIS IS FOR WHEN A PLAYER CHOOSES A NEW DOOR";
 
-    String PROPERTY_LOCKED_CHANGE = " THIS IS FOR WHEN A DOOR PERMANENTLY LOCKS";
 
     /**
      * Add a PropertyChangeListener to the listener list. The listener is registered for

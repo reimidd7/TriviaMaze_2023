@@ -13,6 +13,10 @@ public class Player {
         this.myPlayerDir = theDir;
     }
 
+    public Player (Point theLoc) {
+        this.myPlayerLoc = theLoc;
+    }
+
     public Point getPlayerLoc() {
         return myPlayerLoc;
     }

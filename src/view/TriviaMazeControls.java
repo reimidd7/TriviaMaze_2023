@@ -1,6 +1,7 @@
 package view;
 
 import model.Doors;
+import model.Question;
 
 import java.awt.Point;
 import java.beans.PropertyChangeSupport;
@@ -48,13 +49,15 @@ public interface TriviaMazeControls {
     void right();
 
 
-    Point getPlayerLocation();
+   // Point getPlayerLocation();
 
 
-    void checkDoors();
+    //void checkDoors();
 
     void updateDoors(Doors door);
     // if door is true set to false
+
+    //Question newQuestion();
 
 
 

@@ -70,7 +70,7 @@ public class Room {
      * Determines if the room is locked. USED WHEN USER PLAYS.
      * @return true if locked, false if unlocked.
      */
-    public boolean isLocked() {
+    public boolean isRoomLocked() {
         return myIsLocked;
     }
 
@@ -78,7 +78,7 @@ public class Room {
      * Sets id the room is locked. This happens when all the doors are locked.
      * @param theLocked true if locked, false if unlocked.
      */
-    public void setLocked(final boolean theLocked) {
+    public void setRoomLocked(final boolean theLocked) {
         myIsLocked = theLocked;
     }
 
@@ -104,7 +104,7 @@ public class Room {
      * Used injuction with setLocked and isLocked.
      * @return true when there are unlocked doors, false if not.
      */
-    public boolean hasUnlockedDoors() {
+    public boolean roomHasUnlockedDoors() {
         for (Doors door: myMapOfDoors.keySet()) {
             if (door.getDoorStatus()) {
                 return true;
