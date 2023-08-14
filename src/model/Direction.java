@@ -19,7 +19,9 @@ public enum Direction {
     /**
      * East (which is right on the screen).
      */
-    EAST('E');
+    EAST('E'),
+
+    NONE('O');
 
     /**
      * Letter of the Enum.

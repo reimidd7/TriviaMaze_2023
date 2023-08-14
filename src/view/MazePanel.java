@@ -86,7 +86,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
         drawDoors(g2d);
 
-        repaint();
+        //repaint();
 
 
     }
@@ -124,11 +124,12 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                     int playerX = x + GRID_SIZE / 4;
                     int playerY = y + GRID_SIZE / 4;
                     theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
-                    repaint();
+
 
                 }
             }
         }
+        repaint();
     }
 
     private void drawDoors(final Graphics2D theG2D) {
