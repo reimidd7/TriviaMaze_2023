@@ -48,6 +48,8 @@ public class Room {
         this.myDescription = theDescription;
         this.myIsLocked = false;
         myMapOfDoors =  new HashMap<>();
+
+
     }
 
     /**

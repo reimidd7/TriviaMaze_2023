@@ -198,18 +198,22 @@ public class TriviaMazeFrame extends JFrame  {
             int keyCode = e.getKeyCode();
             switch (keyCode) {
                 case KeyEvent.VK_UP:
+                    myMaze.faceUp();
                     myMaze.up();
                     System.out.println("up");
                     break;
                 case KeyEvent.VK_DOWN:
+                    myMaze.faceDown();
                     myMaze.down();
                     System.out.println("down");
                     break;
                 case KeyEvent.VK_LEFT:
+                    myMaze.faceLeft();
                     myMaze.left();
                     System.out.println("left");
                     break;
                 case KeyEvent.VK_RIGHT:
+                    myMaze.faceRight();
                     myMaze.right();
                     System.out.println("right");
                     break;

@@ -36,7 +36,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     private Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
-    private final Room myRoom;
+    //private final Room myRoom;
     private Doors myDoor;
 
     private Question myQuestion;
@@ -49,22 +49,32 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
-        this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
-        this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
-        this.myQuestion = myDoor.getCurrQuestion();
+        this.myQuestion = myMaze.getQuestion();
+
+        System.out.println("From QDP:  " + myQuestion.getQuestion());
 
 
-        if (determineDoorQuestionType(myPlayer).equals("MC")) {
+
+
+        if (myQuestion == null) {
+            homeDisplay();
+        } else if (determineDoorQuestionType(myPlayer).equals("MC")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             mcDisplay(myPlayer); //yellow
         } else if (determineDoorQuestionType(myPlayer).equals("TF")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             tfDisplay(myPlayer); //red
         } else if (determineDoorQuestionType(myPlayer).equals("SAns")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             sAnsDisplay(myPlayer); //gray
         } else {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             homeDisplay();
         }
 
+
         //setFocusable(true);
+        repaint();
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
     }

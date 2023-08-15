@@ -49,6 +49,11 @@ public interface TriviaMazeControls {
      */
     void right();
 
+    void faceUp();
+    void faceDown();
+    void faceLeft();
+    void faceRight();
+
 
    // Point getPlayerLocation();
 

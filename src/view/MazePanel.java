@@ -194,11 +194,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             door = updatedDoor;
             repaint();
         }
-        if (maze.PROPERTY_NEW_QUESTION.equals(evt.getPropertyName())) {
-            Doors newDoor = (Doors) evt.getNewValue();
-            door = newDoor;
-            repaint();
-        }
     }
 //    private class BoardKeyListener extends KeyAdapter {
 //        public void keyPressed(KeyEvent e) {
