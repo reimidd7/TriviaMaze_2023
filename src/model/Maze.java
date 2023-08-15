@@ -1,8 +1,6 @@
 package model;
 
 import view.PropertyChangeEnabledTriviaMazeControls;
-import view.QuestionDisplayPanel;
-import view.TriviaMazeControls;
 
 import java.awt.Point;
 import java.beans.PropertyChangeListener;
@@ -47,7 +45,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     //private Room room;
 
-    //private Question myQues;
+    private Question myQues;
 
     private final PropertyChangeSupport myPcs;
 
@@ -70,10 +68,8 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void newGame() {
         createMaze();
-        myPlayer = new Player(new Point(0, 0), Direction.SOUTH); // This should come from get entrance but idk how to do that rn
-        //room = getRoom(myPlayer.getPlayerLoc());
+        myPlayer = new Player(new Point(0, 0), Direction.NONE); // This should come from get entrance but idk how to do that rn
 
-        //myDoor = room.getDoorByDirection(myPlayer.getPlayerDir());
         System.out.println("First   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
         setEntrance();
@@ -96,24 +92,24 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         boolean checkForSouth = room.getDoorByDirection(Direction.SOUTH).getDoorStatus();
         myPlayer.setPlayerDir(Direction.SOUTH);
         System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
-        setQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-
 
         if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
-
-
             myPlayerLoc.translate(1,0);         //Translates location
 
             System.out.println("Down   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
             notifyObseversOfLocationChange();
+            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
+            checkForWin();
         }
     }
 
     @Override
     public void up() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
+        Room room = getRoom(myPlayerLoc);
+        //sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
 
         if (myPlayerLoc.x > 0) {
             myPlayerLoc.translate(-1,0);         //Translates location
@@ -121,6 +117,8 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
             System.out.println("up   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
             notifyObseversOfLocationChange();
+            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
         }
     }
 
@@ -140,6 +138,8 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
             System.out.println("left   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
             notifyObseversOfLocationChange();
+            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
         }
     }
 
@@ -152,72 +152,33 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         boolean checkForEast = room.getDoorByDirection(Direction.EAST).getDoorStatus();
         myPlayer.setPlayerDir(Direction.EAST);
         System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
-        setQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
 
         if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
             myPlayerLoc.translate(0, 1);         //Translates location
 
-
             System.out.println("right   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
             notifyObseversOfLocationChange();
+            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
+            checkForWin();
         }
     }
 
     @Override
-    public void faceUp() {
-        myPlayer.setPlayerDir(Direction.NORTH);
-
-
-    }
-
-    @Override
-    public void faceDown() {
-        // get playerlocation
-        // set player direction
-        // check if there is a door in that direction
-        // get the door the player is looking at
-        // get and set the question from that door
-        // send to the Question Display
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-//        myPlayer.setPlayerDir(Direction.SOUTH);
-//        boolean check = room.getDoorByDirection(Direction.SOUTH).getDoorStatus();
-//
-//        if (myPlayerLoc.y < getCols() - 1 && check) {
-//            Doors door = room.getDoorByDirection(Direction.SOUTH);
-//            setQuestion(door);
-//
-//            myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, getQuestion());
-//        }
-
+    public void sendQuestion(Question q) {
+        //myQues = q;
+        myQues = q;
+        System.out.println("Send question");
+        myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, q);
     }
 
 
-    public void setQuestion(Question q) {
-
-        Question myQues = q;
-    }
-
-    @Override
     public Question getQuestion() {
-        Room room = getRoom(myPlayer.getPlayerLoc());
-        Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
-        System.out.println(" getQUestion()" + door.getCurrQuestion().getQuestion());
-        myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, door.getCurrQuestion());
-        return door.getCurrQuestion();
+        System.out.println("*****getQuestion()" + myQues);
+        return myQues;
     }
 
-    @Override
-    public void faceLeft() {
-        myPlayer.setPlayerDir(Direction.WEST);
-
-    }
-
-    @Override
-    public void faceRight() {
-        myPlayer.setPlayerDir(Direction.EAST);
-
-    }
 
     /*TODO: When a key is pressed we want to
         grab the question in that direction
@@ -452,6 +413,13 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     // This method sets the exit of the maze.
     private void setExit() {
         myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
+    }
+
+    private void checkForWin() {
+        Room currentRoom = getRoom(myPlayer.getPlayerLoc());
+        if (currentRoom != null && currentRoom.isExit()) {
+            System.out.println("Congratulations! You have reached the exit and won!");
+        }
     }
 
     @Override

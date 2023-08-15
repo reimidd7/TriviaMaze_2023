@@ -5,15 +5,14 @@ package view;
 //LOWER RIGHT HAND SIDE OF THE FRAME
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+
 import model.Direction;
 import model.Doors;
 import model.Maze;
@@ -28,14 +27,14 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     private static final Dimension TEXTBOX = new Dimension(200, 30);
 
-    private final Maze myMaze;
+    private Maze myMaze;
     private Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
     //private final Room myRoom;
     private Doors myDoor;
 
-    private Question myQuestion;
+    //private Question myQuestion;
 
     /**
      * Constructor for QuestionDisplayPanel.
@@ -45,31 +44,35 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
-        this.myQuestion = myMaze.getQuestion();
+        addKeyListener(new BoardKeyListener());
+        setFocusable(true);
+        requestFocus();
+//        myQuestion = myMaze.getQuestion();
+//
+//
+//
+//
+//
+//
+//        if (myQuestion == null) {
+//            homeDisplay();
+//        } else if (determineDoorQuestionType().equals("MC")) {
+//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
+//            mcDisplay(myPlayer); //yellow
+//        } else if (determineDoorQuestionType().equals("TF")) {
+//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
+//            tfDisplay(myPlayer); //red
+//        } else if (determineDoorQuestionType().equals("SAns")) {
+//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
+//            sAnsDisplay(myPlayer); //gray
+//        } else {
+//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
+//            homeDisplay();
+//        }
+        //repaint();
+        //revalidate();
 
-        System.out.println("From QDP:  " + myQuestion.getQuestion());
-
-
-
-
-        if (myQuestion == null) {
-            homeDisplay();
-        } else if (determineDoorQuestionType(myPlayer).equals("MC")) {
-            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-            mcDisplay(myPlayer); //yellow
-        } else if (determineDoorQuestionType(myPlayer).equals("TF")) {
-            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-            tfDisplay(myPlayer); //red
-        } else if (determineDoorQuestionType(myPlayer).equals("SAns")) {
-            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-            sAnsDisplay(myPlayer); //gray
-        } else {
-            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-            homeDisplay();
-        }
-        repaint();
-
-
+        updateQuestion(myMaze.getQuestion());
 
         //setFocusable(true);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -77,12 +80,12 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
 
-    private String determineDoorQuestionType(final Player thePlayer) {
-        repaint();
+    private String determineDoorQuestionType(Question myQuestion) {
+        //repaint();
         return myQuestion.getQuestionTypeType();
     }
 
-    private void mcDisplay(final Player thePlayer) {
+    private void mcDisplay(Question myQuestion) {
         final ArrayList<String> split = new ArrayList<>();
         final String qString = myQuestion.getQuestion();
         final String answer = myQuestion.getCorrectAnswer();
@@ -130,11 +133,12 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(cC);
         add(cD);
         setBackground(Color.yellow);
+        revalidate();
         repaint();
 
     }
 
-    public void tfDisplay(final Player thePlayer) {
+    public void tfDisplay(Question myQuestion) {
         final String qString = myQuestion.getQuestion();
         final String answer = myQuestion.getCorrectAnswer();
 
@@ -160,11 +164,12 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(bTrue);
         add(bFalse);
         setBackground(Color.pink);
+        revalidate();
         repaint();
 
     }
 
-    public void sAnsDisplay(final Player thePlayer) {
+    public void sAnsDisplay(Question myQuestion) {
         final String qString = myQuestion.getQuestion();
         final String answer = myQuestion.getCorrectAnswer();
 
@@ -204,6 +209,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(shortAns);
         add(submit);
         setBackground(Color.GRAY);
+        revalidate();
         repaint();
 
     }
@@ -215,6 +221,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JLabel home = new JLabel("Choose a Doorway... Have fun!");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
+        setBackground(Color.ORANGE);
+        add(home);
+        revalidate();
+        repaint();
     }
 
     private void buttonFunctionality(final JButton theButton, final String theAnswer) {
@@ -223,10 +233,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         theButton.addActionListener(e -> {
             if (firstButton == firstAns) {
-                System.out.println("Correct!" + myDoor.getDoorStatus());
+                System.out.println("Correct!");
             } else {
                 myMaze.updateDoors(myDoor);
-                System.out.println("incorrect!" + myDoor.getDoorStatus());
+                System.out.println("incorrect!");
             }
 
         });
@@ -262,20 +272,93 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         }
     }
 
+    public void updateQuestion(Question question) { //ONLY CALLED THE FIRST TIME
+        System.out.println("updateQuestion is being called\n\n\n");
+
+        removeAll();
+
+        if (question == null) {
+            homeDisplay();
+
+        } else if (determineDoorQuestionType(question).equals("MC")) {
+            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            mcDisplay(question); //yellow
+
+        } else if (determineDoorQuestionType(question).equals("TF")) {
+            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            tfDisplay(question); //red
+
+        } else if (determineDoorQuestionType(question).equals("SAns")) {
+            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            sAnsDisplay(question); //gray
+
+        } else {
+            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            homeDisplay();
+
+        }
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
-            myDoor = (Doors) theEvt.getNewValue();
-            repaint();
-        }
-        if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
-            Player newPlayer = (Player) theEvt.getNewValue();
-            myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
-            repaint();
-        }
+//        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
+//            myDoor = (Doors) theEvt.getNewValue();
+//            repaint();
+//        }
+//        if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
+//            Player newPlayer = (Player) theEvt.getNewValue();
+//            myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
+//            repaint();
+//        }
+
+        System.out.println("is this being called");
         if (myMaze.PROPERTY_NEW_QUESTION.equals(theEvt.getPropertyName())) {
             Question newQuestion = (Question) theEvt.getNewValue();
-            myQuestion = newQuestion;
+            updateQuestion(newQuestion);
+            repaint();
+        }
+    }
+
+
+    private class BoardKeyListener extends KeyAdapter {
+        /*TODO: When a key is pressed we want to
+        grab the question in that direction
+        Ask the question
+        if the user is correct move the player in that direction
+        if the user is incorrect change the door color (user remains in the same room)
+         */
+        public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.VK_UP:
+                    myMaze.getQuestion();
+                    myMaze.up();
+                    System.out.println("up");
+                    break;
+                case KeyEvent.VK_DOWN:
+                    myMaze.getQuestion();
+
+                    myMaze.down();
+
+                    System.out.println("down");
+                    break;
+                case KeyEvent.VK_LEFT:
+                    myMaze.getQuestion();
+
+                    myMaze.left();
+
+                    System.out.println("left");
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    myMaze.getQuestion();
+
+                    myMaze.right();
+
+                    System.out.println("right");
+                    break;
+            }
+            updateQuestion(myMaze.getQuestion());
+
             repaint();
         }
     }
