@@ -57,6 +57,9 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         revalidate();
         repaint();
     }
+    private void displayQuestion() {
+        Doors door = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
+    }
     private void displayMSTF() {
         removeAll();
         if(myDoor != null) {
@@ -218,6 +221,9 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JLabel home = new JLabel("Choose a Doorway... Have fun!");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
+        add(home);
+        revalidate();
+        repaint();
     }
 
     private void buttonFunctionality(final JButton theButton, final String theAnswer) {
@@ -228,6 +234,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             if (firstButton == firstAns) {
                 System.out.println("Correct!" + myDoor.getDoorStatus());
             } else {
+                myMaze.updateDoors(myDoor);
+                myDoor.setLocked(true);
                 myMaze.updateDoors(myDoor);
                 System.out.println("incorrect!" + myDoor.getDoorStatus());
             }

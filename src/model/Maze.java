@@ -1,7 +1,6 @@
 package model;
 
 import view.PropertyChangeEnabledTriviaMazeControls;
-import view.QuestionDisplayPanel;
 import view.TriviaMazeControls;
 
 import java.awt.Point;
@@ -46,7 +45,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     private Doors myDoor;
 
     private Room room;
-    private QuestionDisplayPanel myQuestionDisplayPanel;
+
     private final PropertyChangeSupport myPcs;
 
 
@@ -66,19 +65,28 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     @Override
     public void newGame() {
-
         this.createMaze();
         this.myPlayer = new Player(new Point(0, 0), Direction.NONE);
         this.room = this.getRoom(this.myPlayer.getPlayerLoc());
         this.myDoor = null;
         this.setEntrance();
         this.setExit();
-
         // Removed old player location and door since we are starting a new game
         this.myPcs.firePropertyChange("PLAYER_CHANGE_LOCATION", null, this.myPlayer.getPlayerLoc());
         this.myPcs.firePropertyChange("DOOR_STATUS_CHANGE", null, this.myDoor);
     }
-
+    private void askQuestionToUnlockDoor(Point playerLoc, Direction direction) {
+        Doors door = getRoom(playerLoc).getDoorByDirection(direction);
+        if (door != null) {
+            Question question = door.getCurrQuestion();
+            door.setLocked(false);
+            System.out.println("Correct! The door is now unlocked.");
+            door.setLocked(true);
+            System.out.println("Incorrect! The door remains locked.");
+        } else {
+            System.out.println("There is no door in this direction!");
+        }
+    }
     @Override
     public void down() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
@@ -88,7 +96,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
-                System.out.println("The door is locked! You can't go down.");
+                askQuestionToUnlockDoor(myPlayerLoc, Direction.SOUTH);
             }
         }
     }
@@ -102,7 +110,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
-                System.out.println("The door is locked! You can't go up.");
+                askQuestionToUnlockDoor(myPlayerLoc, Direction.NORTH);
             }
         }
     }
@@ -116,7 +124,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
-                System.out.println("The door is locked! You can't go left.");
+                askQuestionToUnlockDoor(myPlayerLoc, Direction.WEST);
             }
         }
     }
@@ -130,10 +138,10 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
-                System.out.println("The door is locked! You can't go right.");
-            }
+                askQuestionToUnlockDoor(myPlayerLoc, Direction.EAST);            }
         }
     }
+
 
     @Override
     public Point getPlayerLocation() {
