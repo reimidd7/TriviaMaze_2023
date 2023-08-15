@@ -4,11 +4,7 @@ package view;
 //DISPLAY NOTHING/AN IMAGE WHEN THE USER IS IN BETWEEN QUESTIONS
 //LOWER RIGHT HAND SIDE OF THE FRAME
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -59,27 +55,30 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         if (myQuestion == null) {
             homeDisplay();
         } else if (determineDoorQuestionType(myPlayer).equals("MC")) {
-            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
+            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
             mcDisplay(myPlayer); //yellow
         } else if (determineDoorQuestionType(myPlayer).equals("TF")) {
-            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
+            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
             tfDisplay(myPlayer); //red
         } else if (determineDoorQuestionType(myPlayer).equals("SAns")) {
-            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
+            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
             sAnsDisplay(myPlayer); //gray
         } else {
-            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
+            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
             homeDisplay();
         }
+        repaint();
+
 
 
         //setFocusable(true);
-        repaint();
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
     }
 
+
     private String determineDoorQuestionType(final Player thePlayer) {
+        repaint();
         return myQuestion.getQuestionTypeType();
     }
 
@@ -131,6 +130,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(cC);
         add(cD);
         setBackground(Color.yellow);
+        repaint();
+
     }
 
     public void tfDisplay(final Player thePlayer) {
@@ -159,6 +160,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(bTrue);
         add(bFalse);
         setBackground(Color.pink);
+        repaint();
+
     }
 
     public void sAnsDisplay(final Player thePlayer) {

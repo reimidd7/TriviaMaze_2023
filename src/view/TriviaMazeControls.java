@@ -67,6 +67,10 @@ public interface TriviaMazeControls {
 
    // void askQuestion();
 
+;
+
+    Question getQuestion();
+
 
 
 

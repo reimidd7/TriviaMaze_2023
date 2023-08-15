@@ -192,13 +192,17 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     }
 
+
     public void setQuestion(Question q) {
+
         Question myQues = q;
     }
 
+    @Override
     public Question getQuestion() {
         Room room = getRoom(myPlayer.getPlayerLoc());
         Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
+        System.out.println(" getQUestion()" + door.getCurrQuestion().getQuestion());
         myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, door.getCurrQuestion());
         return door.getCurrQuestion();
     }
