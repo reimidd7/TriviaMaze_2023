@@ -20,7 +20,7 @@ import java.io.*;
  * @author Reilly Middlebrooks
  * @version Summer 2023
  */
-public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
+public class TriviaMazeFrame extends JFrame  {
 
     //private MazePanel gameState;
 
@@ -33,16 +33,19 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
-    private final Maze myMaze;
+    private final TriviaMazeControls myMaze;
 
 
     /**
      * Constructor to create the Frame for Trivia Maze.
      * Uses JFrame as super.
      */
-    public TriviaMazeFrame(Maze theMaze) {
+    public TriviaMazeFrame(TriviaMazeControls theMaze) {
         super();
         myMaze = theMaze;
+        addKeyListener(new BoardKeyListener());
+        setFocusable(true);
+        requestFocus();
         createFrame();
         setVisible(true);
     }
@@ -180,17 +183,42 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         frame.add(mazePanel);
         frame.add(eastInfo);
 
-
-
         frame.setVisible(true);
 
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (myMaze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName()) ||
-                Maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
-            repaint();
+    private class BoardKeyListener extends KeyAdapter {
+        /*TODO: When a key is pressed we want to
+        grab the question in that direction
+        Ask the question
+        if the user is correct move the player in that direction
+        if the user is incorrect change the door color (user remains in the same room)
+         */
+        public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.VK_UP:
+                    myMaze.faceUp();
+                    myMaze.up();
+                    System.out.println("up");
+                    break;
+                case KeyEvent.VK_DOWN:
+                    myMaze.faceDown();
+                    myMaze.down();
+                    System.out.println("down");
+                    break;
+                case KeyEvent.VK_LEFT:
+                    myMaze.faceLeft();
+                    myMaze.left();
+                    System.out.println("left");
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    myMaze.faceRight();
+                    myMaze.right();
+                    System.out.println("right");
+                    break;
+            }
+            //repaint();
         }
     }
 }

@@ -36,44 +36,57 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     private Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
-    private final Room myRoom;
+    //private final Room myRoom;
     private Doors myDoor;
+
+    private Question myQuestion;
 
     /**
      * Constructor for QuestionDisplayPanel.
      */
     public QuestionDisplayPanel(final Maze theMaze) {
         super();
+
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
-        this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
-        this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
+        this.myQuestion = myMaze.getQuestion();
 
-        if (determineDoorQuestionType(myPlayer).equals("MC")) {
+        System.out.println("From QDP:  " + myQuestion.getQuestion());
+
+
+
+
+        if (myQuestion == null) {
+            homeDisplay();
+        } else if (determineDoorQuestionType(myPlayer).equals("MC")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             mcDisplay(myPlayer); //yellow
         } else if (determineDoorQuestionType(myPlayer).equals("TF")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             tfDisplay(myPlayer); //red
         } else if (determineDoorQuestionType(myPlayer).equals("SAns")) {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             sAnsDisplay(myPlayer); //gray
         } else {
+            System.out.println("QUESTION -----   " + myQuestion.getQuestion());
             homeDisplay();
         }
 
-        setFocusable(true);
+
+        //setFocusable(true);
+        repaint();
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
     }
 
     private String determineDoorQuestionType(final Player thePlayer) {
-        final Question q = myDoor.getCurrQuestion();
-        return q.getQuestionTypeType();
+        return myQuestion.getQuestionTypeType();
     }
 
     private void mcDisplay(final Player thePlayer) {
         final ArrayList<String> split = new ArrayList<>();
-        final Question ques = myDoor.getCurrQuestion();
-        final String qString = ques.getQuestion();
-        final String answer = ques.getCorrectAnswer();
+        final String qString = myQuestion.getQuestion();
+        final String answer = myQuestion.getCorrectAnswer();
 
         final Scanner s = new Scanner(qString);
         while (s.hasNextLine()) {
@@ -100,6 +113,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JButton cD = new JButton(choiceD);
         buttonFunctionality(cD, answer);
 
+
         cA.setAlignmentX(Component.CENTER_ALIGNMENT);
         cB.setAlignmentX(Component.CENTER_ALIGNMENT);
         cC.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -120,9 +134,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void tfDisplay(final Player thePlayer) {
-        final Question ques = myDoor.getCurrQuestion();
-        final String qString = ques.getQuestion();
-        final String answer = ques.getCorrectAnswer();
+        final String qString = myQuestion.getQuestion();
+        final String answer = myQuestion.getCorrectAnswer();
 
         // Question Type
         final JLabel header = new JLabel("True or False");
@@ -149,9 +162,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void sAnsDisplay(final Player thePlayer) {
-        final Question ques = myDoor.getCurrQuestion();
-        final String qString = ques.getQuestion();
-        final String answer = ques.getCorrectAnswer();
+        final String qString = myQuestion.getQuestion();
+        final String answer = myQuestion.getCorrectAnswer();
 
         // Question Type
         final JLabel header = new JLabel("Short Answer");
@@ -189,6 +201,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(shortAns);
         add(submit);
         setBackground(Color.GRAY);
+        repaint();
 
     }
 
@@ -255,6 +268,11 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
             Player newPlayer = (Player) theEvt.getNewValue();
             myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
+            repaint();
+        }
+        if (myMaze.PROPERTY_NEW_QUESTION.equals(theEvt.getPropertyName())) {
+            Question newQuestion = (Question) theEvt.getNewValue();
+            myQuestion = newQuestion;
             repaint();
         }
     }
