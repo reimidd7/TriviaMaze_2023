@@ -43,31 +43,49 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
      * Constructor for QuestionDisplayPanel.
      */
     public QuestionDisplayPanel(final Maze theMaze) {
-
         super();
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
         this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
         this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
 
-        if (determineDoorQuestionType(myPlayer).equals("MC")) {
-            mcDisplay(myPlayer); //yellow
-        } else if (determineDoorQuestionType(myPlayer).equals("TF")) {
-            tfDisplay(myPlayer); //red
-        } else if (determineDoorQuestionType(myPlayer).equals("SAns")) {
-            sAnsDisplay(myPlayer); //gray
-        } else {
-            homeDisplay();
-        }
+        displayMSTF();
 
         setFocusable(true);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
+        revalidate();
+        repaint();
+    }
+    private void displayMSTF() {
+        removeAll();
+        if(myDoor != null) {
+            switch(determineDoorQuestionType(myPlayer)) {
+                case "MC":
+                    mcDisplay(myPlayer);
+                    break;
+                case "TF":
+                    tfDisplay(myPlayer);
+                    break;
+                case "SAns":
+                    sAnsDisplay(myPlayer);
+                    break;
+                default:
+                    homeDisplay();
+                    break;
+            }
+        } else {
+            homeDisplay();
+        }
     }
 
     private String determineDoorQuestionType(final Player thePlayer) {
-        final Question q = myDoor.getCurrQuestion();
-        return q.getQuestionType().name();
+        if(myDoor != null) {
+            final Question q = myDoor.getCurrQuestion();
+            return q.getQuestionType().name();
+        } else {
+            return "NONE";
+        }
     }
 
     private void mcDisplay(final Player thePlayer) {
@@ -213,7 +231,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 myMaze.updateDoors(myDoor);
                 System.out.println("incorrect!" + myDoor.getDoorStatus());
             }
-
+            homeDisplay();
         });
 
     }
@@ -259,5 +277,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             repaint();
         }
     }
+
 }
 

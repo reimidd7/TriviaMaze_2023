@@ -37,7 +37,7 @@ public class Doors {
      */
     public Doors(final int theDoorId) {
         //is the door unlocked?
-        this.myIsUnlocked = true; //by default
+        this.myIsUnlocked = false; //by default
 
         // adds the question data to the variable myCurrQuestion
         this.myCurrQuestion = myQuestionData.retrieveQuestion();
@@ -92,8 +92,5 @@ public class Doors {
         return myCurrQuestion;
     }
 
-    public Question getQuestionIfUnlocked() {
-        return myIsUnlocked ? myQuestionData.retrieveQuestion() : null;
-    }
 }
 

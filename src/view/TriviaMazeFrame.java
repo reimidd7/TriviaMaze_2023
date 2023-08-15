@@ -2,6 +2,7 @@ package view;
 
 import model.Doors;
 import model.Maze;
+import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,9 +34,9 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
-    private final Maze myMaze;
+    private Maze myMaze;
 
-
+    private Player myPlayer;
     /**
      * Constructor to create the Frame for Trivia Maze.
      * Uses JFrame as super.
@@ -68,7 +69,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     private JMenuBar createFileMenu() {
         final JMenuBar bar = new JMenuBar();
         final JMenu fileClick = new JMenu("File");
-        final JMenuItem newGame = new JMenuItem("New Game");
+        final JMenuItem newGameLabel = new JMenuItem("New Game");
         final JMenu help = new JMenu("Help");
         final JMenuItem saveGame = new JMenuItem("Save Game");
         saveGame.addActionListener(new ActionListener() {
@@ -81,6 +82,15 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
                     JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
 
                 }
+            }
+        });
+        newGameLabel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                myMaze.newGame();
+                myPlayer = myMaze.getPlayer();
+                revalidate();
+                repaint();
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "New Game Started!");
             }
         });
         // Create load game menu item and add ActionListener.
@@ -112,7 +122,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         help.add(instructionSubMenu("Goal", "This is the goal"));
         help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, "
                 + "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
-        fileClick.add(newGame);
+        fileClick.add(newGameLabel);
         fileClick.add(saveGame);
         fileClick.add(loadGame);
         fileClick.add(exitGame);

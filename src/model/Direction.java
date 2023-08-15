@@ -1,6 +1,7 @@
 package model;
 
 public enum Direction {
+    NONE('O'),
     /**
      * North (which is up on the screen).
      */
@@ -43,7 +44,6 @@ public enum Direction {
         for (final Direction direction : Direction.values()) {
             if (direction.letter() == theLetter) {
                 result = direction;
-                break;
             }
         }
 

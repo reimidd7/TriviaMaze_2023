@@ -1,6 +1,7 @@
 package model;
 
 import view.PropertyChangeEnabledTriviaMazeControls;
+import view.QuestionDisplayPanel;
 import view.TriviaMazeControls;
 
 import java.awt.Point;
@@ -45,7 +46,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     private Doors myDoor;
 
     private Room room;
-
+    private QuestionDisplayPanel myQuestionDisplayPanel;
     private final PropertyChangeSupport myPcs;
 
 
@@ -65,116 +66,78 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     @Override
     public void newGame() {
-        createMaze();
-        myPlayer = new Player(new Point(0,0), Direction.SOUTH); // This should come from get entrance but idk how to do that rn
-        this.room = getRoom(myPlayer.getPlayerLoc());
-        this.myDoor = room.getDoorByDirection(myPlayer.getPlayerDir());
-        setEntrance();
-        setExit();
 
-        // save old values
-        Point oldPlayerLoc = myPlayer.getPlayerLoc();
-        Doors oldDoor = getDoor();
-        // Change any states? player location. door status?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, new Point(myPlayer.getPlayerLoc()));
-        myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, oldDoor, myDoor);
+        this.createMaze();
+        this.myPlayer = new Player(new Point(0, 0), Direction.NONE);
+        this.room = this.getRoom(this.myPlayer.getPlayerLoc());
+        this.myDoor = null;
+        this.setEntrance();
+        this.setExit();
 
+        // Removed old player location and door since we are starting a new game
+        this.myPcs.firePropertyChange("PLAYER_CHANGE_LOCATION", null, this.myPlayer.getPlayerLoc());
+        this.myPcs.firePropertyChange("DOOR_STATUS_CHANGE", null, this.myDoor);
     }
 
     @Override
     public void down() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-        // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForSouth;
-
-        if (room.hasDoorInDirection(Direction.SOUTH)) {
-            checkForSouth = getDoor().getDoorStatus();
-        } else {
-            checkForSouth = false;
+        if (myPlayerLoc.x < getRows() - 1) {
+            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.SOUTH)) {
+                myPlayerLoc.translate(1, 0);
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("The door is locked! You can't go down.");
+            }
         }
-
-
-        if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
-            myPlayerLoc.translate(1,0);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.SOUTH); //resets player to the new loc and dir
-
-            notifyObseversOfLocationChange();
-        }
-
     }
 
     @Override
     public void up() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        // checks if the room has a door to the north and if it's unlocked.
-        boolean checkForNorth;
-
-        if (room.hasDoorInDirection(Direction.NORTH)) {
-            checkForNorth = getDoor().getDoorStatus();
-        } else {
-            checkForNorth = false;
+        if (myPlayerLoc.x > 0) {
+            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.NORTH)) {
+                myPlayerLoc.translate(-1, 0);
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("The door is locked! You can't go up.");
+            }
         }
-
-        if (myPlayerLoc.x > 0 && checkForNorth) {
-            myPlayerLoc.translate(-1,0);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.NORTH); //resets player to the new loc and dir
-
-            notifyObseversOfLocationChange();
-        }
-
-
-
     }
 
     @Override
     public void left() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-
-        // checks if the room has a door to the west and if it's unlocked.
-        boolean checkForWest;
-
-        if (room.hasDoorInDirection(Direction.WEST)) {
-            checkForWest = getDoor().getDoorStatus();
-        } else {
-            checkForWest = false;
+        if (myPlayerLoc.y > 0) {
+            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.WEST)) {
+                myPlayerLoc.translate(0, -1);
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("The door is locked! You can't go left.");
+            }
         }
-
-        if (myPlayerLoc.y > 0 && checkForWest) {
-            myPlayerLoc.translate(0,-1);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.WEST); //resets player to the new loc and dir
-
-            notifyObseversOfLocationChange();
-        }
-
     }
 
     @Override
     public void right() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        // checks if the room has a door to the east and if it's unlocked.
-        boolean checkForEast;
-
-        if (room.hasDoorInDirection(Direction.EAST)) {
-            checkForEast = getDoor().getDoorStatus();
-        } else {
-            checkForEast = false;
+        if (myPlayerLoc.y < getCols() - 1) {
+            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.EAST)) {
+                myPlayerLoc.translate(0, 1);
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("The door is locked! You can't go right.");
+            }
         }
-        if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
-            myPlayerLoc.translate(0, 1);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.EAST); //resets player to the new loc and dir
-
-            notifyObseversOfLocationChange();
-        }
-
     }
 
     @Override
     public Point getPlayerLocation() {
         return new Point(myPlayer.getPlayerLoc());
-        // CHANGE LOCATION STATE?
     }
 
     @Override
@@ -201,9 +164,8 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
                 new Player(myPlayer.getPlayerLoc(), myPlayer.getPlayerDir()));
 
-        //myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null, myPlayer);
     }
-    // ------------------------------------- ^^^ For property change stuff
+
 
     public Direction getPlayerDirection() {
         return myPlayer.getPlayerDir();
@@ -212,11 +174,12 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     public Player getPlayer() {
         return myPlayer;
     }
+
     //TODO IDK this can be used in the checkFor... variable....I think
     public boolean isDoorUnlockedByDirection(Point thePlayerLoc, Direction theDir) {
         Room currRoom = getRoom(thePlayerLoc); //room where the player is located
         Doors currDoor = null;
-        for (Doors d: currRoom.getMapOfDoorsAndDir().keySet()) {
+        for (Doors d : currRoom.getMapOfDoorsAndDir().keySet()) {
             Direction dirOfCurrDoor = currRoom.getMapOfDoorsAndDir().get(d);
             if (dirOfCurrDoor.equals(theDir)) {
                 currDoor = d;
@@ -302,6 +265,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     public int getCols() {
         return myCols;
     }
+
     /**
      * Gets a list of all doors in the maze.
      *
@@ -412,8 +376,16 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     // This method sets the exit of the maze.
     private void setExit() {
-        myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
+        this.myRooms[this.myRows - 1][this.myCols - 1].setExit(true);
     }
+
+    private void checkForWin() {
+        Room currentRoom = getRoom(myPlayer.getPlayerLoc());
+        if (currentRoom != null && currentRoom.isExit()) {
+            System.out.println("Congratulations! You have reached the exit and won!");
+        }
+    }
+
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener theListener) {

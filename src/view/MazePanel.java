@@ -5,16 +5,13 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 
 // DISPLAY THE MAZE
