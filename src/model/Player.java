@@ -29,4 +29,7 @@ public class Player {
         return myPlayerDir;
     }
 
+    public void setPlayerDir(Direction direction) {
+        myPlayerDir = direction;
+    }
 }

@@ -46,11 +46,13 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
      */
     public QuestionDisplayPanel(final Maze theMaze) {
         super();
+
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
         this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
         this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
         this.myQuestion = myDoor.getCurrQuestion();
+
 
         if (determineDoorQuestionType(myPlayer).equals("MC")) {
             mcDisplay(myPlayer); //yellow

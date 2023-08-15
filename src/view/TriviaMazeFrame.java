@@ -183,13 +183,17 @@ public class TriviaMazeFrame extends JFrame  {
         frame.add(mazePanel);
         frame.add(eastInfo);
 
-
-
         frame.setVisible(true);
 
     }
 
     private class BoardKeyListener extends KeyAdapter {
+        /*TODO: When a key is pressed we want to
+        grab the question in that direction
+        Ask the question
+        if the user is correct move the player in that direction
+        if the user is incorrect change the door color (user remains in the same room)
+         */
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
             switch (keyCode) {

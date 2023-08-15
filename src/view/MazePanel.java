@@ -64,7 +64,8 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
 //        addKeyListener(new BoardKeyListener());
 //        setFocusable(true);
-//        requestFocus();
+// requestFocus();
+
         setVisible(true);
     }
 
@@ -124,8 +125,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                     int playerX = x + GRID_SIZE / 4;
                     int playerY = y + GRID_SIZE / 4;
                     theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
-
-
                 }
             }
         }
@@ -193,6 +192,11 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
             Doors updatedDoor = (Doors) evt.getNewValue();
             door = updatedDoor;
+            repaint();
+        }
+        if (maze.PROPERTY_NEW_QUESTION.equals(evt.getPropertyName())) {
+            Doors newDoor = (Doors) evt.getNewValue();
+            door = newDoor;
             repaint();
         }
     }

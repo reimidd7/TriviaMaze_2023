@@ -1,6 +1,7 @@
 package view;
 
 import model.Doors;
+import model.Player;
 import model.Question;
 
 import java.awt.Point;
@@ -57,7 +58,9 @@ public interface TriviaMazeControls {
     void updateDoors(Doors door);
     // if door is true set to false
 
-    //Question newQuestion();
+   // Doors newQuestion();
+
+   // void askQuestion();
 
 
 
