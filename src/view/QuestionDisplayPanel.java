@@ -225,7 +225,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void correctDisplay() {
-        final JLabel home = new JLabel("Correct Move Forward");
+        final JLabel home = new JLabel("Correct! Choose new Door");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
         setBackground(Color.ORANGE);
@@ -233,7 +233,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void incorrectDisplay() {
-        final JLabel home = new JLabel("Incorrect choose a new door");
+        final JLabel home = new JLabel("Incorrect :( choose a new door");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
         setBackground(Color.ORANGE);
