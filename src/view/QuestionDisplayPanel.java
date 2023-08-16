@@ -47,30 +47,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         addKeyListener(new BoardKeyListener());
         setFocusable(true);
         requestFocus();
-//        myQuestion = myMaze.getQuestion();
-//
-//
-//
-//
-//
-//
-//        if (myQuestion == null) {
-//            homeDisplay();
-//        } else if (determineDoorQuestionType().equals("MC")) {
-//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-//            mcDisplay(myPlayer); //yellow
-//        } else if (determineDoorQuestionType().equals("TF")) {
-//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-//            tfDisplay(myPlayer); //red
-//        } else if (determineDoorQuestionType().equals("SAns")) {
-//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-//            sAnsDisplay(myPlayer); //gray
-//        } else {
-//            System.out.println("QUESTIONDP -----   " + myQuestion.getQuestion());
-//            homeDisplay();
-//        }
-        //repaint();
-        //revalidate();
 
         updateQuestion(myMaze.getQuestion());
 
@@ -133,8 +109,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(cC);
         add(cD);
         setBackground(Color.yellow);
-        revalidate();
-        repaint();
+//        revalidate();
+//        repaint();
 
     }
 
@@ -164,8 +140,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(bTrue);
         add(bFalse);
         setBackground(Color.pink);
-        revalidate();
-        repaint();
+//        revalidate();
+//        repaint();
 
     }
 
@@ -190,13 +166,25 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         submit.addActionListener(e -> {
             final String userAns = shortAns.getText().toLowerCase().replaceAll("\\s", "");
             final String ans = answer.toLowerCase().replaceAll("\\s", "");
-            System.out.println(userAns + "   real:   " + ans);
+            //System.out.println(userAns + "   real:   " + ans);
             if (userAns.equals(ans)) {
-                System.out.println("Correct!" + myDoor.getDoorStatus());
+                myMaze.setCanGetThrough(true);
+                removeAll();
+                correctDisplay();
+                repaint();
+                revalidate();
+                //System.out.println("Correct!" );
             } else {
-                myMaze.updateDoors(myDoor);
-                System.out.println("incorrect!" + myDoor.getDoorStatus());
+                myMaze.setCanGetThrough(false);
+                myMaze.updateDoors();
+                removeAll();
+                incorrectDisplay();
+                repaint();
+                revalidate();
+                //System.out.println("incorrect!");
             }
+
+            requestFocusInWindow();
         });
 
         add(header);
@@ -209,8 +197,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(shortAns);
         add(submit);
         setBackground(Color.GRAY);
-        revalidate();
-        repaint();
+//        revalidate();
+//        repaint();
 
     }
 
@@ -223,8 +211,22 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         home.setFont(LARGE_FONT);
         setBackground(Color.ORANGE);
         add(home);
-        revalidate();
-        repaint();
+    }
+
+    public void correctDisplay() {
+        final JLabel home = new JLabel("Correct Move Forward");
+        home.setAlignmentX(Component.CENTER_ALIGNMENT);
+        home.setFont(LARGE_FONT);
+        setBackground(Color.ORANGE);
+        add(home);
+    }
+
+    public void incorrectDisplay() {
+        final JLabel home = new JLabel("Incorrect choose a new door");
+        home.setAlignmentX(Component.CENTER_ALIGNMENT);
+        home.setFont(LARGE_FONT);
+        setBackground(Color.ORANGE);
+        add(home);
     }
 
     private void buttonFunctionality(final JButton theButton, final String theAnswer) {
@@ -233,11 +235,23 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         theButton.addActionListener(e -> {
             if (firstButton == firstAns) {
-                System.out.println("Correct!");
+                myMaze.setCanGetThrough(true);
+               //System.out.println("Correct!");
+                removeAll();
+                correctDisplay();
+                repaint();
+                revalidate();
             } else {
-                myMaze.updateDoors(myDoor);
-                System.out.println("incorrect!");
+                myMaze.setCanGetThrough(false);
+                myMaze.updateDoors();
+                removeAll();
+                incorrectDisplay();
+                repaint();
+                revalidate();
+                //System.out.println("incorrect!");
             }
+
+            requestFocusInWindow();
 
         });
 
@@ -273,7 +287,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void updateQuestion(Question question) { //ONLY CALLED THE FIRST TIME
-        System.out.println("updateQuestion is being called\n\n\n");
+        //System.out.println("updateQuestion is being called\n\n\n");
 
         removeAll();
 
@@ -281,37 +295,41 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             homeDisplay();
 
         } else if (determineDoorQuestionType(question).equals("MC")) {
-            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            //System.out.println("QUESTIONDP -----   " + question.getQuestion());
             mcDisplay(question); //yellow
 
+
         } else if (determineDoorQuestionType(question).equals("TF")) {
-            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            //System.out.println("QUESTIONDP -----   " + question.getQuestion());
             tfDisplay(question); //red
 
         } else if (determineDoorQuestionType(question).equals("SAns")) {
-            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            //System.out.println("QUESTIONDP -----   " + question.getQuestion());
             sAnsDisplay(question); //gray
 
         } else {
-            System.out.println("QUESTIONDP -----   " + question.getQuestion());
+            //System.out.println("QUESTIONDP -----   " + question.getQuestion());
             homeDisplay();
 
         }
+
+        revalidate();
+        repaint();
     }
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-//        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
-//            myDoor = (Doors) theEvt.getNewValue();
-//            repaint();
-//        }
+        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
+            myDoor = (Doors) theEvt.getNewValue();
+            repaint();
+        }
 //        if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
 //            Player newPlayer = (Player) theEvt.getNewValue();
 //            myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
 //            repaint();
 //        }
 
-        System.out.println("is this being called");
+        //System.out.println("is this being called");
         if (myMaze.PROPERTY_NEW_QUESTION.equals(theEvt.getPropertyName())) {
             Question newQuestion = (Question) theEvt.getNewValue();
             updateQuestion(newQuestion);
@@ -328,36 +346,39 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         if the user is incorrect change the door color (user remains in the same room)
          */
         public void keyPressed(KeyEvent e) {
+
             int keyCode = e.getKeyCode();
             switch (keyCode) {
                 case KeyEvent.VK_UP:
-                    myMaze.getQuestion();
+                    myMaze.lookUp();
+                    updateQuestion(myMaze.getQuestion());
                     myMaze.up();
                     System.out.println("up");
                     break;
+
                 case KeyEvent.VK_DOWN:
-                    myMaze.getQuestion();
-
+                    myMaze.lookDown();
+                    updateQuestion(myMaze.getQuestion());
                     myMaze.down();
-
                     System.out.println("down");
                     break;
+
                 case KeyEvent.VK_LEFT:
-                    myMaze.getQuestion();
-
+                    myMaze.lookLeft();
+                    updateQuestion(myMaze.getQuestion());
                     myMaze.left();
-
                     System.out.println("left");
                     break;
-                case KeyEvent.VK_RIGHT:
-                    myMaze.getQuestion();
 
+                case KeyEvent.VK_RIGHT:
+                    myMaze.lookRight();
+                    updateQuestion(myMaze.getQuestion());
                     myMaze.right();
 
                     System.out.println("right");
                     break;
             }
-            updateQuestion(myMaze.getQuestion());
+            //updateQuestion(myMaze.getQuestion());
 
             repaint();
         }

@@ -46,6 +46,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     //private Room room;
 
     private Question myQues;
+    boolean canGetThrough = false;
 
     private final PropertyChangeSupport myPcs;
 
@@ -69,8 +70,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     public void newGame() {
         createMaze();
         myPlayer = new Player(new Point(0, 0), Direction.NONE); // This should come from get entrance but idk how to do that rn
-
-        System.out.println("First   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
+        //System.out.println("First   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
         setEntrance();
         setExit();
@@ -87,22 +87,45 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void down() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
+
         Room room = getRoom(myPlayerLoc);
 //        // checks if the room has a door to the south and if it's unlocked.
         boolean checkForSouth = room.getDoorByDirection(Direction.SOUTH).getDoorStatus();
-        myPlayer.setPlayerDir(Direction.SOUTH);
-        System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
+        //Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
 
-        if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
-            myPlayerLoc.translate(1,0);         //Translates location
+        //System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
 
-            System.out.println("Down   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
-            notifyObseversOfLocationChange();
-            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+        if (getCanGetThrough()) {
+            setCanGetThrough(false);
+            if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
+                // is the new location ok - in bounds and across an open door
+                // set the question
+                // CHECK if player gets the question...
+                // correct move places
+                // incorrect change doors
 
-            checkForWin();
+
+                myPlayerLoc.translate(1, 0);         //Translates location
+                notifyObseversOfLocationChange();
+                checkForWin();
+            }
         }
+
+        //System.out.println("Down   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
+
+
+//            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+    }
+    @Override
+    public void lookDown() {
+        Point myPlayerLoc = myPlayer.getPlayerLoc();
+
+        Room room = getRoom(myPlayerLoc);
+        myPlayer.setPlayerDir(Direction.SOUTH);
+
+        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
     }
 
     @Override
@@ -111,15 +134,23 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         Room room = getRoom(myPlayerLoc);
         //sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
 
+
         if (myPlayerLoc.x > 0) {
             myPlayerLoc.translate(-1,0);         //Translates location
-
-            System.out.println("up   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
-
             notifyObseversOfLocationChange();
-            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-
+            checkForWin();
         }
+
+        System.out.println("up   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
+
+        //sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
+
+    }
+
+    @Override
+    public void lookUp() {
+        myPlayer.setPlayerDir(Direction.NORTH);
     }
 
     @Override
@@ -131,16 +162,27 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         //TODO: THIS IS WRONG. NO DOORS ARE LABELED WITH WEST
 
         boolean checkForWest = room.hasDoorInDirection(Direction.WEST);
+        if (getCanGetThrough()) {
+            setCanGetThrough(false);
 
-        if (myPlayerLoc.y > 0 ) {
-            myPlayerLoc.translate(0,-1);         //Translates location
+            if (myPlayerLoc.y > 0 ) {
+                myPlayerLoc.translate(0,-1);         //Translates location
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("door locked ***");
+            }
 
-            System.out.println("left   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
+            //System.out.println("left   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
-            notifyObseversOfLocationChange();
-            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+            //sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
 
         }
+    }
+
+    @Override
+    public void lookLeft() {
+        myPlayer.setPlayerDir(Direction.WEST);
     }
 
     @Override
@@ -150,32 +192,45 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
         // checks if the room has a door to the east and if it's unlocked.
         boolean checkForEast = room.getDoorByDirection(Direction.EAST).getDoorStatus();
-        myPlayer.setPlayerDir(Direction.EAST);
-        System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
 
-        if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
-            myPlayerLoc.translate(0, 1);         //Translates location
+        //System.out.println("Question - - - " + room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion().getQuestion());
+        if (getCanGetThrough()) {
+            setCanGetThrough(false);
 
-            System.out.println("right   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
+            if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
+                myPlayerLoc.translate(0, 1);         //Translates location
+                notifyObseversOfLocationChange();
+                checkForWin();
+            } else {
+                System.out.println("door locked ***");
+            }
 
-            notifyObseversOfLocationChange();
-            sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+            // System.out.println("right   " + myPlayer.getPlayerLoc().toString() + " " + myPlayer.getPlayerDir().toString());
 
-            checkForWin();
+
         }
+    }
+    @Override
+    public void lookRight() {
+        Point myPlayerLoc = myPlayer.getPlayerLoc();
+
+        Room room = getRoom(myPlayerLoc);
+        myPlayer.setPlayerDir(Direction.EAST);
+
+        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
     }
 
     @Override
     public void sendQuestion(Question q) {
         //myQues = q;
         myQues = q;
-        System.out.println("Send question");
+        //System.out.println("Send question");
         myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, q);
     }
 
 
     public Question getQuestion() {
-        System.out.println("*****getQuestion()" + myQues);
+        //System.out.println("*****getQuestion()" + myQues);
         return myQues;
     }
 
@@ -195,15 +250,35 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     // qdp NOT UPDATING BECAUSE IT IS NOT PAINTED COMPONENTS?
 
     @Override
-    public void updateDoors(Doors door) { //TODO: Change status us the user gets the Q wrong
+    public void updateDoors() { //TODO: Change status us the user gets the Q wrong
 
+        Room room = getRoom(myPlayer.getPlayerLoc());
+        Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
         //CHANGE DOOR STATE?
 
         if (door.getDoorStatus()) {
             System.out.println("update door call");
             door.setLocked(false);
+            //canGetThrough = false;
             myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, null, door);
         }
+    }
+
+
+
+
+
+
+
+
+
+
+    public void setCanGetThrough(boolean boo) {
+        canGetThrough = boo;
+    }
+
+    public boolean getCanGetThrough() {
+        return canGetThrough;
     }
 
 

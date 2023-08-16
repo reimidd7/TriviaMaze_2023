@@ -50,9 +50,13 @@ public interface TriviaMazeControls {
      */
     void right();
 
-    void updateDoors(Doors door);
+    void updateDoors();
     // if door is true set to false
 
+    void lookUp();
+    void lookDown();
+    void lookLeft();
+    void lookRight();
 
 
     void sendQuestion(Question q);
