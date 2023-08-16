@@ -48,6 +48,8 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     private Question myQues;
     boolean canGetThrough = false;
 
+    boolean dontAsk = false; //false you can ask
+
     private final PropertyChangeSupport myPcs;
 
 
@@ -267,11 +269,9 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         if (door.getDoorStatus()) {
             System.out.println("update door call");
             door.setLocked(false);
-            //canGetThrough = false;
             myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, null, door);
         }
     }
-
 
 
 
