@@ -1,17 +1,16 @@
 package view;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 public class TriviaMazeApp {
-    /*** FOR TESTING ONLY ***/
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(TriviaMazeFrame:: createAndShowGui);
-    }
-    /***---------------***/
-
     public TriviaMazeApp() {
 
     }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(TriviaMazeFrame:: createAndShowGui);
+    }
+
+
 
 
 

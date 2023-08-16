@@ -3,21 +3,21 @@ package view;
 import model.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyEvent;
 
-// DISPLAY THE MAZE
 public class MazePanel extends JPanel implements PropertyChangeListener {
     private static final int ROWS = 5;
     private static final int COLS = 5;
@@ -62,10 +62,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             e.printStackTrace();
         }
 
-//        addKeyListener(new BoardKeyListener());
-//        setFocusable(true);
-// requestFocus();
-
         setVisible(true);
     }
 
@@ -81,14 +77,37 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        drawMazeGridWithGraphics(g2d);
+        if (maze.checkForWin()) {
+            showExitPopup(theGraphics);
+        } else {
+            drawMazeGridWithGraphics(g2d);
 
-        drawPlayer(g2d);
+            drawPlayer(g2d);
 
-        drawDoors(g2d);
+            drawDoors(g2d);
+        }
 
-        //repaint();
 
+    }
+
+    private void showExitPopup(final Graphics theGraphics) {
+        Graphics2D g2d = (Graphics2D) theGraphics;
+        String[] options = {"Exit", "New Game"};
+        SwingUtilities.invokeLater(() -> {
+            int choice = JOptionPane.showOptionDialog(this,
+                    "CONGRATS YOU WON!!", "Won Game",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, options, options[0]);
+            if (choice == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                removeAll();
+                maze.newGame();
+                //TODO THis does not reset the player location
+                repaint();
+                revalidate();
+            }
+        });
 
     }
 
@@ -151,7 +170,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 10;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        //repaint();
 
 
                     } else if (dir.equals(Direction.EAST)) {
@@ -161,7 +179,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 20;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        //repaint();
 
                     }
 
@@ -184,19 +201,14 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("\nMaze PC is this being calledn\n\n");
 
         if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
-            System.out.println("\nMaze PC is this being calledn\n\n");
-
             Player newPlayer = (Player) evt.getNewValue();
             player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
-            //repaint();
         }
         if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
             Doors updatedDoor = (Doors) evt.getNewValue();
             door = updatedDoor;
-            //repaint();
         }
     }
 //    private class BoardKeyListener extends KeyAdapter {
