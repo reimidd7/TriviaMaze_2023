@@ -2,6 +2,7 @@ package view;
 
 import model.Doors;
 import model.Maze;
+import model.Question;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,8 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
     private final Maze myMaze;
 
+    private Question myQuestion;
+
 
     /**
      * Constructor to create the Frame for Trivia Maze.
@@ -43,7 +46,12 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
     public TriviaMazeFrame(Maze theMaze) {
         super();
         myMaze = theMaze;
+        myQuestion = myMaze.getQuestion();
+//        addKeyListener(new BoardKeyListener());
+//        setFocusable(true);
+//        requestFocus();
         createFrame();
+
         setVisible(true);
     }
 
@@ -161,8 +169,7 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
         final TriviaMazeFrame frame = new TriviaMazeFrame(maze);
         //maze.addPropertyChangeListener(frame);
 
-        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(maze);
-        maze.addPropertyChangeListener(questionPanel);
+
 
         // Pass the Maze object to the MazePanel constructor
         final MazePanel mazePanel = new MazePanel(maze);
@@ -171,26 +178,66 @@ public class TriviaMazeFrame extends JFrame implements PropertyChangeListener {
 
         final UserControlsPanel controlsPanel = new UserControlsPanel();
 
+        QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(maze);
+        maze.addPropertyChangeListener(questionPanel);
+
         final JPanel eastInfo = new JPanel();
         eastInfo.setLayout(new GridLayout(2,1, 0, 16));
         eastInfo.add(controlsPanel);
         eastInfo.add(questionPanel);
-
         frame.setLayout(new GridLayout(1,2,16,0));
         frame.add(mazePanel);
         frame.add(eastInfo);
 
-
-
         frame.setVisible(true);
 
     }
-
+//
+//    private class BoardKeyListener extends KeyAdapter {
+//        /*TODO: When a key is pressed we want to
+//        grab the question in that direction
+//        Ask the question
+//        if the user is correct move the player in that direction
+//        if the user is incorrect change the door color (user remains in the same room)
+//         */
+//        public void keyPressed(KeyEvent e) {
+//            int keyCode = e.getKeyCode();
+//            switch (keyCode) {
+//                case KeyEvent.VK_UP:
+//                    myMaze.getQuestion();
+//                    myMaze.up();
+//                    System.out.println("up");
+//                    break;
+//                case KeyEvent.VK_DOWN:
+//                    myMaze.getQuestion();
+//
+//                    myMaze.down();
+//
+//                    System.out.println("down");
+//                    break;
+//                case KeyEvent.VK_LEFT:
+//                    myMaze.getQuestion();
+//
+//                    myMaze.left();
+//
+//                    System.out.println("left");
+//                    break;
+//                case KeyEvent.VK_RIGHT:
+//                    myMaze.getQuestion();
+//
+//                    myMaze.right();
+//
+//                    System.out.println("right");
+//                    break;
+//            }
+//
+//            //repaint();
+//        }
+//    }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (myMaze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName()) ||
-                Maze.PROPERTY_LOCATION_CHANGE.equals(evt.getPropertyName())) {
-            repaint();
-        }
+//        if (Maze.PROPERTY_NEW_QUESTION.equals(evt.getPropertyName())) {
+//            SwingUtilities.invokeLater(() -> QuestionDisplayPanel.updateQuestion(myMaze.getQuestion()));
+//        }
     }
 }

@@ -62,9 +62,10 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             e.printStackTrace();
         }
 
-        addKeyListener(new BoardKeyListener());
-        setFocusable(true);
-        requestFocus();
+//        addKeyListener(new BoardKeyListener());
+//        setFocusable(true);
+// requestFocus();
+
         setVisible(true);
     }
 
@@ -85,6 +86,8 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         drawPlayer(g2d);
 
         drawDoors(g2d);
+
+        //repaint();
 
 
     }
@@ -122,11 +125,10 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                     int playerX = x + GRID_SIZE / 4;
                     int playerY = y + GRID_SIZE / 4;
                     theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
-                    repaint();
-
                 }
             }
         }
+        repaint();
     }
 
     private void drawDoors(final Graphics2D theG2D) {
@@ -149,7 +151,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 10;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        repaint();
+                        //repaint();
 
 
                     } else if (dir.equals(Direction.EAST)) {
@@ -159,7 +161,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 20;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        repaint();
+                        //repaint();
 
                     }
 
@@ -182,40 +184,44 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("\nMaze PC is this being calledn\n\n");
+
         if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
+            System.out.println("\nMaze PC is this being calledn\n\n");
+
             Player newPlayer = (Player) evt.getNewValue();
             player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
-            repaint();
+            //repaint();
         }
         if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
             Doors updatedDoor = (Doors) evt.getNewValue();
             door = updatedDoor;
-            repaint();
-        }
-    }
-    private class BoardKeyListener extends KeyAdapter {
-        public void keyPressed(KeyEvent e) {
-            int keyCode = e.getKeyCode();
-            switch (keyCode) {
-                case KeyEvent.VK_UP:
-                    maze.up();
-                    System.out.println("up");
-                    break;
-                case KeyEvent.VK_DOWN:
-                    maze.down();
-                    System.out.println("down");
-                    break;
-                case KeyEvent.VK_LEFT:
-                    maze.left();
-                    System.out.println("left");
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    maze.right();
-                    System.out.println("right");
-                    break;
-            }
             //repaint();
         }
     }
+//    private class BoardKeyListener extends KeyAdapter {
+//        public void keyPressed(KeyEvent e) {
+//            int keyCode = e.getKeyCode();
+//            switch (keyCode) {
+//                case KeyEvent.VK_UP:
+//                    maze.up();
+//                    System.out.println("up");
+//                    break;
+//                case KeyEvent.VK_DOWN:
+//                    maze.down();
+//                    System.out.println("down");
+//                    break;
+//                case KeyEvent.VK_LEFT:
+//                    maze.left();
+//                    System.out.println("left");
+//                    break;
+//                case KeyEvent.VK_RIGHT:
+//                    maze.right();
+//                    System.out.println("right");
+//                    break;
+//            }
+//            //repaint();
+//        }
+//    }
 }
 
