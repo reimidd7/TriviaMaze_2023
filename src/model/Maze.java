@@ -73,7 +73,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
     @Override
     public void newGame() {
         createMaze();
-        myPlayer = new Player(new Point(3, 3), Direction.NONE); // This should come from get entrance but idk how to do that rn
+        myPlayer = new Player(new Point(0, 0), Direction.NONE); // This should come from get entrance but idk how to do that rn
         setEntrance();
         setExit();
 
