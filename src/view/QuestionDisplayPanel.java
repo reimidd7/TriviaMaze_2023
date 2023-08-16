@@ -48,7 +48,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         this.myPlayer = myMaze.getPlayer();
         this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
         this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
-
+        this.myMaze.addPropertyChangeListener(this);
         displayMSTF();
 
         setFocusable(true);
@@ -57,7 +57,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         revalidate();
         repaint();
     }
-    private void displayQuestion() {
+    private void displayQuestion(Question question) {
+
         Doors door = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
     }
     private void displayMSTF() {
@@ -195,6 +196,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             System.out.println(userAns + "   real:   " + ans);
             if (userAns.equals(ans)) {
                 System.out.println("Correct!");  myDoor.setLocked(false);
+                myDoor.notifyObservers();
             } else {
                 System.out.println("incorrect");
                 myDoor.setLocked(true);
@@ -233,11 +235,15 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         theButton.addActionListener(e -> {
             if (firstButton == firstAns) {
                 System.out.println("Correct!" + myDoor.getDoorStatus());
+                myDoor.setLocked(false);
+                myDoor.notifyObservers();
+                firePropertyChange("DoorStatusChanged", null, myDoor);
             } else {
-                myMaze.updateDoors(myDoor);
+                //myMaze.updateDoors(myDoor);
                 myDoor.setLocked(true);
-                myMaze.updateDoors(myDoor);
+               // myMaze.updateDoors(myDoor);
                 System.out.println("incorrect!" + myDoor.getDoorStatus());
+                firePropertyChange("DoorStatusChanged", null, myDoor);
             }
             homeDisplay();
         });
@@ -272,9 +278,12 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             add(question);
         }
     }
-
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
+        if ("NewQuestion".equals(theEvt.getPropertyName())) {
+            Question question = (Question) theEvt.getNewValue();
+            displayQuestion(question);
+        }
         if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
             myDoor = (Doors) theEvt.getNewValue();
             repaint();
@@ -284,7 +293,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
             repaint();
         }
+        if ("DoorStatusChanged".equals(theEvt.getPropertyName())) {
+            Doors changedDoor = (Doors) theEvt.getNewValue();
+            myMaze.updateDoors(changedDoor);
+        }
     }
-
 }
 

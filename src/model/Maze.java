@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Class to organize the rooms and doors and create the maze functional.
@@ -75,17 +76,42 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         this.myPcs.firePropertyChange("PLAYER_CHANGE_LOCATION", null, this.myPlayer.getPlayerLoc());
         this.myPcs.firePropertyChange("DOOR_STATUS_CHANGE", null, this.myDoor);
     }
+
     private void askQuestionToUnlockDoor(Point playerLoc, Direction direction) {
         Doors door = getRoom(playerLoc).getDoorByDirection(direction);
         if (door != null) {
-            Question question = door.getCurrQuestion();
-            door.setLocked(false);
-            System.out.println("Correct! The door is now unlocked.");
-            door.setLocked(true);
-            System.out.println("Incorrect! The door remains locked.");
+            if (!door.getDoorStatus()) {
+                Question question = door.getCurrQuestion();
+
+                if (question != null) {
+                    myPcs.firePropertyChange("NewQuestion", null, question);
+                    System.out.println(question.getQuestion());
+                    String playerAnswer = getPlayerAnswer();
+
+                    if (playerAnswer.equalsIgnoreCase(question.getCorrectAnswer())) {
+                        door.setLocked(true);
+                        door.notifyObservers();
+                        System.out.println("Correct! The door is now unlocked.");
+                    } else {
+                        System.out.println("Incorrect! The door remains locked.");
+                    }
+
+                } else {
+                    System.out.println("No question available to ask!");
+                }
+            } else {
+                System.out.println("This door is already unlocked.");
+            }
         } else {
             System.out.println("There is no door in this direction!");
         }
+    }
+
+    // Placeholder for player's input, you might replace this with actual UI input
+    private String getPlayerAnswer() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter your answer: ");
+        return scanner.nextLine();
     }
     @Override
     public void down() {
@@ -93,6 +119,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         if (myPlayerLoc.x < getRows() - 1) {
             if (isDoorUnlockedByDirection(myPlayerLoc, Direction.SOUTH)) {
                 myPlayerLoc.translate(1, 0);
+                myPlayer.setPlayerLoc(myPlayerLoc);
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
@@ -107,6 +134,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         if (myPlayerLoc.x > 0) {
             if (isDoorUnlockedByDirection(myPlayerLoc, Direction.NORTH)) {
                 myPlayerLoc.translate(-1, 0);
+                myPlayer.setPlayerLoc(myPlayerLoc);
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
@@ -122,6 +150,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
             if (isDoorUnlockedByDirection(myPlayerLoc, Direction.WEST)) {
                 myPlayerLoc.translate(0, -1);
                 notifyObseversOfLocationChange();
+                myPlayer.setPlayerLoc(myPlayerLoc);
                 checkForWin();
             } else {
                 askQuestionToUnlockDoor(myPlayerLoc, Direction.WEST);
@@ -135,13 +164,28 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         if (myPlayerLoc.y < getCols() - 1) {
             if (isDoorUnlockedByDirection(myPlayerLoc, Direction.EAST)) {
                 myPlayerLoc.translate(0, 1);
+                myPlayer.setPlayerLoc(myPlayerLoc);
                 notifyObseversOfLocationChange();
                 checkForWin();
             } else {
                 askQuestionToUnlockDoor(myPlayerLoc, Direction.EAST);            }
         }
     }
-
+    public boolean isDoorUnlockedByDirection(Point thePlayerLoc, Direction theDir) {
+        Room currRoom = getRoom(thePlayerLoc); //room where the player is located
+        Doors currDoor = null;
+        for (Doors d : currRoom.getMapOfDoorsAndDir().keySet()) {
+            Direction dirOfCurrDoor = currRoom.getMapOfDoorsAndDir().get(d);
+            if (dirOfCurrDoor.equals(theDir)) {
+                currDoor = d;
+            }
+        }
+        if (currDoor != null) {
+            return currDoor.getDoorStatus();
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public Point getPlayerLocation() {
@@ -149,7 +193,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     }
 
     @Override
-    public void checkDoors() { //TODO: IDK if we need this. Maybe as a private method?
+    public void checkDoors() {
         Room playerRoom = getRoom(myPlayer.getPlayerLoc());
         Map<Doors, Direction> map = playerRoom.getMapOfDoorsAndDir();
         playerRoom.hasUnlockedDoors();
@@ -157,7 +201,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     }
 
     @Override
-    public void updateDoors(Doors door) { //TODO: Change status us the user gets the Q wrong
+    public void updateDoors(Doors door) {
         Doors oldDoor = getDoor();
         //CHANGE DOOR STATE?
 
@@ -183,24 +227,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         return myPlayer;
     }
 
-    //TODO IDK this can be used in the checkFor... variable....I think
-    public boolean isDoorUnlockedByDirection(Point thePlayerLoc, Direction theDir) {
-        Room currRoom = getRoom(thePlayerLoc); //room where the player is located
-        Doors currDoor = null;
-        for (Doors d : currRoom.getMapOfDoorsAndDir().keySet()) {
-            Direction dirOfCurrDoor = currRoom.getMapOfDoorsAndDir().get(d);
-            if (dirOfCurrDoor.equals(theDir)) {
-                currDoor = d;
-            }
-        }
-        if (currDoor.getDoorStatus()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    // --------------------------------^^ NEW stuff
-
     /**
      * Gets the Room at the given index.
      *
@@ -224,37 +250,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         return null;
     }
 
-    /**
-     * This method is the getter for the entrance of the maze.
-     *
-     * @return Returns the room of the entrance
-     */
-    public Room getEntrance() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isEntrance()) {
-                    return myRooms[row][column];
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * This method is the getter for the exit of the maze.
-     *
-     * @return Returns a room
-     */
-    public Room getExit() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isExit()) {
-                    return myRooms[row][column];
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Gets the number of rows in the maze.
@@ -337,6 +332,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
         for (int i = 1; i <= amtOfDoors; i++) {
             allDoors.add(new Doors(i));
+
         }
 
         return allDoors;
@@ -397,6 +393,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(theListener);
 
     }
 

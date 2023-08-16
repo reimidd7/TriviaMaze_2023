@@ -96,6 +96,9 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    public void onDoorUnlocked(Doors unlockedDoor) {
+        System.out.println("Door " + unlockedDoor.getDoorId() + " has been unlocked!");
+    }
     private void drawPlayer(final Graphics2D theG2D) {
         // Moves the player around the maze?
         for (int row = 0; row < ROWS; row++) {
@@ -197,7 +200,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             }
         }
     }
-
 }
 
 

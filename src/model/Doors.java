@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The door class is for the doors used in trivial maze.
  * each door has status and holds a question.
@@ -91,6 +94,18 @@ public class Doors {
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
+    public interface DoorUnlockObserver {
+        void onDoorUnlocked(Doors unlockedDoor);
+    }
+    private final List<DoorUnlockObserver> observers = new ArrayList<>();
+    public void addObserver(DoorUnlockObserver observer) {
+        observers.add(observer);
+    }
 
+    public void notifyObservers() {
+        for (DoorUnlockObserver observer : observers) {
+            observer.onDoorUnlocked(this);
+        }
+    }
 }
 
