@@ -48,8 +48,6 @@ public class Room {
         this.myDescription = theDescription;
         this.myIsLocked = false;
         myMapOfDoors =  new HashMap<>();
-
-
     }
 
     /**
@@ -130,16 +128,7 @@ public class Room {
         return null;
     }
 
-    //------------------new
-    public boolean hasDoorInDirection(Direction theDir) {
-        boolean hasDoor = false;
-        for (Doors door: myMapOfDoors.keySet()) {
-            hasDoor = myMapOfDoors.get(door).equals(theDir);
-        }
-        return hasDoor;
-    }
-
-    public Doors getDoorByDirection(Direction theDir) {
+    public Doors getDoorByDirection(final Direction theDir) {
         for (Doors d: myMapOfDoors.keySet()) {
             if (myMapOfDoors.get(d).equals(theDir)) {
                 return d;
@@ -147,8 +136,6 @@ public class Room {
         }
         return null;
     }
-
-    //----------------^^^new
 
     /**
      * Does the room have the door in question?

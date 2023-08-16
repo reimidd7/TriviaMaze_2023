@@ -3,10 +3,19 @@ package controller;
 import java.beans.PropertyChangeListener;
 
 public interface PropertyChangeEnabledTriviaMazeControls extends TriviaMazeControls {
+    /**
+     * A property name for the location.
+     */
     String PROPERTY_LOCATION_CHANGE = " THIS IS FOR A PLAYER CHANGING LOCATIONS";
 
+    /**
+     * A property name for the door status.
+     */
     String PROPERTY_DOOR_STATUS = " THIS IS FOR WHEN A PLAYER ANSWER CHANGES THE DOOR STATUS";
 
+    /**
+     * A property name for the questions.
+     */
     String PROPERTY_NEW_QUESTION = " THIS IS FOR WHEN A PLAYER CHOOSES A NEW DOOR";
 
 

@@ -3,19 +3,22 @@ package model;
 /**
  * The TF question class for the TF question type and
  * extends the abstract question class.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
  */
 public class TFQuestion extends Question {
     /**
-     * correct answer string
+     * Correct answer string.
      */
     private String myCorrectAnswer;
 
     /**
      * Constructor to create True/False question.
      *
-     * @param theQuestionID
-     * @param theQuestion
-     * @param theCorrectAnswer
+     * @param theQuestionID id of the question in database.
+     * @param theQuestion the actual question in string form.
+     * @param theCorrectAnswer the correct answer for the current question.
      */
     public TFQuestion(final int theQuestionID, final String theQuestion,
                       final String theCorrectAnswer) {
@@ -33,12 +36,12 @@ public class TFQuestion extends Question {
         return myCorrectAnswer;
     }
 
-    /**
-     * set the correct answer for the TF question.
-     *
-     * @param theCorrectAnswer
-     */
-    public void setCorrectAnswer(final String theCorrectAnswer) {
-        this.myCorrectAnswer = theCorrectAnswer;
-    }
+//    /**
+//     * set the correct answer for the TF question.
+//     *
+//     * @param theCorrectAnswer
+//     */
+//    public void setCorrectAnswer(final String theCorrectAnswer) {
+//        this.myCorrectAnswer = theCorrectAnswer;
+//    }
 }

@@ -18,7 +18,7 @@ import model.Room;
  * @author Reilly Middlebrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
-public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeControls {
+public final class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeControls {
     /**
      * The number of rows in the maze.
      */
@@ -85,7 +85,7 @@ public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeC
 
         if (playerLoc.x < getRows() - 1 && checkForSouth) {
             playerLoc.translate(1, 0);         //Translates location
-            notifyObseversOfLocationChange();
+            notifyObserversOfLocationChange();
             checkForWin();
         }
     }
@@ -105,8 +105,8 @@ public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeC
         final Point playerLoc = myPlayer.getPlayerLoc();
 
         if (playerLoc.x > 0) {
-            playerLoc.translate(-1,0);         //Translates location
-            notifyObseversOfLocationChange();
+            playerLoc.translate(-1, 0);         //Translates location
+            notifyObserversOfLocationChange();
             checkForWin();
         }
     }
@@ -127,7 +127,7 @@ public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeC
 
         if (playerLoc.y > 0) {
             playerLoc.translate(0, -1);         //Translates location
-            notifyObseversOfLocationChange();
+            notifyObserversOfLocationChange();
             checkForWin();
         }
     }
@@ -152,7 +152,7 @@ public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeC
 
         if (playerLoc.y < getCols() - 1 && checkForEast) {
             playerLoc.translate(0, 1);         //Translates location
-            notifyObseversOfLocationChange();
+            notifyObserversOfLocationChange();
             checkForWin();
         }
     }
@@ -185,19 +185,34 @@ public class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeC
     }
 
     // Makes the property change call easier to read.
-    private void notifyObseversOfLocationChange() {
+    private void notifyObserversOfLocationChange() {
         myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
                 myPlayer);
     }
 
+    /**
+     * Gets the player currently in use.
+     *
+     * @return the Player object.
+     */
     public Player getPlayer() {
         return myPlayer;
     }
 
+    /**
+     * Gets the question currently in use.
+     *
+     * @return the Question object.
+     */
     public Question getQuestion() {
         return myQues;
     }
 
+    /**
+     * Check for if the user.Player made it to the exit room.
+     *
+     * @return true if the Player has won, false if not.
+     */
     public boolean checkForWin() {
         if (myPlayer.getPlayerLoc().equals(new Point(EXIT_ROW, EXIT_COL))) {
             System.out.println("Congratulations! You have reached the exit and won!");

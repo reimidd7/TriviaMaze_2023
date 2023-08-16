@@ -3,19 +3,22 @@ package model;
 /**
  * The multiple choice question class for the multiple choice
  * question type and extends the abstract question class.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
  */
 public class MCQuestion extends Question {
     /**
-     * correct answer string
+     * Correct answer string.
      */
-    private String myCorrectAnswer;
+    private final String myCorrectAnswer;
 
     /**
      * Constructor to create multiple choice question.
      *
-     * @param theQuestionID
-     * @param theQuestion
-     * @param theCorrectAnswer
+     * @param theQuestionID id of the question in database.
+     * @param theQuestion the actual question in string form.
+     * @param theCorrectAnswer the correct answer for the current question.
      */
     public MCQuestion(final int theQuestionID, final String theQuestion,
                       final String theCorrectAnswer) {
@@ -33,12 +36,12 @@ public class MCQuestion extends Question {
         return myCorrectAnswer;
     }
 
-    /**
-     * set the correct answer for the multiple choice question.
-     *
-     * @param theCorrectAnswer
-     */
-    public void setCorrectAnswer(final String theCorrectAnswer) {
-        this.myCorrectAnswer = theCorrectAnswer;
-    }
+//    /**
+//     * set the correct answer for the multiple choice question.
+//     *
+//     * @param theCorrectAnswer
+//     */
+//    public void setCorrectAnswer(final String theCorrectAnswer) {
+//        this.myCorrectAnswer = theCorrectAnswer;
+//    }
 }

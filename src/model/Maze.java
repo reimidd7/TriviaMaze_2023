@@ -23,7 +23,6 @@ public class Maze implements Serializable {
      */
     private static final int ROWS_OF_DOORS = 4;
 
-    // Instance Variables used in maze creation.
     /**
      * The 2d array that stores the rooms and doors of the Maze.
      */
@@ -48,7 +47,6 @@ public class Maze implements Serializable {
         myRows = theRows;
         myCols = theCols;
         myRooms = new Room[theRows][theCols];
-
     }
 
     /**
@@ -65,46 +63,46 @@ public class Maze implements Serializable {
         return null;
     }
 
-    public Room getRoom(Point thePlayerLoc) {
-        int row = thePlayerLoc.x;
-        int col = thePlayerLoc.y;
+    public Room getRoom(final Point thePlayerLoc) {
+        final int row = thePlayerLoc.x;
+        final int col = thePlayerLoc.y;
         if (row >= 0 && row < myRows && col >= 0 && col < myCols) {
             return myRooms[row][col];
         }
         return null;
     }
 
-    /**
-     * This method is the getter for the entrance of the maze.
-     *
-     * @return Returns the room of the entrance
-     */
-    public Point getEntrance() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isEntrance()) {
-                    return new Point(row, column);
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * This method is the getter for the entrance of the maze.
+//     *
+//     * @return Returns the room of the entrance
+//     */
+//    public Point getEntrance() {
+//        for (int row = 0; row < myRows; row++) {
+//            for (int column = 0; column < myCols; column++) {
+//                if (myRooms[row][column].isEntrance()) {
+//                    return new Point(row, column);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
-    /**
-     * This method is the getter for the exit of the maze.
-     *
-     * @return Returns a room
-     */
-    public Point getExit() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isExit()) {
-                    return new Point(row, column);
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * This method is the getter for the exit of the maze.
+//     *
+//     * @return Returns a room
+//     */
+//    public Point getExit() {
+//        for (int row = 0; row < myRows; row++) {
+//            for (int column = 0; column < myCols; column++) {
+//                if (myRooms[row][column].isExit()) {
+//                    return new Point(row, column);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Gets the number of rows in the maze.
