@@ -128,6 +128,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
     }
 
+
     @Override
     public void up() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
@@ -151,6 +152,10 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void lookUp() {
         myPlayer.setPlayerDir(Direction.NORTH);
+        Point myPlayerLoc = myPlayer.getPlayerLoc();
+        Room room = getRoom(myPlayerLoc);
+        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
+
     }
 
     @Override
@@ -183,6 +188,9 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void lookLeft() {
         myPlayer.setPlayerDir(Direction.WEST);
+        Point myPlayerLoc = myPlayer.getPlayerLoc();
+        Room room = getRoom(myPlayerLoc);
+        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
     }
 
     @Override
@@ -490,10 +498,12 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
     }
 
-    private void checkForWin() {
-        Room currentRoom = getRoom(myPlayer.getPlayerLoc());
-        if (currentRoom != null && currentRoom.isExit()) {
+    public boolean checkForWin() {
+        if (myPlayer.getPlayerLoc().equals(new Point(4,4))) {
             System.out.println("Congratulations! You have reached the exit and won!");
+            return true;
+        } else {
+            return false;
         }
     }
 

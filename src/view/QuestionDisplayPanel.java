@@ -48,8 +48,16 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         setFocusable(true);
         requestFocus();
 
-        updateQuestion(myMaze.getQuestion());
 
+        if (myMaze.checkForWin()) {
+            removeAll();
+            winDisplay();
+            repaint();
+            revalidate();
+        } else {
+            updateQuestion(myMaze.getQuestion());
+
+        }
         //setFocusable(true);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
@@ -284,6 +292,14 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
             add(question);
         }
+    }
+
+    public void winDisplay() {
+        final JLabel home = new JLabel("You Won!!!!");
+        home.setAlignmentX(Component.CENTER_ALIGNMENT);
+        home.setFont(LARGE_FONT);
+        setBackground(Color.CYAN);
+        add(home);
     }
 
     public void updateQuestion(Question question) { //ONLY CALLED THE FIRST TIME
