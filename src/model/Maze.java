@@ -1,15 +1,10 @@
 package model;
 
-import view.PropertyChangeEnabledTriviaMazeControls;
-import view.TriviaMazeFrame;
-
-import javax.swing.*;
 import java.awt.Point;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Class to organize the rooms and doors and create the maze functional.
@@ -17,7 +12,7 @@ import java.util.List;
  * @author Danie Oum, Reilly Middlebrooks, Kevin Than
  * @version Summer 2023
  */
-public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializable {
+public class Maze implements Serializable {
     /**
      * The total amount of doors needed for our 5x5 maze.
      */
@@ -28,6 +23,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
      */
     private static final int ROWS_OF_DOORS = 4;
 
+    // Instance Variables used in maze creation.
     /**
      * The 2d array that stores the rooms and doors of the Maze.
      */
@@ -41,20 +37,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
      */
     private final int myCols;
 
-    private Player myPlayer;
-
-    //private Doors myDoor;
-
-    //private Room room;
-
-    private Question myQues;
-    boolean canGetThrough = false;
-
-    boolean dontAsk = false; //false you can ask
-
-    private final PropertyChangeSupport myPcs;
-
-
     /**
      * This method initializes the rows and columns of the maze and calls other methods.
      *
@@ -67,213 +49,7 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
         myCols = theCols;
         myRooms = new Room[theRows][theCols];
 
-        myPcs = new PropertyChangeSupport(this);
     }
-
-    @Override
-    public void newGame() {
-        createMaze();
-        myPlayer = new Player(new Point(0, 0), Direction.NONE); // This should come from get entrance but idk how to do that rn
-        setEntrance();
-        setExit();
-
-        // save old values
-        Point oldPlayerLoc = myPlayer.getPlayerLoc();
-        //Doors oldDoor = myDoor;
-        // Change any states? player location. door status?
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, oldPlayerLoc, new Point(myPlayer.getPlayerLoc()));
-        //myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, oldDoor, myDoor);
-        // myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, myDoor);
-    }
-
-    @Override
-    public void down() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        Room room = getRoom(myPlayerLoc);
-//        // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForSouth = room.getDoorByDirection(Direction.SOUTH).getDoorStatus();
-
-        if (getCanGetThrough() && !determineExit()) {
-            setCanGetThrough(false);
-            if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
-                // is the new location ok - in bounds and across an open door
-                // set the question
-                // CHECK if player gets the question...
-                // correct move places
-                // incorrect change doors
-
-                myPlayerLoc.translate(1, 0);         //Translates location
-                notifyObseversOfLocationChange();
-                checkForWin();
-            }
-        }
-    }
-    @Override
-    public void lookDown() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        Room room = getRoom(myPlayerLoc);
-        myPlayer.setPlayerDir(Direction.SOUTH);
-
-        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-
-    }
-
-    @Override
-    public void up() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        Room room = getRoom(myPlayerLoc);
-
-        if (myPlayerLoc.x > 0) {
-            myPlayerLoc.translate(-1,0);         //Translates location
-            notifyObseversOfLocationChange();
-            checkForWin();
-        }
-    }
-
-    @Override
-    public void lookUp() {
-        myPlayer.setPlayerDir(Direction.NORTH);
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        Room room = getRoom(myPlayerLoc);
-        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-
-    }
-
-    @Override
-    public void left() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        Room room = getRoom(myPlayerLoc);
-
-        // checks if the room has a door to the west and if it's unlocked.
-        boolean checkForWest = room.hasDoorInDirection(Direction.WEST);
-
-        if (getCanGetThrough()) {
-            setCanGetThrough(false);
-
-            if (myPlayerLoc.y > 0 ) {
-                myPlayerLoc.translate(0,-1);         //Translates location
-                notifyObseversOfLocationChange();
-                checkForWin();
-            } else {
-                System.out.println("door locked ***");
-            }
-
-        }
-    }
-
-    @Override
-    public void lookLeft() {
-        myPlayer.setPlayerDir(Direction.WEST);
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        Room room = getRoom(myPlayerLoc);
-        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-    }
-
-    @Override
-    public void right() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        Room room = getRoom(myPlayerLoc);
-
-        // checks if the room has a door to the east and if it's unlocked.
-        boolean checkForEast = room.getDoorByDirection(Direction.EAST).getDoorStatus();
-
-        if (getCanGetThrough()) {
-            setCanGetThrough(false);
-
-            if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
-                myPlayerLoc.translate(0, 1);         //Translates location
-                notifyObseversOfLocationChange();
-                checkForWin();
-            } else {
-                System.out.println("door locked ***");
-            }
-
-        }
-    }
-    @Override
-    public void lookRight() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        Room room = getRoom(myPlayerLoc);
-        myPlayer.setPlayerDir(Direction.EAST);
-
-        sendQuestion(room.getDoorByDirection(myPlayer.getPlayerDir()).getCurrQuestion());
-    }
-
-    @Override
-    public void sendQuestion(Question q) {
-        myQues = q;
-        myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, q);
-    }
-
-
-    public Question getQuestion() {
-        return myQues;
-    }
-
-    public boolean determineExit() {
-        return  myPlayer.getPlayerLoc().equals(new Point(4,4));
-    }
-
-    /*TODO: When a key is pressed we want to
-        grab the question in that direction
-        Ask the question
-        if the user is correct move the player in that direction
-        if the user is incorrect change the door color (user remains in the same room)
-         */
-    //I WANT AN ASK QUESTION THAT SETS OFF THE DISPLAY
-
-    //GET current facing door
-    // get current question
-    // ask the question
-
-    // qdp NOT UPDATING BECAUSE IT IS NOT PAINTED COMPONENTS?
-
-    @Override
-    public void updateDoors() { //TODO: Change status us the user gets the Q wrong
-
-        Room room = getRoom(myPlayer.getPlayerLoc());
-        Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
-        //CHANGE DOOR STATE?
-
-        if (door.getDoorStatus()) {
-            System.out.println("update door call");
-            door.setLocked(false);
-            myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, null, door);
-        }
-    }
-
-
-    public void setCanGetThrough(boolean boo) {
-        canGetThrough = boo;
-    }
-
-    public boolean getCanGetThrough() {
-        return canGetThrough;
-    }
-
-
-    private void notifyObseversOfLocationChange() {
-
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
-                myPlayer);
-
-
-    }
-    // ------------------------------------- ^^^ For property change stuff
-
-    public Direction getPlayerDirection() {
-        return myPlayer.getPlayerDir();
-    }
-
-    public Player getPlayer() {
-        return myPlayer;
-    }
-    //TODO IDK this can be used in the checkFor... variable....I think
-
-    // --------------------------------^^ NEW stuff
 
     /**
      * Gets the Room at the given index.
@@ -347,23 +123,12 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
     public int getCols() {
         return myCols;
     }
-//    /**
-//     * Gets a list of all doors in the maze.
-//     *
-//     * @return A list of doors.
-//     */
-//    public Doors getDoor() {
-//        Room room = getRoom(myPlayer.getPlayerLoc());
-//        Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
-//
-//        return door;
-//    }
 
     /*
      * This method creates the maze using a list of Doors and Room.
      * Connects the Doors to two Rooms with no duplication.
      */
-    private void createMaze() {
+    protected void createMaze() {
         final List<Doors> currDoors = createAllDoors();
         final List<Room> currRooms = createAllRooms();
         int roomId = 0;
@@ -451,42 +216,13 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls, Serializab
     }
 
     // This method sets the entrance of the maze.
-    private void setEntrance() {
+    protected void setEntrance() {
         myRooms[0][0].setEntrance(true);
     }
 
     // This method sets the exit of the maze.
-    private void setExit() {
+    protected void setExit() {
         myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
-    }
-
-    public boolean checkForWin() {
-        if (myPlayer.getPlayerLoc().equals(new Point(4,4))) {
-            System.out.println("Congratulations! You have reached the exit and won!");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener theListener) {
-
-    }
-
-    @Override
-    public void addPropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
-
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener theListener) {
-
-    }
-
-    @Override
-    public void removePropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
-
     }
 
 }

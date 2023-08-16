@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * This is an Enum class that holds directions for the doors and players.
+ *
+ * @author Reilly Middlebrooks
+ * @version Summer 2023
+ */
 public enum Direction {
     /**
      * North (which is up on the screen).
@@ -21,6 +27,9 @@ public enum Direction {
      */
     EAST('E'),
 
+    /**
+     * None points nowhere is the default direction for the player.
+     */
     NONE('O');
 
     /**
@@ -32,32 +41,4 @@ public enum Direction {
         myLetter = theLetter;
     }
 
-    /**
-     * Returns the Direction represented by the given letter.
-     *
-     * @param theLetter The letter.
-     * @return the Direction represented by the given letter, or null if no
-     *         Direction is represented by the given letter.
-     */
-    public static Direction valueOf(final char theLetter) {
-        Direction result = null;
-
-        for (final Direction direction : Direction.values()) {
-            if (direction.letter() == theLetter) {
-                result = direction;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Returns the letter corresponding to this direction.
-     *
-     * @return the letter corresponding to this direction.
-     */
-    public char letter() {
-        return myLetter;
-    }
 }

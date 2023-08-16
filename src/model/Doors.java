@@ -43,7 +43,6 @@ public class Doors {
         this.myCurrQuestion = myQuestionData.retrieveQuestion();
 
         this.myDoorId = theDoorId;
-
     }
 
     /**
@@ -71,7 +70,6 @@ public class Doors {
         myIsUnlocked = theLocked;
     }
 
-
     /**
      * set question type by retrieving random question from database.
      * then it will become current question on the door.
@@ -88,5 +86,4 @@ public class Doors {
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
-
 }

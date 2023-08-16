@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
 
+import controller.TriviaMaze;
 import model.Direction;
 import model.Doors;
 import model.Maze;
@@ -27,7 +28,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     private static final Dimension TEXTBOX = new Dimension(200, 30);
 
-    private Maze myMaze;
+    private TriviaMaze myMaze;
     private Player myPlayer;
     private final JLabel filler = new JLabel("\n");
     private final JLabel filler2 = new JLabel("\n");
@@ -37,7 +38,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     /**
      * Constructor for QuestionDisplayPanel.
      */
-    public QuestionDisplayPanel(final Maze theMaze) {
+    public QuestionDisplayPanel(final TriviaMaze theMaze) {
         super();
 
         this.myMaze = theMaze;
@@ -170,7 +171,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             final String ans = answer.toLowerCase().replaceAll("\\s", "");
 
             if (userAns.equals(ans)) {
-                myMaze.setCanGetThrough(true);
+                //myMaze.setCanGetThrough(true);
                 Direction d = myMaze.getPlayer().getPlayerDir();
                 if (d.equals(Direction.SOUTH)) {
                     myMaze.down();
@@ -186,7 +187,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 repaint();
                 revalidate();
             } else {
-                myMaze.setCanGetThrough(false);
+                //myMaze.setCanGetThrough(false);
                 myMaze.updateDoors();
                 removeAll();
                 incorrectDisplay();
@@ -243,7 +244,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         theButton.addActionListener(e -> {
             if (firstButton == firstAns) {
-                myMaze.setCanGetThrough(true);
+                //myMaze.setCanGetThrough(true);
                 Direction d = myMaze.getPlayer().getPlayerDir();
                 if (d.equals(Direction.SOUTH)) {
                     myMaze.down();
@@ -259,7 +260,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 repaint();
                 revalidate();
             } else {
-                myMaze.setCanGetThrough(false);
+                //myMaze.setCanGetThrough(false);
                 myMaze.updateDoors();
                 removeAll();
                 incorrectDisplay();

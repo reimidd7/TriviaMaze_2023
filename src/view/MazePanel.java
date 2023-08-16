@@ -1,5 +1,6 @@
 package view;
 
+import controller.TriviaMaze;
 import model.*;
 
 import javax.imageio.ImageIO;
@@ -26,7 +27,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     private static final int GRID_SIZE = 85;
 
-    private Maze maze; // The Maze object to be displayed
+    private TriviaMaze maze; // The Maze object to be displayed
 
     private Player player;
     private BufferedImage entranceImage;
@@ -45,7 +46,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
      *
      * @param maze The Maze object to be displayed.
      */
-    public MazePanel(Maze maze) {
+    public MazePanel(TriviaMaze maze) {
         super();
         this.maze = maze;
         this.player = maze.getPlayer();

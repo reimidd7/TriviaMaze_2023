@@ -1,12 +1,8 @@
-package view;
+package controller;
 
-import model.Doors;
-import model.Player;
 import model.Question;
 
-import java.awt.Point;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 public interface TriviaMazeControls {
 

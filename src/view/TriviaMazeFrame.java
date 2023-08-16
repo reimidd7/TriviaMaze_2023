@@ -1,5 +1,6 @@
 package view;
 
+import controller.TriviaMaze;
 import model.Doors;
 import model.Maze;
 import model.Question;
@@ -34,7 +35,7 @@ public class TriviaMazeFrame extends JFrame {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
-    private final Maze myMaze;
+    private final TriviaMaze myMaze;
 
     private Question myQuestion;
 
@@ -43,7 +44,7 @@ public class TriviaMazeFrame extends JFrame {
      * Constructor to create the Frame for Trivia Maze.
      * Uses JFrame as super.
      */
-    public TriviaMazeFrame(Maze theMaze) {
+    public TriviaMazeFrame(TriviaMaze theMaze) {
         super();
         myMaze = theMaze;
         myQuestion = myMaze.getQuestion();
@@ -168,7 +169,7 @@ public class TriviaMazeFrame extends JFrame {
 
     public static void createAndShowGui() {
         // Create the Maze object here
-        Maze maze = new Maze(5, 5);
+        TriviaMaze maze = new TriviaMaze();
         maze.newGame();
 
         final TriviaMazeFrame frame = new TriviaMazeFrame(maze);
