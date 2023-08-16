@@ -58,14 +58,12 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             updateQuestion(myMaze.getQuestion());
 
         }
-        //setFocusable(true);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
     }
 
 
     private String determineDoorQuestionType(Question myQuestion) {
-        //repaint();
         return myQuestion.getQuestionTypeType();
     }
 
@@ -117,8 +115,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(cC);
         add(cD);
         setBackground(Color.yellow);
-//        revalidate();
-//        repaint();
 
     }
 
@@ -148,8 +144,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(bTrue);
         add(bFalse);
         setBackground(Color.pink);
-//        revalidate();
-//        repaint();
+
 
     }
 
@@ -177,11 +172,20 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             //System.out.println(userAns + "   real:   " + ans);
             if (userAns.equals(ans)) {
                 myMaze.setCanGetThrough(true);
+                Direction d = myMaze.getPlayer().getPlayerDir();
+                if (d.equals(Direction.SOUTH)) {
+                    myMaze.down();
+                } else if (d.equals(Direction.NORTH)) {
+                    myMaze.up();
+                } else if (d.equals(Direction.EAST)) {
+                    myMaze.right();
+                } else if (d.equals(Direction.WEST)) {
+                    myMaze.left();
+                }
                 removeAll();
                 correctDisplay();
                 repaint();
                 revalidate();
-                //System.out.println("Correct!" );
             } else {
                 myMaze.setCanGetThrough(false);
                 myMaze.updateDoors();
@@ -189,7 +193,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 incorrectDisplay();
                 repaint();
                 revalidate();
-                //System.out.println("incorrect!");
             }
 
             requestFocusInWindow();
@@ -244,6 +247,16 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         theButton.addActionListener(e -> {
             if (firstButton == firstAns) {
                 myMaze.setCanGetThrough(true);
+                Direction d = myMaze.getPlayer().getPlayerDir();
+                if (d.equals(Direction.SOUTH)) {
+                    myMaze.down();
+                } else if (d.equals(Direction.NORTH)) {
+                    myMaze.up();
+                } else if (d.equals(Direction.EAST)) {
+                    myMaze.right();
+                } else if (d.equals(Direction.WEST)) {
+                    myMaze.left();
+                }
                //System.out.println("Correct!");
                 removeAll();
                 correctDisplay();
@@ -368,29 +381,24 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 case KeyEvent.VK_UP:
                     myMaze.lookUp();
                     updateQuestion(myMaze.getQuestion());
-                    myMaze.up();
                     System.out.println("up");
                     break;
 
                 case KeyEvent.VK_DOWN:
                     myMaze.lookDown();
                     updateQuestion(myMaze.getQuestion());
-                    myMaze.down();
                     System.out.println("down");
                     break;
 
                 case KeyEvent.VK_LEFT:
                     myMaze.lookLeft();
                     updateQuestion(myMaze.getQuestion());
-                    myMaze.left();
                     System.out.println("left");
                     break;
 
                 case KeyEvent.VK_RIGHT:
                     myMaze.lookRight();
                     updateQuestion(myMaze.getQuestion());
-                    myMaze.right();
-
                     System.out.println("right");
                     break;
             }
