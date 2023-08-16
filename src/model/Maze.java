@@ -84,68 +84,69 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     @Override
     public void down() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-        // checks if the room has a door to the south and if it's unlocked.
-        boolean checkForSouth;
-
-        if (room.hasDoorInDirection(Direction.SOUTH)) {
-            checkForSouth = getDoor().getDoorStatus();
-        } else {
-            checkForSouth = false;
-        }
-
-
-        if (myPlayerLoc.x < getRows() - 1 && checkForSouth) {
+//        // checks if the room has a door to the south and if it's unlocked.
+//        boolean checkForSouth;
+//
+//        if (room.hasDoorInDirection(Direction.SOUTH)) {
+//            checkForSouth = room.getDoorByDirection(Direction.SOUTH).getDoorStatus();
+//        } else {
+//            checkForSouth = false;
+//        }
+//
+        if (myPlayerLoc.x < getRows() - 1) {
             myPlayerLoc.translate(1,0);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.SOUTH); //resets player to the new loc and dir
+            //myPlayer = new Player(myPlayerLoc.getLocation(), Direction.SOUTH); //resets player to the new loc and dir
 
             notifyObseversOfLocationChange();
-        }
+            //myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, myDoor.getCurrQuestion());
 
+        }
     }
 
     @Override
     public void up() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-        // checks if the room has a door to the north and if it's unlocked.
-        boolean checkForNorth;
-
-        if (room.hasDoorInDirection(Direction.NORTH)) {
-            checkForNorth = getDoor().getDoorStatus();
-        } else {
-            checkForNorth = false;
-        }
-
-        if (myPlayerLoc.x > 0 && checkForNorth) {
+//
+//        // checks if the room has a door to the north and if it's unlocked.
+//        boolean checkForNorth;
+//
+//        if (room.hasDoorInDirection(Direction.NORTH)) {
+//            checkForNorth = room.getDoorByDirection(Direction.NORTH).getDoorStatus();
+//        } else {
+//            checkForNorth = false;
+//        }
+//
+        if (myPlayerLoc.x > 0 ) {
             myPlayerLoc.translate(-1,0);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.NORTH); //resets player to the new loc and dir
+            //myPlayer = new Player(myPlayerLoc.getLocation(), Direction.NORTH); //resets player to the new loc and dir
 
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, myDoor.getCurrQuestion());
+
         }
-
-
-
     }
 
     @Override
     public void left() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
-
-
-        // checks if the room has a door to the west and if it's unlocked.
-        boolean checkForWest;
-
-        if (room.hasDoorInDirection(Direction.WEST)) {
-            checkForWest = getDoor().getDoorStatus();
-        } else {
-            checkForWest = false;
-        }
-
-        if (myPlayerLoc.y > 0 && checkForWest) {
+//
+//
+//        // checks if the room has a door to the west and if it's unlocked.
+//        boolean checkForWest;
+//
+//        if (room.hasDoorInDirection(Direction.WEST)) {
+//            checkForWest = room.getDoorByDirection(Direction.WEST).getDoorStatus();
+//        } else {
+//            checkForWest = false;
+//        }
+//
+        if (myPlayerLoc.y > 0 ) {
             myPlayerLoc.translate(0,-1);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.WEST); //resets player to the new loc and dir
+            //myPlayer = new Player(myPlayerLoc.getLocation(), Direction.WEST); //resets player to the new loc and dir
 
             notifyObseversOfLocationChange();
+            // myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, myDoor.getCurrQuestion());
+
         }
 
     }
@@ -154,19 +155,21 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     public void right() {
         Point myPlayerLoc = myPlayer.getPlayerLoc();
 
-        // checks if the room has a door to the east and if it's unlocked.
-        boolean checkForEast;
-
-        if (room.hasDoorInDirection(Direction.EAST)) {
-            checkForEast = getDoor().getDoorStatus();
-        } else {
-            checkForEast = false;
-        }
-        if (myPlayerLoc.y < getCols() - 1 && checkForEast) {
+//        // checks if the room has a door to the east and if it's unlocked.
+//        boolean checkForEast;
+//
+//        if (room.hasDoorInDirection(Direction.EAST)) {
+//            checkForEast = room.getDoorByDirection(Direction.EAST).getDoorStatus();
+//        } else {
+//            checkForEast = false;
+//        }
+        if (myPlayerLoc.y < getCols() - 1 ) {
             myPlayerLoc.translate(0, 1);         //Translates location
-            myPlayer = new Player(myPlayerLoc.getLocation(), Direction.EAST); //resets player to the new loc and dir
+            // myPlayer = new Player(myPlayerLoc.getLocation(), Direction.EAST); //resets player to the new loc and dir
 
             notifyObseversOfLocationChange();
+            //myPcs.firePropertyChange(PROPERTY_NEW_QUESTION, null, myDoor.getCurrQuestion());
+
         }
 
     }
