@@ -151,7 +151,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 10;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        repaint();
+                        //repaint();
 
 
                     } else if (dir.equals(Direction.EAST)) {
@@ -161,7 +161,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                         height = 20;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-                        repaint();
+                        //repaint();
 
                     }
 
@@ -184,15 +184,19 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("\nMaze PC is this being calledn\n\n");
+
         if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
+            System.out.println("\nMaze PC is this being calledn\n\n");
+
             Player newPlayer = (Player) evt.getNewValue();
             player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
-            repaint();
+            //repaint();
         }
         if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
             Doors updatedDoor = (Doors) evt.getNewValue();
             door = updatedDoor;
-            repaint();
+            //repaint();
         }
     }
 //    private class BoardKeyListener extends KeyAdapter {
