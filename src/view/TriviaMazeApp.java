@@ -2,16 +2,10 @@ package view;
 
 import javax.swing.SwingUtilities;
 
-public class TriviaMazeApp {
-    public TriviaMazeApp() {
+public final class TriviaMazeApp {
+    private TriviaMazeApp() { }
 
-    }
-    public static void main(String[] args) {
+    public static void main(final String[] theArgs) {
         SwingUtilities.invokeLater(TriviaMazeFrame:: createAndShowGui);
     }
-
-
-
-
-
 }

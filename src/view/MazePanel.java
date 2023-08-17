@@ -1,85 +1,135 @@
 package view;
 
 import controller.TriviaMaze;
-import model.*;
-
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import model.Direction;
+import model.Doors;
+import model.Player;
+import model.Room;
 
+
+/**
+ * Displays and updates the maze visual.
+ * Moves the player, draws the Maze, updates door statuses.
+ *
+ * @author Kevin Than, Reilly Middlebrooks
+ * @version Summer 2023
+ */
 public class MazePanel extends JPanel implements PropertyChangeListener {
+    /**
+     * Amount of rows in the maze.
+     */
     private static final int ROWS = 5;
+
+    /**
+     * Amount of columns in the maze.
+     */
     private static final int COLS = 5;
 
+    /**
+     * Dimension of the grid for the Maze.
+     */
     private static final Dimension MAZE_SIZE = new Dimension(ROWS * 50, COLS * 50);
 
+    /**
+     * The size of each individual grid square.
+     */
     private static final int GRID_SIZE = 85;
 
-    private TriviaMaze maze; // The Maze object to be displayed
+    /**
+     * The maze object to be displayed.
+     */
+    private final TriviaMaze myMaze;
 
-    private Player player;
-    private BufferedImage entranceImage;
-    private BufferedImage exitImage;
-    private BufferedImage floorImage;
-    private BufferedImage flowerImage;
-    private BufferedImage playerImage;
+    /**
+     * The player object to activate movement.
+     */
+    private Player myPlayer;
 
-    private Doors door;
+    /**
+     * Image for the Entrance.
+     */
+    private BufferedImage myEntranceImage;
 
-    private Room room;
+    /**
+     * Image for the Exit.
+     */
+    private BufferedImage myExitImage;
+
+    /**
+     * Image for the Floor.
+     */
+    private BufferedImage myFloorImage;
+
+    /**
+     * Image for the Flower.
+     */
+    private BufferedImage myFlowerImage;
+
+    /**
+     * Image for the Player.
+     */
+    private BufferedImage myPlayerImage;
+
+    /**
+     * Current door.
+     */
+    private Doors myDoor;
+
+    /**
+     * Current room the player is in.
+     */
+    private final Room myRoom;
 
 
     /**
      * Constructor for MazePanel.
      *
-     * @param maze The Maze object to be displayed.
+     * @param theMaze The Maze object to be displayed.
      */
-    public MazePanel(TriviaMaze maze) {
+    public MazePanel(final TriviaMaze theMaze) {
         super();
-        this.maze = maze;
-        this.player = maze.getPlayer();
-        this.room = maze.getRoom(player.getPlayerLoc());
-        this.door = room.getDoorByDirection(player.getPlayerDir());
+        this.myMaze = theMaze;
+        this.myPlayer = theMaze.getPlayer();
+        this.myRoom = theMaze.getRoom(myPlayer.getPlayerLoc());
+        this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
 
         try {
-            entranceImage = ImageIO.read(new File("start.png"));
-            exitImage = ImageIO.read(new File("mirror.png"));
-            floorImage = ImageIO.read(new File("floor.png"));
-            flowerImage = ImageIO.read(new File("flower.png"));
-            playerImage = ImageIO.read(new File("player.png"));
-        } catch (IOException e) {
+            myEntranceImage = ImageIO.read(new File("start.png"));
+            myExitImage = ImageIO.read(new File("mirror.png"));
+            myFloorImage = ImageIO.read(new File("floor.png"));
+            myFlowerImage = ImageIO.read(new File("flower.png"));
+            myPlayerImage = ImageIO.read(new File("player.png"));
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
         setVisible(true);
     }
 
-    public static Dimension getMazeSize() {
-        return MAZE_SIZE;
-    }
-
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
-        Graphics2D g2d = (Graphics2D) theGraphics;
+        final Graphics2D g2d = (Graphics2D) theGraphics;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (maze.checkForWin()) {
-            showExitPopup(theGraphics);
+        if (myMaze.checkForWin()) {
+            showExitPopup();
         } else {
             drawMazeGridWithGraphics(g2d);
 
@@ -87,15 +137,12 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
             drawDoors(g2d);
         }
-
-
     }
 
-    private void showExitPopup(final Graphics theGraphics) {
-        Graphics2D g2d = (Graphics2D) theGraphics;
-        String[] options = {"Exit", "New Game"};
+    private void showExitPopup() {
+        final String[] options = {"Exit", "New Game"};
         SwingUtilities.invokeLater(() -> {
-            int choice = JOptionPane.showOptionDialog(this,
+            final int choice = JOptionPane.showOptionDialog(this,
                     "CONGRATS YOU WON!!", "Won Game",
                     JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
@@ -103,7 +150,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                 System.exit(0);
             } else {
                 removeAll();
-                maze.newGame();
+                myMaze.newGame();
                 //TODO THis does not reset the player location
                 repaint();
                 revalidate();
@@ -116,15 +163,15 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         // Creates the Maze grid. With entrance, exit, and floor images
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                int x = col * GRID_SIZE;
-                int y = row * GRID_SIZE;
-                Room room = maze.getRoom(row, col);
+                final int x = col * GRID_SIZE;
+                final int y = row * GRID_SIZE;
+                final Room room = myMaze.getRoom(row, col);
                 if (room.isEntrance()) {
-                    theG2D.drawImage(entranceImage, x, y, GRID_SIZE, GRID_SIZE, this);
+                    theG2D.drawImage(myEntranceImage, x, y, GRID_SIZE, GRID_SIZE, this);
                 } else if (room.isExit()) {
-                    theG2D.drawImage(exitImage, x, y, GRID_SIZE, GRID_SIZE, this);
+                    theG2D.drawImage(myExitImage, x, y, GRID_SIZE, GRID_SIZE, this);
                 } else {
-                    theG2D.drawImage(floorImage, x, y, GRID_SIZE, GRID_SIZE, this);
+                    theG2D.drawImage(myFloorImage, x, y, GRID_SIZE, GRID_SIZE, this);
                 }
                 theG2D.setColor(Color.BLACK);
                 theG2D.drawLine(x, y, x + GRID_SIZE, y);
@@ -139,12 +186,12 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         // Moves the player around the maze?
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                int x = col * GRID_SIZE;
-                int y = row * GRID_SIZE;
-                if (player.getPlayerLoc().x == row && player.getPlayerLoc().y == col) {
-                    int playerX = x + GRID_SIZE / 4;
-                    int playerY = y + GRID_SIZE / 4;
-                    theG2D.drawImage(playerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
+                final int x = col * GRID_SIZE;
+                final int y = row * GRID_SIZE;
+                if (myPlayer.getPlayerLoc().x == row && myPlayer.getPlayerLoc().y == col) {
+                    final int playerX = x + GRID_SIZE / 4;
+                    final int playerY = y + GRID_SIZE / 4;
+                    theG2D.drawImage(myPlayerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
                 }
             }
         }
@@ -155,42 +202,39 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         // Prints the doors
         int width = 0;
         int height = 0;
-        for (int row = 0; row < maze.getRows(); row++) {
-            for (int col = 0; col < maze.getCols(); col++) {
-                Room currRoom = maze.getRoom(row, col);
-                int x = col * GRID_SIZE;
-                int y = row * GRID_SIZE;
+        for (int row = 0; row < myMaze.getRows(); row++) {
+            for (int col = 0; col < myMaze.getCols(); col++) {
+                final Room currRoom = myMaze.getRoom(row, col);
+                final int x = col * GRID_SIZE;
+                final int y = row * GRID_SIZE;
 
                 for (Doors d : currRoom.getMapOfDoorsAndDir().keySet()) {
-                    Direction dir = currRoom.getMapOfDoorsAndDir().get(d);
+                    final Direction dir = currRoom.getMapOfDoorsAndDir().get(d);
 
                     if (dir.equals(Direction.SOUTH)) {
-                        int doorX = x + GRID_SIZE / 2 - 10;
-                        int doorY = y + GRID_SIZE;
+                        final int doorX = x + GRID_SIZE / 2 - 10;
+                        final int doorY = y + GRID_SIZE;
                         width = 20;
                         height = 10;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
 
-
                     } else if (dir.equals(Direction.EAST)) {
-                        int doorX = x + GRID_SIZE;
-                        int doorY = y + GRID_SIZE / 2 - 10;
+                        final int doorX = x + GRID_SIZE;
+                        final int doorY = y + GRID_SIZE / 2 - 10;
                         width = 10;
                         height = 20;
 
                         drawChangingDoors(theG2D, doorX, doorY, width, height, d);
-
                     }
-
                 }
             }
-
         }
     }
 
-    private void drawChangingDoors(final Graphics2D theG2D, int theX, int theY, int theW, int theH, Doors d) {
-        if (d.getDoorStatus()) {
+    private void drawChangingDoors(final Graphics2D theG2D, final int theX, final int theY,
+                                   final int theW, final int theH, final Doors theDoor) {
+        if (theDoor.getDoorStatus()) {
             theG2D.setColor(Color.BLACK);
             theG2D.fillRect(theX, theY, theW, theH);
         } else {
@@ -201,40 +245,15 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
 
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent theEvt) {
 
-        if (evt.getPropertyName().equals(maze.PROPERTY_LOCATION_CHANGE)) {
-            Player newPlayer = (Player) evt.getNewValue();
-            player = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
+        if (theEvt.getPropertyName().equals(myMaze.PROPERTY_LOCATION_CHANGE)) {
+            final Player newPlayer = (Player) theEvt.getNewValue();
+            myPlayer = new Player(newPlayer.getPlayerLoc(), newPlayer.getPlayerDir());
         }
-        if (maze.PROPERTY_DOOR_STATUS.equals(evt.getPropertyName())) {
-            Doors updatedDoor = (Doors) evt.getNewValue();
-            door = updatedDoor;
+        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
+            myDoor = (Doors) theEvt.getNewValue();
         }
     }
-//    private class BoardKeyListener extends KeyAdapter {
-//        public void keyPressed(KeyEvent e) {
-//            int keyCode = e.getKeyCode();
-//            switch (keyCode) {
-//                case KeyEvent.VK_UP:
-//                    maze.up();
-//                    System.out.println("up");
-//                    break;
-//                case KeyEvent.VK_DOWN:
-//                    maze.down();
-//                    System.out.println("down");
-//                    break;
-//                case KeyEvent.VK_LEFT:
-//                    maze.left();
-//                    System.out.println("left");
-//                    break;
-//                case KeyEvent.VK_RIGHT:
-//                    maze.right();
-//                    System.out.println("right");
-//                    break;
-//            }
-//            //repaint();
-//        }
-//    }
 }
 
