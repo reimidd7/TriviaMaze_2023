@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,13 +55,13 @@ class RoomTest {
 
     @Test
     void testIsLockedDefaultFalse() {
-        assertFalse(myRoom.isLocked(), "The Room is unlocked");
+        assertFalse(myRoom.isRoomLocked(), "The Room is unlocked");
     }
 
     @Test
     void testIsLockedTrue() {
-        myRoom.setLocked(true);
-        assertTrue(myRoom.isLocked(), "The Room is locked");
+        myRoom.setRoomLocked(true);
+        assertTrue(myRoom.isRoomLocked(), "The Room is locked");
     }
 
     @Test
@@ -79,14 +79,14 @@ class RoomTest {
 
     @Test
     void testHasUnlockedDoorsDefaultTrue() {
-        assertTrue(myRoom.hasUnlockedDoors(), "The default the doors are unlocked");
+        assertTrue(myRoom.roomHasUnlockedDoors(), "The default the doors are unlocked");
     }
 
     @Test
     void testHasUnlockedDoorsFalse() {
         myDoors.get(1).setLocked(false);
         myDoors.get(0).setLocked(false);
-        assertFalse(myRoom.hasUnlockedDoors(), "There should be no unlocked doors");
+        assertFalse(myRoom.roomHasUnlockedDoors(), "There should be no unlocked doors");
     }
 
     @Test
@@ -94,7 +94,7 @@ class RoomTest {
         // if one door is unlocked and one is locked == true
         myDoors.get(1).setLocked(true);
         myDoors.get(0).setLocked(false);
-        assertTrue(myRoom.hasUnlockedDoors(), "There should be unlocked doors");
+        assertTrue(myRoom.roomHasUnlockedDoors(), "There should be unlocked doors");
     }
 
     @Test

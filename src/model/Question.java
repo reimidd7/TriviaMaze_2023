@@ -2,68 +2,66 @@ package model;
 
 /**
  * The abstract class question that will be use in MCQuestion, SAnsQuestion, and TFQuestion.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
  */
-public class Question {
+public abstract class Question {
     /**
      * Question string.
      */
     protected String myQuestion;
-
     /**
-     * Type of question.
+     * Type of question string.
      */
-    public enum QuestionType {
-        TF, SAns, MC
-    }
-
-    protected QuestionType myQuestionType;
-
+    protected String myQuestionType;
     /**
      * QuestionID string.
      */
     protected int myQuestionID;
 
     /**
-     * Correct answer string
-     */
-    protected String myCorrectAnswer;
-
-    /**
      * Constructor to initialize the questions.
      *
-     * @param myQuestionID
-     * @param myQuestionType
-     * @param myQuestion
-     * @param myCorrectAnswer
+     * @param theQuestionID id of the question in database.
+     * @param theQuestion the actual question in string form.
+     * @param theQuestionType the type of question for the current question.
      */
-    public Question(int myQuestionID, QuestionType myQuestionType, String myQuestion, String myCorrectAnswer) {
-        this.myQuestionID = myQuestionID;
-        this.myQuestionType = myQuestionType;
-        this.myQuestion = myQuestion;
-        this.myCorrectAnswer = myCorrectAnswer;
+    public Question(final int theQuestionID, final String theQuestionType,
+                    final String theQuestion) {
+        this.myQuestionID = theQuestionID;
+        this.myQuestionType = theQuestionType;
+        this.myQuestion = theQuestion;
     }
 
+    /**
+     * Getter to get the question.
+     */
     public String getQuestion() {
         return myQuestion;
     }
 
-    public void setQuestion(String question) {
-        this.myQuestion = question;
-    }
+//    /**
+//     * Setter to set the question.
+//     */
+//    private void setQuestion(String question) { this.myQuestion = question; }
 
-    public QuestionType getQuestionType() {
+    /**
+     * Getter to get the question type.
+     */
+    public String getQuestionTypeType() {
         return myQuestionType;
     }
 
-    public int getQuestionID() {
-        return myQuestionID;
-    }
+//    /**
+//     * Getter to get the questionID.
+//     */
+//    public int getQuestionID() {
+//        return myQuestionID;
+//    }
 
-    public String getCorrectAnswer() {
-        return myCorrectAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.myCorrectAnswer = correctAnswer;
-    }
+    /**
+     * Abstract method to be implemented by subclass to get correct answer.
+     */
+    public abstract String getCorrectAnswer();
 }

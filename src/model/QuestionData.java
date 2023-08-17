@@ -1,8 +1,4 @@
 package model;
-/**
- * Database for the question and answers.
- * Also hold the get random question and the get answer from data base.
- */
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Database for the question and answers.
+ * Also hold the get random question and the get answer from database.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
+ */
 public class QuestionData {
     /**
      * URL to the database file.
@@ -85,9 +88,9 @@ public class QuestionData {
 
     /**
      * Retrieve the correct answer for the question.
-     * @param theQuestionID
-     * @return CorrectAnswer
-     * @throws SQLException
+     * @param theQuestionID id of the question in database.
+     * @return CorrectAnswer the correct answer for the question.
+     * @throws SQLException for if the database cannot be found.
      */
     private String getCorrectAnswerForQuestion(final int theQuestionID) throws SQLException {
         String correctAnswer = null;

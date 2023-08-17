@@ -1,8 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The door class is for the doors used in trivial maze.
  * each door has status and holds a question.
@@ -40,18 +37,16 @@ public class Doors {
      */
     public Doors(final int theDoorId) {
         //is the door unlocked?
-        this.myIsUnlocked = false; //by default
+        this.myIsUnlocked = true; //by default
 
         // adds the question data to the variable myCurrQuestion
         this.myCurrQuestion = myQuestionData.retrieveQuestion();
 
         this.myDoorId = theDoorId;
-
     }
 
     /**
      * Gets the specific Doors' ID.
-     *
      * @return the door ID.
      */
     public int getDoorId() {
@@ -60,7 +55,6 @@ public class Doors {
 
     /**
      * Get the status of doors.
-     *
      * @return true if unlocked or false is locked.
      */
     public boolean getDoorStatus() {
@@ -76,7 +70,6 @@ public class Doors {
         myIsUnlocked = theLocked;
     }
 
-
     /**
      * set question type by retrieving random question from database.
      * then it will become current question on the door.
@@ -88,24 +81,9 @@ public class Doors {
 
     /**
      * Get the current question displayed on the doors.
-     *
      * @return current question.
      */
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
-    public interface DoorUnlockObserver {
-        void onDoorUnlocked(Doors unlockedDoor);
-    }
-    private final List<DoorUnlockObserver> observers = new ArrayList<>();
-    public void addObserver(DoorUnlockObserver observer) {
-        observers.add(observer);
-    }
-
-    public void notifyObservers() {
-        for (DoorUnlockObserver observer : observers) {
-            observer.onDoorUnlocked(this);
-        }
-    }
 }
-

@@ -1,15 +1,10 @@
 package model;
 
-import view.PropertyChangeEnabledTriviaMazeControls;
-import view.TriviaMazeControls;
-
 import java.awt.Point;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+
 
 /**
  * Class to organize the rooms and doors and create the maze functional.
@@ -17,7 +12,7 @@ import java.util.Scanner;
  * @author Danie Oum, Reilly Middlebrooks, Kevin Than
  * @version Summer 2023
  */
-public class Maze implements PropertyChangeEnabledTriviaMazeControls {
+public class Maze implements Serializable {
     /**
      * The total amount of doors needed for our 5x5 maze.
      */
@@ -41,15 +36,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
      */
     private final int myCols;
 
-    private Player myPlayer;
-
-    private Doors myDoor;
-
-    private Room room;
-
-    private final PropertyChangeSupport myPcs;
-
-
     /**
      * This method initializes the rows and columns of the maze and calls other methods.
      *
@@ -61,170 +47,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         myRows = theRows;
         myCols = theCols;
         myRooms = new Room[theRows][theCols];
-        myPcs = new PropertyChangeSupport(this);
-    }
-
-    @Override
-    public void newGame() {
-        this.createMaze();
-        this.myPlayer = new Player(new Point(0, 0), Direction.NONE);
-        this.room = this.getRoom(this.myPlayer.getPlayerLoc());
-        this.myDoor = null;
-        this.setEntrance();
-        this.setExit();
-        // Removed old player location and door since we are starting a new game
-        this.myPcs.firePropertyChange("PLAYER_CHANGE_LOCATION", null, this.myPlayer.getPlayerLoc());
-        this.myPcs.firePropertyChange("DOOR_STATUS_CHANGE", null, this.myDoor);
-    }
-
-    private void askQuestionToUnlockDoor(Point playerLoc, Direction direction) {
-        Doors door = getRoom(playerLoc).getDoorByDirection(direction);
-        if (door != null) {
-            if (!door.getDoorStatus()) {
-                Question question = door.getCurrQuestion();
-
-                if (question != null) {
-                    myPcs.firePropertyChange("NewQuestion", null, question);
-                    System.out.println(question.getQuestion());
-                    String playerAnswer = getPlayerAnswer();
-
-                    if (playerAnswer.equalsIgnoreCase(question.getCorrectAnswer())) {
-                        door.setLocked(true);
-                        door.notifyObservers();
-                        System.out.println("Correct! The door is now unlocked.");
-                    } else {
-                        System.out.println("Incorrect! The door remains locked.");
-                    }
-
-                } else {
-                    System.out.println("No question available to ask!");
-                }
-            } else {
-                System.out.println("This door is already unlocked.");
-            }
-        } else {
-            System.out.println("There is no door in this direction!");
-        }
-    }
-
-    // Placeholder for player's input, you might replace this with actual UI input
-    private String getPlayerAnswer() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your answer: ");
-        return scanner.nextLine();
-    }
-    @Override
-    public void down() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        if (myPlayerLoc.x < getRows() - 1) {
-            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.SOUTH)) {
-                myPlayerLoc.translate(1, 0);
-                myPlayer.setPlayerLoc(myPlayerLoc);
-                notifyObseversOfLocationChange();
-                checkForWin();
-            } else {
-                askQuestionToUnlockDoor(myPlayerLoc, Direction.SOUTH);
-            }
-        }
-    }
-
-    @Override
-    public void up() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        if (myPlayerLoc.x > 0) {
-            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.NORTH)) {
-                myPlayerLoc.translate(-1, 0);
-                myPlayer.setPlayerLoc(myPlayerLoc);
-                notifyObseversOfLocationChange();
-                checkForWin();
-            } else {
-                askQuestionToUnlockDoor(myPlayerLoc, Direction.NORTH);
-            }
-        }
-    }
-
-    @Override
-    public void left() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        if (myPlayerLoc.y > 0) {
-            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.WEST)) {
-                myPlayerLoc.translate(0, -1);
-                notifyObseversOfLocationChange();
-                myPlayer.setPlayerLoc(myPlayerLoc);
-                checkForWin();
-            } else {
-                askQuestionToUnlockDoor(myPlayerLoc, Direction.WEST);
-            }
-        }
-    }
-
-    @Override
-    public void right() {
-        Point myPlayerLoc = myPlayer.getPlayerLoc();
-        if (myPlayerLoc.y < getCols() - 1) {
-            if (isDoorUnlockedByDirection(myPlayerLoc, Direction.EAST)) {
-                myPlayerLoc.translate(0, 1);
-                myPlayer.setPlayerLoc(myPlayerLoc);
-                notifyObseversOfLocationChange();
-                checkForWin();
-            } else {
-                askQuestionToUnlockDoor(myPlayerLoc, Direction.EAST);            }
-        }
-    }
-    public boolean isDoorUnlockedByDirection(Point thePlayerLoc, Direction theDir) {
-        Room currRoom = getRoom(thePlayerLoc); //room where the player is located
-        Doors currDoor = null;
-        for (Doors d : currRoom.getMapOfDoorsAndDir().keySet()) {
-            Direction dirOfCurrDoor = currRoom.getMapOfDoorsAndDir().get(d);
-            if (dirOfCurrDoor.equals(theDir)) {
-                currDoor = d;
-            }
-        }
-        if (currDoor != null) {
-            return currDoor.getDoorStatus();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public Point getPlayerLocation() {
-        return new Point(myPlayer.getPlayerLoc());
-    }
-
-    @Override
-    public void checkDoors() {
-        Room playerRoom = getRoom(myPlayer.getPlayerLoc());
-        Map<Doors, Direction> map = playerRoom.getMapOfDoorsAndDir();
-        playerRoom.hasUnlockedDoors();
-
-    }
-
-    @Override
-    public void updateDoors(Doors door) {
-        Doors oldDoor = getDoor();
-        //CHANGE DOOR STATE?
-
-        if (door.getDoorStatus()) {
-            door.setLocked(false);
-            myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, oldDoor, door);
-        }
-    }
-
-    private void notifyObseversOfLocationChange() {
-
-        myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
-                new Player(myPlayer.getPlayerLoc(), myPlayer.getPlayerDir()));
-
-    }
-
-
-    public Direction getPlayerDirection() {
-        return myPlayer.getPlayerDir();
-    }
-
-    public Player getPlayer() {
-        return myPlayer;
     }
 
     /**
@@ -241,15 +63,46 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         return null;
     }
 
-    public Room getRoom(Point thePlayerLoc) {
-        int row = thePlayerLoc.x;
-        int col = thePlayerLoc.y;
+    public Room getRoom(final Point thePlayerLoc) {
+        final int row = thePlayerLoc.x;
+        final int col = thePlayerLoc.y;
         if (row >= 0 && row < myRows && col >= 0 && col < myCols) {
             return myRooms[row][col];
         }
         return null;
     }
 
+//    /**
+//     * This method is the getter for the entrance of the maze.
+//     *
+//     * @return Returns the room of the entrance
+//     */
+//    public Point getEntrance() {
+//        for (int row = 0; row < myRows; row++) {
+//            for (int column = 0; column < myCols; column++) {
+//                if (myRooms[row][column].isEntrance()) {
+//                    return new Point(row, column);
+//                }
+//            }
+//        }
+//        return null;
+//    }
+
+//    /**
+//     * This method is the getter for the exit of the maze.
+//     *
+//     * @return Returns a room
+//     */
+//    public Point getExit() {
+//        for (int row = 0; row < myRows; row++) {
+//            for (int column = 0; column < myCols; column++) {
+//                if (myRooms[row][column].isExit()) {
+//                    return new Point(row, column);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Gets the number of rows in the maze.
@@ -269,23 +122,11 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
         return myCols;
     }
 
-    /**
-     * Gets a list of all doors in the maze.
-     *
-     * @return A list of doors.
-     */
-    public Doors getDoor() {
-        Room room = getRoom(myPlayer.getPlayerLoc());
-        Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
-
-        return door;
-    }
-
     /*
      * This method creates the maze using a list of Doors and Room.
      * Connects the Doors to two Rooms with no duplication.
      */
-    private void createMaze() {
+    protected void createMaze() {
         final List<Doors> currDoors = createAllDoors();
         final List<Room> currRooms = createAllRooms();
         int roomId = 0;
@@ -332,7 +173,6 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
 
         for (int i = 1; i <= amtOfDoors; i++) {
             allDoors.add(new Doors(i));
-
         }
 
         return allDoors;
@@ -374,42 +214,13 @@ public class Maze implements PropertyChangeEnabledTriviaMazeControls {
     }
 
     // This method sets the entrance of the maze.
-    private void setEntrance() {
+    protected void setEntrance() {
         myRooms[0][0].setEntrance(true);
     }
 
     // This method sets the exit of the maze.
-    private void setExit() {
-        this.myRooms[this.myRows - 1][this.myCols - 1].setExit(true);
-    }
-
-    private void checkForWin() {
-        Room currentRoom = getRoom(myPlayer.getPlayerLoc());
-        if (currentRoom != null && currentRoom.isExit()) {
-            System.out.println("Congratulations! You have reached the exit and won!");
-        }
-    }
-
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener theListener) {
-        myPcs.addPropertyChangeListener(theListener);
-
-    }
-
-    @Override
-    public void addPropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
-
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener theListener) {
-
-    }
-
-    @Override
-    public void removePropertyChangeListener(String thePropertyName, PropertyChangeListener theListener) {
-
+    protected void setExit() {
+        myRooms[ROWS_OF_DOORS][ROWS_OF_DOORS].setExit(true);
     }
 
 }

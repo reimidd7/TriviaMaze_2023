@@ -1,23 +1,13 @@
-package view;
+package controller;
 
-import model.Doors;
-
-import java.awt.Point;
-import java.beans.PropertyChangeSupport;
+import model.Question;
 
 public interface TriviaMazeControls {
-
 
     /**
      * Resets the game to the default Maze grid.
      */
     void newGame();
-
-
-
-    // Player movement update question to the door they just touched
-    // if correct move character location to the new Room index
-    //Player says go right... check for door... Unlocked... grab the question... user got question correct... move in room to the right
 
     /**
      * Try to move the player's character down.
@@ -47,17 +37,39 @@ public interface TriviaMazeControls {
      */
     void right();
 
+    /**
+     * Updates the door status's.
+     * If the user get the answer incorrect the door changes.
+     */
+    void updateDoors();
 
-    Point getPlayerLocation();
+    /**
+     * Sets the player direction NORTH,
+     *      sends the question to the display panel.
+     */
+    void lookUp();
 
+    /**
+     * Sets the player direction SOUTH,
+     *      sends the question to the display panel.
+     */
+    void lookDown();
 
-    void checkDoors();
+    /**
+     * Sets the player direction WEST,
+     *      sends the question to the display panel.
+     */
+    void lookLeft();
 
-    void updateDoors(Doors door);
-    // if door is true set to false
+    /**
+     * Sets the player direction EAST,
+     *      sends the question to the display panel.
+     */
+    void lookRight();
 
-
-
-
-
+    /**
+     * Sends a new question to the display panel.
+     * @param theQ the current question.
+     */
+    void sendQuestion(Question theQ);
 }
