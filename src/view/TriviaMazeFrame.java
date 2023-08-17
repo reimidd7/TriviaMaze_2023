@@ -88,27 +88,10 @@ public class TriviaMazeFrame extends JFrame {
         final String fileName = "gamestate.ser";
 
         saveGame.addActionListener(theE -> {
-            // Serialization
-//            try {
-//                // Saving of object in a file
-//                FileOutputStream file = new FileOutputStream(filename);
-//                ObjectOutputStream out = new ObjectOutputStream(file);
-//
-//                // Method for serialization of object
-//                out.writeObject(myMaze);
-//
-//                out.close();
-//                file.close();
-//
-//                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
-//            } catch (IOException ex) {
-//                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
-//            }
-            try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
-                saveData.writeObject(myMaze);
+            try {
+                save(myMaze, "gameState.ser");
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
-                System.out.println(myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
             }
@@ -119,17 +102,15 @@ public class TriviaMazeFrame extends JFrame {
 
         loadGame.addActionListener(e -> {
             //load game when clicked.
-            try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
-                TriviaMaze loadedMaze = (TriviaMaze) loadData.readObject();
+            try {
+                TriviaMaze loadedMaze = (TriviaMaze) load("gameState.ser");
                 myMaze.copyStateFrom(loadedMaze);
                 questionPanel.updateStateAfterLoadQuestion(loadedMaze);
                 mazePanel.updateStateAfterLoadMaze(loadedMaze);
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
-                System.out.println(myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
-
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loaded");
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loading");
             }
         });
 
