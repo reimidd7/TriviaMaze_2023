@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  * @author Reilly Middlebrooks
  * @version August 2023
  */
-public class Room {
+public class Room implements Serializable {
 
     /**
      * This Map is the Doors/Directions attached to the Room.

@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
@@ -34,7 +36,7 @@ public class TriviaMazeFrame extends JFrame {
     /**
      * Trivia Maze object for gameplay.
      */
-    private final TriviaMaze myMaze;
+    private TriviaMaze myMaze;
 
     /**
      * Current question.
@@ -80,29 +82,26 @@ public class TriviaMazeFrame extends JFrame {
         final JMenuItem newGame = new JMenuItem("New Game");
         final JMenu help = new JMenu("Help");
         final JMenuItem saveGame = new JMenuItem("Save Game");
-        saveGame.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent theE) {
-                try {
-                    //save(gameState, "gameState");
-                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
-                }
+        saveGame.addActionListener(theE -> {
+            try {
+                save(myMaze, "gameState.ser");
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
             }
         });
 
-        // Create load game menu item and add ActionListener.
         final JMenuItem loadGame = new JMenuItem("Load Game");
 
         loadGame.addActionListener(e -> {
-            //load game when clicked.
             try {
-                load("gameState.dat");
+                TriviaMaze loadedMaze = (TriviaMaze) load("gameState.ser");
+                myMaze = loadedMaze;
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loaded");
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loading");
             }
         });
 
@@ -141,14 +140,14 @@ public class TriviaMazeFrame extends JFrame {
             System.exit(0);
         }
     }
-    private static void save(final Serializable data, final String fileName) throws Exception {
-        try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            saveData.writeObject(data);
+    private static void save(final Serializable theData, final String theFileName) throws Exception {
+        try (ObjectOutputStream saveData = new ObjectOutputStream(Files.newOutputStream(Paths.get(theFileName)))) {
+            saveData.writeObject(theData);
         }
     }
 
-    private static Object load(final String fileName) throws Exception {
-        try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
+    private static Object load(final String theFileName) throws Exception {
+        try (ObjectInputStream loadData = new ObjectInputStream(Files.newInputStream(Paths.get(theFileName)))) {
             return loadData.readObject();
         }
     }

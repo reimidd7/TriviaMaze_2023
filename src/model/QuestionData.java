@@ -1,5 +1,8 @@
 package model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +16,7 @@ import java.sql.SQLException;
  * @author Kevin Than
  * @version Summer 2023
  */
-public class QuestionData {
+public class QuestionData implements Serializable {
     /**
      * URL to the database file.
      */
@@ -21,12 +24,16 @@ public class QuestionData {
     /**
      * Database connection used to interact with the question database.
      */
-    private final Connection myDBConnection;
+    private transient Connection myDBConnection;
 
     /**
      * contractor to establishes a database connection.
      */
     public QuestionData() {
+        this.myDBConnection = connect();
+    }
+    private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
+        aInputStream.defaultReadObject();
         this.myDBConnection = connect();
     }
 
@@ -45,20 +52,23 @@ public class QuestionData {
                 final int questionID = rs.getInt("QuestionID");
                 final String questionText = rs.getString("Question");
                 final String questionType = rs.getString("QuestionType");
-                final String correctAnswer = getCorrectAnswerForQuestion(questionID);
 
                 switch (questionType) {
                     case "MC" -> {
-                        question = new Question(questionID, Question.QuestionType.MC, questionText, correctAnswer);
+                        final String correctAnswerMC = getCorrectAnswerForQuestion(questionID);
+                        question = new MCQuestion(questionID, questionText, correctAnswerMC);
                     }
                     case "TF" -> {
-                        question = new Question(questionID, Question.QuestionType.TF, questionText, correctAnswer);
+                        final String correctAnswerTF = getCorrectAnswerForQuestion(questionID);
+                        question = new TFQuestion(questionID, questionText, correctAnswerTF);
                     }
                     case "SAns" -> {
-                        question = new Question(questionID, Question.QuestionType.SAns, questionText, correctAnswer);
+                        final String correctAnswerSAns =
+                                getCorrectAnswerForQuestion(questionID);
+                        question = new SAnsQuestion(questionID,
+                                questionText, correctAnswerSAns);
                     }
                     default -> {
-                        // Handle unexpected question type if needed
                     }
                 }
             }
@@ -69,7 +79,6 @@ public class QuestionData {
 
         return question;
     }
-
 
     /**
      * Establishes connection to the question database.

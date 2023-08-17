@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  * Initilizes the Player object. Represents the user.
@@ -8,7 +9,7 @@ import java.awt.Point;
  * @author Reilly Middelbrooks, Kevin Than
  * @version Summer 2023
  */
-public class Player {
+public class Player implements Serializable {
 
     /**
      * Point of player's location in the Maze.
