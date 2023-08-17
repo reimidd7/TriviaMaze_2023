@@ -104,9 +104,8 @@ public class TriviaMazeFrame extends JFrame {
 //            } catch (IOException ex) {
 //                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
 //            }
-            try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))){
+            try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
                 saveData.writeObject(myMaze);
-                //save(myMaze, "gameState.dat");
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
                 System.out.println(myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
             } catch (IOException ex) {

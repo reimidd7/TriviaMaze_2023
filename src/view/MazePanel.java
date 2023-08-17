@@ -151,7 +151,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             } else {
                 removeAll();
                 myMaze.newGame();
-                //TODO THis does not reset the player location
+                resetMazePanel();
                 repaint();
                 revalidate();
             }
