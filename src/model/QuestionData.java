@@ -1,7 +1,5 @@
 package model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,16 +22,12 @@ public class QuestionData implements Serializable {
     /**
      * Database connection used to interact with the question database.
      */
-    private transient Connection myDBConnection;
+    private transient final Connection myDBConnection;
 
     /**
      * contractor to establishes a database connection.
      */
     public QuestionData() {
-        this.myDBConnection = connect();
-    }
-    private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
-        aInputStream.defaultReadObject();
         this.myDBConnection = connect();
     }
 

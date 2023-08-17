@@ -43,10 +43,10 @@ public abstract class Question implements Serializable {
         return myQuestion;
     }
 
-//    /**
-//     * Setter to set the question.
-//     */
-//    private void setQuestion(String question) { this.myQuestion = question; }
+    /**
+     * Setter to set the question.
+     */
+    public void setQuestion(String question) { this.myQuestion = question; }
 
     /**
      * Getter to get the question type.

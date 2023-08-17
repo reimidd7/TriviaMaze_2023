@@ -27,10 +27,12 @@ public class Maze implements Serializable {
      * The 2d array that stores the rooms and doors of the Maze.
      */
     private final Room[][] myRooms;
+
     /**
      * The amount of rows needed for the Maze.
      */
     private final int myRows;
+
     /**
      * The amount of columns needed for the Maze.
      */

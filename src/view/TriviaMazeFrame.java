@@ -9,8 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
@@ -33,15 +31,20 @@ public class TriviaMazeFrame extends JFrame {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
+    private static QuestionDisplayPanel questionPanel;
+    private static MazePanel mazePanel;
+
     /**
      * Trivia Maze object for gameplay.
      */
-    private TriviaMaze myMaze;
+    private final TriviaMaze myMaze;
 
     /**
      * Current question.
      */
     final private Question myQuestion;
+
+
 
 
     /**
@@ -79,40 +82,61 @@ public class TriviaMazeFrame extends JFrame {
     private JMenuBar createFileMenu() {
         final JMenuBar bar = new JMenuBar();
         final JMenu fileClick = new JMenu("File");
-        final JMenuItem newGame = new JMenuItem("New Game");
+
         final JMenu help = new JMenu("Help");
         final JMenuItem saveGame = new JMenuItem("Save Game");
+        final String fileName = "gamestate.ser";
+
         saveGame.addActionListener(theE -> {
-            try {
-                save(myMaze, "gameState.ser");
+            // Serialization
+//            try {
+//                // Saving of object in a file
+//                FileOutputStream file = new FileOutputStream(filename);
+//                ObjectOutputStream out = new ObjectOutputStream(file);
+//
+//                // Method for serialization of object
+//                out.writeObject(myMaze);
+//
+//                out.close();
+//                file.close();
+//
+//                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
+//            } catch (IOException ex) {
+//                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
+//            }
+            try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))){
+                saveData.writeObject(myMaze);
+                //save(myMaze, "gameState.dat");
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
-            } catch (Exception ex) {
+                System.out.println(myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Saved Failed");
             }
         });
 
+        // Create load game menu item and add ActionListener.
         final JMenuItem loadGame = new JMenuItem("Load Game");
 
         loadGame.addActionListener(e -> {
-            try {
-                TriviaMaze loadedMaze = (TriviaMaze) load("gameState.ser");
-                myMaze = loadedMaze;
+            //load game when clicked.
+            try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
+                TriviaMaze loadedMaze = (TriviaMaze) loadData.readObject();
+                myMaze.copyStateFrom(loadedMaze);
+                questionPanel.updateStateAfterLoadQuestion(loadedMaze);
+                mazePanel.updateStateAfterLoadMaze(loadedMaze);
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
+                System.out.println(myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
+
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loading");
+                JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loaded");
             }
         });
 
         // Create exit game menu item and add ActionListener.
         final JMenuItem exitGame = new JMenuItem("Exit Game");
-        exitGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theE) {
-                exitGame();
-            }
-        });
+        exitGame.addActionListener(theE -> exitGame());
 
         help.add(instructionSubMenu("Game Controls", "To move the player around the board "
                 + "use the arrow keys on your keyboard."));
@@ -123,6 +147,15 @@ public class TriviaMazeFrame extends JFrame {
                 If incorrect the door locks and you must find a new way around"""));
         help.add(instructionSubMenu("About", "Trivia Maze 1.0 was created by Danie Oum, "
                 + "Kevin Than, and Reilly Middelbrooks. \n We hope you enjoy!"));
+
+        final JMenuItem newGame = new JMenuItem("New Game");
+        newGame.addActionListener(theE -> {
+            myMaze.newGame();
+            questionPanel.resetQuestionPanel();
+            mazePanel.resetMazePanel();
+            System.out.println("Player " + myMaze.getPlayer().getPlayerLoc() + " " + myMaze.getPlayer().getPlayerDir());
+        });
+
         fileClick.add(newGame);
         fileClick.add(saveGame);
         fileClick.add(loadGame);
@@ -140,14 +173,14 @@ public class TriviaMazeFrame extends JFrame {
             System.exit(0);
         }
     }
-    private static void save(final Serializable theData, final String theFileName) throws Exception {
-        try (ObjectOutputStream saveData = new ObjectOutputStream(Files.newOutputStream(Paths.get(theFileName)))) {
-            saveData.writeObject(theData);
+    private static void save(final Serializable data, final String fileName) throws Exception {
+        try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            saveData.writeObject(data);
         }
     }
 
-    private static Object load(final String theFileName) throws Exception {
-        try (ObjectInputStream loadData = new ObjectInputStream(Files.newInputStream(Paths.get(theFileName)))) {
+    private static Object load(final String fileName) throws Exception {
+        try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
             return loadData.readObject();
         }
     }
@@ -172,13 +205,13 @@ public class TriviaMazeFrame extends JFrame {
         final TriviaMazeFrame frame = new TriviaMazeFrame(maze);
 
         // Pass the Maze object to the MazePanel constructor
-        final MazePanel mazePanel = new MazePanel(maze);
+        mazePanel = new MazePanel(maze);
         maze.addPropertyChangeListener(mazePanel);
 
 
         final UserControlsPanel controlsPanel = new UserControlsPanel();
 
-        final QuestionDisplayPanel questionPanel = new QuestionDisplayPanel(maze);
+        questionPanel = new QuestionDisplayPanel(maze);
         maze.addPropertyChangeListener(questionPanel);
 
         final JPanel eastInfo = new JPanel();

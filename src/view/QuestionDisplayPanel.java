@@ -48,7 +48,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     /**
      * Trivia Maze object.
      */
-    private final TriviaMaze myMaze;
+    private TriviaMaze myMaze;
 
     /**
      * A player object for grabbing questions.
@@ -69,7 +69,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     /**
      * The current Door object.
      */
-    private Doors myDoor;
+
 
     /**
      * Constructor for QuestionDisplayPanel.
@@ -79,6 +79,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         this.myMaze = theMaze;
         this.myPlayer = myMaze.getPlayer();
 
+
         addKeyListener(new BoardKeyListener());
         setFocusable(true);
         requestFocus();
@@ -87,6 +88,23 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
+    }
+
+    public void resetQuestionPanel() {
+        removeAll();
+        myMaze.newGame();
+        homeDisplay();
+        revalidate();
+        repaint();
+    }
+
+    public void updateStateAfterLoadQuestion(TriviaMaze loadedMaze) {
+        removeAll();
+        myMaze = loadedMaze;
+        myPlayer = loadedMaze.getPlayer();
+        updateQuestion(myMaze.getQuestion());
+        revalidate();
+        repaint();
     }
 
     private String determineDoorQuestionType(final Question theQuestion) {
@@ -139,7 +157,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(cB);
         add(cC);
         add(cD);
-        setBackground(Color.yellow);
+        setBackground(new Color(136, 216, 176)); //lighter green
     }
 
     private void tfDisplay(final Question theQuestion) {
@@ -167,7 +185,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(myFiller2);
         add(bTrue);
         add(bFalse);
-        setBackground(Color.pink);
+        setBackground(new Color(173,190,255)); //bluish
     }
 
     private void sAnsDisplay(final Question theQuestion) {
@@ -229,7 +247,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         add(myFiller2);
         add(shortAns);
         add(submit);
-        setBackground(Color.GRAY);
+        setBackground(new Color(135, 185, 162)); //darker green
     }
 
     /**
@@ -239,7 +257,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JLabel home = new JLabel("Choose a Doorway... Have fun!");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
-        setBackground(Color.ORANGE);
+        setBackground(new Color(255, 204, 92)); //orange
         add(home);
     }
 
@@ -247,7 +265,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JLabel home = new JLabel("Correct! Choose new Door");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
-        setBackground(Color.ORANGE);
+        setBackground(new Color(255, 204, 92));
         add(home);
     }
 
@@ -255,7 +273,15 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         final JLabel home = new JLabel("Incorrect :( choose a new door");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
-        setBackground(Color.ORANGE);
+        setBackground(new Color(255, 204, 92));
+        add(home);
+    }
+
+    private void lockedDisplay() {
+        final JLabel home = new JLabel("Door is locked choose a new Doorway");
+        home.setAlignmentX(Component.CENTER_ALIGNMENT);
+        home.setFont(LARGE_FONT);
+        setBackground(new Color(255, 111, 105));
         add(home);
     }
 
@@ -321,10 +347,14 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void updateQuestion(final Question theQuestion) {
+        Doors door = myMaze.getCurrentDoor();
         removeAll();
 
         if (theQuestion == null) {
             homeDisplay();
+
+        } else if (!door.getDoorStatus()) {
+            lockedDisplay();
 
         } else if (determineDoorQuestionType(theQuestion).equals("MC")) {
             mcDisplay(theQuestion); //yellow
@@ -346,10 +376,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
-        if (myMaze.PROPERTY_DOOR_STATUS.equals(theEvt.getPropertyName())) {
-            myDoor = (Doors) theEvt.getNewValue();
-            repaint();
-        }
 
         if (myMaze.PROPERTY_NEW_QUESTION.equals(theEvt.getPropertyName())) {
             final Question newQuestion = (Question) theEvt.getNewValue();

@@ -3,6 +3,9 @@ package controller;
 import java.awt.Point;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serial;
+import java.io.Serializable;
+
 import model.Direction;
 import model.Doors;
 import model.Maze;
@@ -18,7 +21,10 @@ import model.Room;
  * @author Reilly Middlebrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
-public final class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeControls {
+public final class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeControls, Serializable {
+    @Serial
+    private static final long serialVersionUID = 123456789L;
+
     /**
      * The number of rows in the maze.
      */
@@ -184,6 +190,13 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
         }
     }
 
+    public Doors getCurrentDoor() {
+        final Room room = getRoom(myPlayer.getPlayerLoc());
+        final Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
+
+        return door;
+    }
+
     // Makes the property change call easier to read.
     private void notifyObserversOfLocationChange() {
         myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
@@ -222,6 +235,14 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
         }
     }
 
+
+    public void copyStateFrom(TriviaMaze loadedMaze) {
+        //this.myRooms = loadedMaze.myRooms;
+        this.myPlayer = loadedMaze.myPlayer;
+        this.myQues = loadedMaze.myQues;
+
+    }
+
     @Override
     public void addPropertyChangeListener(final PropertyChangeListener theListener) {
     }
@@ -239,4 +260,5 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
     public void removePropertyChangeListener(final String thePropertyName,
                                              final PropertyChangeListener theListener) {
     }
+
 }
