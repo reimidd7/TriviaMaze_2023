@@ -184,6 +184,13 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
         }
     }
 
+    public Doors getCurrentDoor() {
+        final Room room = getRoom(myPlayer.getPlayerLoc());
+        final Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
+
+        return door;
+    }
+
     // Makes the property change call easier to read.
     private void notifyObserversOfLocationChange() {
         myPcs.firePropertyChange(PROPERTY_LOCATION_CHANGE, null,
