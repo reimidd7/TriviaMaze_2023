@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  * @author Kevin Than
  * @version Summer 2023
  */
-public class QuestionData {
+public class QuestionData implements Serializable {
     /**
      * URL to the database file.
      */
@@ -21,7 +22,7 @@ public class QuestionData {
     /**
      * Database connection used to interact with the question database.
      */
-    private final Connection myDBConnection;
+    private transient final Connection myDBConnection;
 
     /**
      * contractor to establishes a database connection.

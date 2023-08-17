@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The multiple choice question class for the multiple choice
  * question type and extends the abstract question class.
@@ -7,7 +9,7 @@ package model;
  * @author Kevin Than
  * @version Summer 2023
  */
-public class MCQuestion extends Question {
+public class MCQuestion extends Question implements Serializable {
     /**
      * Correct answer string.
      */

@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The SAnsQuestion question class for the short answer
  * question type and extends the abstract question class.
@@ -7,7 +9,7 @@ package model;
  * @author Kevin Than
  * @version Summer 2023
  */
-public class SAnsQuestion extends Question {
+public class SAnsQuestion extends Question implements Serializable {
     /**
      * Correct answer string.
      */

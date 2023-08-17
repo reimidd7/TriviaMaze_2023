@@ -48,7 +48,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     /**
      * Trivia Maze object.
      */
-    private final TriviaMaze myMaze;
+    private TriviaMaze myMaze;
 
     /**
      * A player object for grabbing questions.
@@ -88,6 +88,23 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setVisible(true);
+    }
+
+    public void resetQuestionPanel() {
+        removeAll();
+        myMaze.newGame();
+        homeDisplay();
+        revalidate();
+        repaint();
+    }
+
+    public void updateStateAfterLoadQuestion(TriviaMaze loadedMaze) {
+        removeAll();
+        myMaze = loadedMaze;
+        myPlayer = loadedMaze.getPlayer();
+        updateQuestion(myMaze.getQuestion());
+        revalidate();
+        repaint();
     }
 
     private String determineDoorQuestionType(final Question theQuestion) {

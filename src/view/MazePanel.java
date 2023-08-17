@@ -52,7 +52,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
     /**
      * The maze object to be displayed.
      */
-    private final TriviaMaze myMaze;
+    private TriviaMaze myMaze;
 
     /**
      * The player object to activate movement.
@@ -92,7 +92,7 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
     /**
      * Current room the player is in.
      */
-    private final Room myRoom;
+    private Room myRoom;
 
 
     /**
@@ -241,6 +241,25 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             theG2D.setColor(Color.RED);
             theG2D.fillRect(theX, theY, theW, theH);
         }
+    }
+
+    public void resetMazePanel() {
+        myPlayer = myMaze.getPlayer();
+        myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
+        myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
+
+        repaint();
+    }
+
+    public void updateStateAfterLoadMaze(TriviaMaze loadedMaze) {
+        removeAll();
+        this.myMaze = loadedMaze;
+        this.myPlayer = myMaze.getPlayer();
+        this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
+        this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
+        // Load images and other initializations here
+        revalidate();
+        repaint();
     }
 
 

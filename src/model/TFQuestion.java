@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The TF question class for the TF question type and
  * extends the abstract question class.
@@ -7,7 +9,7 @@ package model;
  * @author Kevin Than
  * @version Summer 2023
  */
-public class TFQuestion extends Question {
+public class TFQuestion extends Question implements Serializable {
     /**
      * Correct answer string.
      */

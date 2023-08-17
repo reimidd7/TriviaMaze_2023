@@ -1,12 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The abstract class question that will be use in MCQuestion, SAnsQuestion, and TFQuestion.
  *
  * @author Kevin Than
  * @version Summer 2023
  */
-public abstract class Question {
+public abstract class Question implements Serializable {
     /**
      * Question string.
      */
