@@ -72,4 +72,5 @@ public interface TriviaMazeControls {
      * @param theQ the current question.
      */
     void sendQuestion(Question theQ);
+
 }

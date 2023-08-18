@@ -63,10 +63,6 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
      */
     private final JLabel myFiller2 = new JLabel("\n");
 
-    /**
-     * The current Door object.
-     */
-
 
     /**
      * Constructor for QuestionDisplayPanel.
@@ -211,12 +207,16 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 final Direction d = myMaze.getPlayer().getPlayerDir();
                 if (d.equals(Direction.SOUTH)) {
                     myMaze.down();
+
                 } else if (d.equals(Direction.NORTH)) {
                     myMaze.up();
+
                 } else if (d.equals(Direction.EAST)) {
                     myMaze.right();
+
                 } else if (d.equals(Direction.WEST)) {
                     myMaze.left();
+
                 }
 
                 removeAll();
@@ -302,10 +302,13 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                     myMaze.down();
                 } else if (d.equals(Direction.NORTH)) {
                     myMaze.up();
+
                 } else if (d.equals(Direction.EAST)) {
                     myMaze.right();
+
                 } else if (d.equals(Direction.WEST)) {
                     myMaze.left();
+
                 }
 
                 removeAll();
@@ -421,18 +424,21 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 case KeyEvent.VK_DOWN:
                     myMaze.lookDown();
                     updateQuestion(myMaze.getQuestion());
+
                     System.out.println("down");
                     break;
 
                 case KeyEvent.VK_LEFT:
                     myMaze.lookLeft();
                     updateQuestion(myMaze.getQuestion());
+
                     System.out.println("left");
                     break;
 
                 case KeyEvent.VK_RIGHT:
                     myMaze.lookRight();
                     updateQuestion(myMaze.getQuestion());
+
                     System.out.println("right");
                     break;
             }

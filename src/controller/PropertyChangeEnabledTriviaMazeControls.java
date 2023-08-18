@@ -9,6 +9,11 @@ public interface PropertyChangeEnabledTriviaMazeControls extends TriviaMazeContr
     String PROPERTY_LOCATION_CHANGE = " THIS IS FOR A PLAYER CHANGING LOCATIONS";
 
     /**
+     * A property name for the room.
+     */
+    String PROPERTY_ROOM_CHANGE = " THIS IS FOR A PLAYER CHANGING ROOMS";
+
+    /**
      * A property name for the door status.
      */
     String PROPERTY_DOOR_STATUS = " THIS IS FOR WHEN A PLAYER ANSWER CHANGES THE DOOR STATUS";

@@ -16,7 +16,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import model.Question;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
@@ -198,10 +197,11 @@ public class TriviaMazeFrame extends JFrame {
         mazePanel = new MazePanel(maze);
         maze.addPropertyChangeListener(mazePanel);
 
-        final UserControlsPanel controlsPanel = new UserControlsPanel();
 
         questionPanel = new QuestionDisplayPanel(maze);
         maze.addPropertyChangeListener(questionPanel);
+
+        final UserControlsPanel controlsPanel = new UserControlsPanel(maze);
 
         final JPanel eastInfo = new JPanel();
         eastInfo.setLayout(new GridLayout(2, 1, 0,  16));

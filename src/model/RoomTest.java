@@ -138,4 +138,5 @@ class RoomTest {
     void testIsExitNo() {
         assertFalse(myRoom.isExit());
     }
+
 }

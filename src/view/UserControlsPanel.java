@@ -1,95 +1,106 @@
 package view;
 
-import model.*;
+import controller.TriviaMaze;
+import model.Direction;
+import model.Doors;
+import model.Room;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.HashMap;
 
-/**
- * Class for the controls of the user.
- *
- * @author Danie Oum, Reilly Middlebrooks, Kevin Than
- * @version Summer 2023
- */
-public class UserControlsPanel extends JPanel implements PropertyChangeListener {
-//    private final JButton upButton;
-//    private final JButton downButton;
-//    private final JButton leftButton;
-//    private final JButton rightButton;
-//
-//    /**
-//     * This method creates and shows the GUI. It includes the arrow buttons and key listeners.
-//     */
-//    public UserControlsPanel() {
-//        setLayout(new GridLayout(2, 3, 10, 10));
-//
-//        JButton blankButton = new JButton("");
-//        JButton blankButton2 = new JButton("");
-//        blankButton.setEnabled(false);
-//        blankButton2.setEnabled(false);
-//
-//        upButton = new JButton("↑"); // Up arrow
-//        leftButton = new JButton("←"); // Left arrow
-//        downButton = new JButton("↓"); // Down arrow
-//        rightButton = new JButton("→"); // Right arrow
-//
-//        add(blankButton);
-//        add(upButton);
-//        add(blankButton2);
-//        add(leftButton);
-//        add(downButton);
-//        add(rightButton);
-////
-////        setFocusable(true);
-////        requestFocus();
-//        setVisible(true);
-//    }
-//
-//    public ArrayList<JButton> getButtons() {
-//        ArrayList<JButton> but = new ArrayList<>();
-//        but.add(upButton);
-//        but.add(downButton);
-//        but.add(leftButton);
-//        but.add(rightButton);
-//        return but;
-//    }
+public class UserControlsPanel extends JPanel {
 
-//    /**
-//     * This method is to highlight the direction of the buttons when pressed.
-//     *
-//     * @param keyCode The key code for the buttons
-//     * @param highlight The buttons will highlight green
-//     * @param buttons The buttons
-//     */
-//    public void highlightDirection(int keyCode, boolean highlight, ArrayList<JButton> buttons) {
-//        for (JButton button : buttons) {
-//            button.setBackground(null);
-//        }
-//        switch (keyCode) {
-//            case KeyEvent.VK_UP:
-//                buttons.get(0).setBackground(highlight ? Color.GREEN : null);
-//                break;
-//            case KeyEvent.VK_DOWN:
-//                buttons.get(1).setBackground(highlight ? Color.GREEN : null);
-//                break;
-//            case KeyEvent.VK_LEFT:
-//                buttons.get(2).setBackground(highlight ? Color.GREEN : null);
-//                break;
-//            case KeyEvent.VK_RIGHT:
-//                buttons.get(3).setBackground(highlight ? Color.GREEN : null);
-//                break;
-//        }
-//    }
+    private TriviaMaze myMaze;
+
+    private Room myRoom;
+
+    private HashMap<Doors, Direction> mapOfRoomDoors;
+
+    public UserControlsPanel(final TriviaMaze theMaze) {
+        super();
+        myMaze = theMaze;
+        JLabel label = new JLabel("Use the arrow keys on your keyboard to move the Player.");
+        add(label);
+    }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        // Handle property changes here if needed
+    public void paintComponent(final Graphics g) {
+        super.paintComponent(g);
+        myRoom = myMaze.getRoom(myMaze.getPlayer().getPlayerLoc());
+        mapOfRoomDoors = (HashMap<Doors, Direction>) myRoom.getMapOfDoorsAndDir();
+
+        int width = getWidth();
+        int height = getHeight();
+
+        int centerX = width / 2;
+        int centerY = height / 2;
+
+        int triangleSize = Math.min(width, height) / 4; // Adjust triangle size as needed
+        int spacing = triangleSize / 6; // Adjust spacing as needed
+
+        int halfTriangleSize = triangleSize / 2;
+        int spacingWithTriangle = spacing + halfTriangleSize;
+
+        // Clear the panel
+        g.setColor(Color.white);
+        g.fillRect(0, 0, width, height);
+
+//        for (Doors d: mapOfRoomDoors.keySet()) {
+//            System.out.println(d.getDoorId() + "  " + mapOfRoomDoors.get(d).toString());
+//
+//            if (mapOfRoomDoors.get(d).equals(Direction.NORTH) && d.getDoorStatus()) {
+//                // Up Triangle
+//                int[] xPointsUp = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
+//                int[] yPointsUp = {centerY - triangleSize - spacingWithTriangle, centerY - spacingWithTriangle, centerY - spacingWithTriangle};
+//                g.setColor(Color.BLACK);
+//                g.fillPolygon(xPointsUp, yPointsUp, 3);
+//
+//            } else if (mapOfRoomDoors.get(d).equals(Direction.SOUTH) && d.getDoorStatus()) {
+//                // Down Triangle
+//                int[] xPointsDown = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
+//                int[] yPointsDown = {centerY + triangleSize + spacingWithTriangle, centerY + spacingWithTriangle, centerY + spacingWithTriangle};
+//                g.setColor(Color.BLACK);
+//                g.fillPolygon(xPointsDown, yPointsDown, 3);
+//
+//            } else if (mapOfRoomDoors.get(d).equals(Direction.WEST) && d.getDoorStatus()) {
+//                // Left Triangle
+//                int[] xPointsLeft = {centerX - triangleSize - spacingWithTriangle, centerX - spacingWithTriangle, centerX - spacingWithTriangle};
+//                int[] yPointsLeft = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
+//                g.setColor(Color.BLACK);
+//                g.fillPolygon(xPointsLeft, yPointsLeft, 3);
+//
+//            } else if (mapOfRoomDoors.get(d).equals(Direction.EAST) && d.getDoorStatus()) {
+//                // Right Triangle
+//                int[] xPointsRight = {centerX + triangleSize + spacingWithTriangle, centerX + spacingWithTriangle, centerX + spacingWithTriangle};
+//                int[] yPointsRight = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
+//                g.setColor(Color.BLACK);
+//                g.fillPolygon(xPointsRight, yPointsRight, 3);
+//            }
+//        }
+        // Up Triangle
+        int[] xPointsUp = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
+        int[] yPointsUp = {centerY - triangleSize - spacingWithTriangle, centerY - spacingWithTriangle, centerY - spacingWithTriangle};
+        g.setColor(Color.BLACK);
+        g.fillPolygon(xPointsUp, yPointsUp, 3);
+        // Down Triangle
+        int[] xPointsDown = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
+        int[] yPointsDown = {centerY + triangleSize + spacingWithTriangle, centerY + spacingWithTriangle, centerY + spacingWithTriangle};
+        g.setColor(Color.BLACK);
+        g.fillPolygon(xPointsDown, yPointsDown, 3);
+        // Left Triangle
+        int[] xPointsLeft = {centerX - triangleSize - spacingWithTriangle, centerX - spacingWithTriangle, centerX - spacingWithTriangle};
+        int[] yPointsLeft = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
+        g.setColor(Color.BLACK);
+        g.fillPolygon(xPointsLeft, yPointsLeft, 3);
+        // Right Triangle
+        int[] xPointsRight = {centerX + triangleSize + spacingWithTriangle, centerX + spacingWithTriangle, centerX + spacingWithTriangle};
+        int[] yPointsRight = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
+        g.setColor(Color.BLACK);
+        g.fillPolygon(xPointsRight, yPointsRight, 3);
+
     }
+
+
 }

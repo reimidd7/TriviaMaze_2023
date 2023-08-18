@@ -91,6 +91,7 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
 
         if (playerLoc.x < getRows() - 1 && checkForSouth) {
             playerLoc.translate(1, 0);         //Translates location
+            myPcs.firePropertyChange(PROPERTY_ROOM_CHANGE, null, getRoom(playerLoc));
             notifyObserversOfLocationChange();
             checkForWin();
         }
@@ -112,6 +113,8 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
 
         if (playerLoc.x > 0) {
             playerLoc.translate(-1, 0);         //Translates location
+            myPcs.firePropertyChange(PROPERTY_ROOM_CHANGE, null, getRoom(playerLoc));
+
             notifyObserversOfLocationChange();
             checkForWin();
         }
@@ -133,6 +136,8 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
 
         if (playerLoc.y > 0) {
             playerLoc.translate(0, -1);         //Translates location
+            myPcs.firePropertyChange(PROPERTY_ROOM_CHANGE, null, getRoom(playerLoc));
+
             notifyObserversOfLocationChange();
             checkForWin();
         }
@@ -158,6 +163,8 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
 
         if (playerLoc.y < getCols() - 1 && checkForEast) {
             playerLoc.translate(0, 1);         //Translates location
+            myPcs.firePropertyChange(PROPERTY_ROOM_CHANGE, null, getRoom(playerLoc));
+
             notifyObserversOfLocationChange();
             checkForWin();
         }
@@ -189,6 +196,8 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
             myPcs.firePropertyChange(PROPERTY_DOOR_STATUS, null, door);
         }
     }
+
+
 
     public Doors getCurrentDoor() {
         final Room room = getRoom(myPlayer.getPlayerLoc());
