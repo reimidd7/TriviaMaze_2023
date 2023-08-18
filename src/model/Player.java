@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Initilizes the Player object. Represents the user.
  *
- * @author Reilly Middelbrooks, Kevin Than
+ * @author Reilly Middelbrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
 public class Player implements Serializable {
