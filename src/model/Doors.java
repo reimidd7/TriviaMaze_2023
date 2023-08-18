@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The door class is for the doors used in trivial maze.
  * each door has status and holds a question.
@@ -8,7 +10,7 @@ package model;
  * @author Reilly Middlebrooks, Danie Oum
  * @version Summer 2023
  */
-public class Doors {
+public class Doors implements Serializable {
     /**
      * Unlock status of the doors.
      * false means locked.
@@ -43,7 +45,6 @@ public class Doors {
         this.myCurrQuestion = myQuestionData.retrieveQuestion();
 
         this.myDoorId = theDoorId;
-
     }
 
     /**
@@ -71,7 +72,6 @@ public class Doors {
         myIsUnlocked = theLocked;
     }
 
-
     /**
      * set question type by retrieving random question from database.
      * then it will become current question on the door.
@@ -88,5 +88,4 @@ public class Doors {
     public Question getCurrQuestion() {
         return myCurrQuestion;
     }
-
 }

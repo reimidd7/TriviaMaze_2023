@@ -1,35 +1,40 @@
 package model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Player {
+/**
+ * Initilizes the Player object. Represents the user.
+ *
+ * @author Reilly Middelbrooks, Kevin Than
+ * @version Summer 2023
+ */
+public class Player implements Serializable {
 
-    private Point myPlayerLoc;
+    /**
+     * Point of player's location in the Maze.
+     */
+    private final Point myPlayerLoc;
 
+    /**
+     * Direction the player is facing.
+     */
     private Direction myPlayerDir;
 
-    public Player(Point theLoc, Direction theDir) {
+    public Player(final Point theLoc, final Direction theDir) {
         this.myPlayerLoc = theLoc;
         this.myPlayerDir = theDir;
-    }
-
-    public Player (Point theLoc) {
-        this.myPlayerLoc = theLoc;
     }
 
     public Point getPlayerLoc() {
         return myPlayerLoc;
     }
 
-    public void setPlayerLoc(Point thePlayerLoc) {
-        this.myPlayerLoc = thePlayerLoc;
-    }
-
     public Direction getPlayerDir() {
         return myPlayerDir;
     }
 
-    public void setPlayerDir(Direction direction) {
-        myPlayerDir = direction;
+    public void setPlayerDir(final Direction theDirection) {
+        myPlayerDir = theDirection;
     }
 }

@@ -1,9 +1,14 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The abstract class question that will be use in MCQuestion, SAnsQuestion, and TFQuestion.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
  */
-public abstract class Question {
+public abstract class Question implements Serializable {
     /**
      * Question string.
      */
@@ -20,27 +25,28 @@ public abstract class Question {
     /**
      * Constructor to initialize the questions.
      *
-     * @param myQuestionID
-     * @param myQuestionType
-     * @param myQuestion
+     * @param theQuestionID id of the question in database.
+     * @param theQuestion the actual question in string form.
+     * @param theQuestionType the type of question for the current question.
      */
-    public Question(int myQuestionID, String myQuestionType, String myQuestion) {
-        this.myQuestionID = myQuestionID;
-        this.myQuestionType = myQuestionType;
-        this.myQuestion = myQuestion;
+    public Question(final int theQuestionID, final String theQuestionType,
+                    final String theQuestion) {
+        this.myQuestionID = theQuestionID;
+        this.myQuestionType = theQuestionType;
+        this.myQuestion = theQuestion;
     }
 
     /**
      * Getter to get the question.
      */
-   public String getQuestion() {
+    public String getQuestion() {
         return myQuestion;
     }
 
     /**
      * Setter to set the question.
      */
-    private void setQuestion(String question) { this.myQuestion = question; }
+    public void setQuestion(String question) { this.myQuestion = question; }
 
     /**
      * Getter to get the question type.
@@ -49,12 +55,12 @@ public abstract class Question {
         return myQuestionType;
     }
 
-    /**
-     * Getter to get the questionID
-     */
-    public int getQuestionID() {
-        return myQuestionID;
-    }
+//    /**
+//     * Getter to get the questionID.
+//     */
+//    public int getQuestionID() {
+//        return myQuestionID;
+//    }
 
     /**
      * Abstract method to be implemented by subclass to get correct answer.

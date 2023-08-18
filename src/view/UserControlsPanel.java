@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 /**
  * Class for the controls of the user.
@@ -45,29 +46,21 @@ public class UserControlsPanel extends JPanel implements PropertyChangeListener 
 //        add(leftButton);
 //        add(downButton);
 //        add(rightButton);
-//
-//        // Attach a KeyAdapter to the panel to listen for arrow key events
-//        addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                int keyCode = e.getKeyCode();
-//                highlightDirection(keyCode, true, upButton, downButton, leftButton, rightButton);
-//                requestFocusInWindow();
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                int keyCode = e.getKeyCode();
-//                highlightDirection(keyCode, false, upButton, downButton, leftButton, rightButton);
-//                requestFocusInWindow();
-//            }
-//        });
 ////
 ////        setFocusable(true);
 ////        requestFocus();
 //        setVisible(true);
 //    }
 //
+//    public ArrayList<JButton> getButtons() {
+//        ArrayList<JButton> but = new ArrayList<>();
+//        but.add(upButton);
+//        but.add(downButton);
+//        but.add(leftButton);
+//        but.add(rightButton);
+//        return but;
+//    }
+
 //    /**
 //     * This method is to highlight the direction of the buttons when pressed.
 //     *
@@ -75,27 +68,26 @@ public class UserControlsPanel extends JPanel implements PropertyChangeListener 
 //     * @param highlight The buttons will highlight green
 //     * @param buttons The buttons
 //     */
-//    private void highlightDirection(int keyCode, boolean highlight, JButton... buttons) {
+//    public void highlightDirection(int keyCode, boolean highlight, ArrayList<JButton> buttons) {
 //        for (JButton button : buttons) {
 //            button.setBackground(null);
 //        }
-//
 //        switch (keyCode) {
 //            case KeyEvent.VK_UP:
-//                buttons[0].setBackground(highlight ? Color.GREEN : null);
+//                buttons.get(0).setBackground(highlight ? Color.GREEN : null);
 //                break;
 //            case KeyEvent.VK_DOWN:
-//                buttons[1].setBackground(highlight ? Color.GREEN : null);
+//                buttons.get(1).setBackground(highlight ? Color.GREEN : null);
 //                break;
 //            case KeyEvent.VK_LEFT:
-//                buttons[2].setBackground(highlight ? Color.GREEN : null);
+//                buttons.get(2).setBackground(highlight ? Color.GREEN : null);
 //                break;
 //            case KeyEvent.VK_RIGHT:
-//                buttons[3].setBackground(highlight ? Color.GREEN : null);
+//                buttons.get(3).setBackground(highlight ? Color.GREEN : null);
 //                break;
 //        }
 //    }
-//
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         // Handle property changes here if needed
