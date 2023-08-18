@@ -11,8 +11,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.*;
-
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import model.Direction;
 import model.Doors;
 import model.Player;
@@ -83,6 +88,9 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         setVisible(true);
     }
 
+    /**
+     * Resets the panel for a new game.
+     */
     public void resetQuestionPanel() {
         removeAll();
         myMaze.newGame();
@@ -91,10 +99,14 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
         repaint();
     }
 
-    public void updateStateAfterLoadQuestion(TriviaMaze loadedMaze) {
+    /**
+     * Updates the state of the panel when loading a game.
+     * @param theLoadedMaze the saved maze.
+     */
+    public void updateStateAfterLoadQuestion(final TriviaMaze theLoadedMaze) {
         removeAll();
-        myMaze = loadedMaze;
-        myPlayer = loadedMaze.getPlayer();
+        myMaze = theLoadedMaze;
+        myPlayer = theLoadedMaze.getPlayer();
         updateQuestion(myMaze.getQuestion());
         revalidate();
         repaint();
@@ -325,6 +337,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             requestFocusInWindow();
         });
     }
+
+     // Checks if the player has lost the game.
     private void checkForGameOver() {
         if (myMaze.getPlayer().getWrongAnswers() >= 3) {
             final String[] options = {"Exit", "Leave"};
@@ -342,6 +356,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
             });
         }
     }
+
     private void questionFormatter(final String theQString) {
         if (theQString.length() > MAX_CHARS) {
             final int h = theQString.lastIndexOf(" ", MAX_CHARS);
@@ -370,7 +385,7 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     public void updateQuestion(final Question theQuestion) {
-        Doors door = myMaze.getCurrentDoor();
+        final Doors door = myMaze.getCurrentDoor();
         removeAll();
 
         if (theQuestion == null) {
@@ -411,32 +426,26 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     private class BoardKeyListener extends KeyAdapter {
         public void keyPressed(final KeyEvent theEvent) {
             switch (theEvent.getKeyCode()) {
-                case KeyEvent.VK_UP:
+                case KeyEvent.VK_UP -> {
                     myMaze.lookUp();
                     updateQuestion(myMaze.getQuestion());
                     System.out.println("up");
-                    break;
-
-                case KeyEvent.VK_DOWN:
+                }
+                case KeyEvent.VK_DOWN -> {
                     myMaze.lookDown();
                     updateQuestion(myMaze.getQuestion());
-
                     System.out.println("down");
-                    break;
-
-                case KeyEvent.VK_LEFT:
+                }
+                case KeyEvent.VK_LEFT -> {
                     myMaze.lookLeft();
                     updateQuestion(myMaze.getQuestion());
-
                     System.out.println("left");
-                    break;
-
-                case KeyEvent.VK_RIGHT:
+                }
+                case KeyEvent.VK_RIGHT -> {
                     myMaze.lookRight();
                     updateQuestion(myMaze.getQuestion());
-
                     System.out.println("right");
-                    break;
+                }
             }
             repaint();
         }

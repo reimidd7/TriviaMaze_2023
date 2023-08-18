@@ -1,51 +1,63 @@
 package view;
 
 import controller.TriviaMaze;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import model.Direction;
 import model.Doors;
 import model.Room;
 
-import javax.swing.*;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.HashMap;
-
+/**
+ * Displays a control panel to tell the user to use their arrow keys.
+ *
+ * @author Danie Oum, Reilly Middlebrooks
+ * @version Summer 2023
+ */
 public class UserControlsPanel extends JPanel {
 
-    private TriviaMaze myMaze;
+    /**
+     * Amount of points for a triangle.
+     */
+    private static final int TRI = 3;
 
-    private Room myRoom;
-
-    private HashMap<Doors, Direction> mapOfRoomDoors;
+    /**
+     * Current Maze in motion.
+     */
+    private final TriviaMaze myMaze;
 
     public UserControlsPanel(final TriviaMaze theMaze) {
         super();
         myMaze = theMaze;
-        JLabel label = new JLabel("Use the arrow keys on your keyboard to move the Player.");
+        final JLabel label = new JLabel("Use the arrow keys on your keyboard "
+                + " to move the Player.");
         add(label);
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
-        super.paintComponent(g);
-        myRoom = myMaze.getRoom(myMaze.getPlayer().getPlayerLoc());
-        mapOfRoomDoors = (HashMap<Doors, Direction>) myRoom.getMapOfDoorsAndDir();
+    public void paintComponent(final Graphics theGraphics) {
+        super.paintComponent(theGraphics);
+        final Room room = myMaze.getRoom(myMaze.getPlayer().getPlayerLoc());
+        //Map<Doors, Direction> mapOfRoomDoors = room.getMapOfDoorsAndDir();
 
-        int width = getWidth();
-        int height = getHeight();
+        final int width = getWidth();
+        final int height = getHeight();
 
-        int centerX = width / 2;
-        int centerY = height / 2;
+        final int centerX = width / 2;
+        final int centerY = height / 2;
 
-        int triangleSize = Math.min(width, height) / 4; // Adjust triangle size as needed
-        int spacing = triangleSize / 6; // Adjust spacing as needed
+        final int triangleSize = Math.min(width, height) / 4; // Adjust triangle size as needed
+        final int spacing = triangleSize / 6; // Adjust spacing as needed
 
-        int halfTriangleSize = triangleSize / 2;
-        int spacingWithTriangle = spacing + halfTriangleSize;
+        final int halfTriangleSize = triangleSize / 2;
+        final int spacingWithTriangle = spacing + halfTriangleSize;
 
         // Clear the panel
-        g.setColor(Color.white);
-        g.fillRect(0, 0, width, height);
+        theGraphics.setColor(Color.white);
+        theGraphics.fillRect(0, 0, width, height);
 
 //        for (Doors d: mapOfRoomDoors.keySet()) {
 //            System.out.println(d.getDoorId() + "  " + mapOfRoomDoors.get(d).toString());
@@ -80,27 +92,33 @@ public class UserControlsPanel extends JPanel {
 //            }
 //        }
         // Up Triangle
-        int[] xPointsUp = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
-        int[] yPointsUp = {centerY - triangleSize - spacingWithTriangle, centerY - spacingWithTriangle, centerY - spacingWithTriangle};
-        g.setColor(Color.BLACK);
-        g.fillPolygon(xPointsUp, yPointsUp, 3);
+        final int[] xPointsUp = {centerX, centerX - halfTriangleSize,
+                centerX + halfTriangleSize};
+        final int[] yPointsUp = {centerY - triangleSize - spacingWithTriangle,
+                centerY - spacingWithTriangle, centerY - spacingWithTriangle};
+        theGraphics.setColor(Color.BLACK);
+        theGraphics.fillPolygon(xPointsUp, yPointsUp, TRI);
         // Down Triangle
-        int[] xPointsDown = {centerX, centerX - halfTriangleSize, centerX + halfTriangleSize};
-        int[] yPointsDown = {centerY + triangleSize + spacingWithTriangle, centerY + spacingWithTriangle, centerY + spacingWithTriangle};
-        g.setColor(Color.BLACK);
-        g.fillPolygon(xPointsDown, yPointsDown, 3);
+        final int[] xPointsDown = {centerX, centerX - halfTriangleSize,
+                centerX + halfTriangleSize};
+        final int[] yPointsDown = {centerY + triangleSize + spacingWithTriangle,
+                centerY + spacingWithTriangle, centerY + spacingWithTriangle};
+        theGraphics.setColor(Color.BLACK);
+        theGraphics.fillPolygon(xPointsDown, yPointsDown, TRI);
         // Left Triangle
-        int[] xPointsLeft = {centerX - triangleSize - spacingWithTriangle, centerX - spacingWithTriangle, centerX - spacingWithTriangle};
-        int[] yPointsLeft = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
-        g.setColor(Color.BLACK);
-        g.fillPolygon(xPointsLeft, yPointsLeft, 3);
+        final int[] xPointsLeft = {centerX - triangleSize - spacingWithTriangle,
+                centerX - spacingWithTriangle, centerX - spacingWithTriangle};
+        final int[] yPointsLeft = {centerY, centerY - halfTriangleSize,
+                centerY + halfTriangleSize};
+        theGraphics.setColor(Color.BLACK);
+        theGraphics.fillPolygon(xPointsLeft, yPointsLeft, TRI);
         // Right Triangle
-        int[] xPointsRight = {centerX + triangleSize + spacingWithTriangle, centerX + spacingWithTriangle, centerX + spacingWithTriangle};
-        int[] yPointsRight = {centerY, centerY - halfTriangleSize, centerY + halfTriangleSize};
-        g.setColor(Color.BLACK);
-        g.fillPolygon(xPointsRight, yPointsRight, 3);
+        final int[] xPointsRight = {centerX + triangleSize + spacingWithTriangle,
+                centerX + spacingWithTriangle, centerX + spacingWithTriangle};
+        final int[] yPointsRight = {centerY, centerY - halfTriangleSize,
+                centerY + halfTriangleSize};
+        theGraphics.setColor(Color.BLACK);
+        theGraphics.fillPolygon(xPointsRight, yPointsRight, TRI);
 
     }
-
-
 }

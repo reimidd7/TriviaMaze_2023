@@ -21,7 +21,7 @@ import javax.swing.JPanel;
  * This class create the frame for the Trivia Maze game to sit in.
  * Added is a file menu to assist the player.
  *
- * @author Reilly Middlebrooks
+ * @author Reilly Middlebrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
 public class TriviaMazeFrame extends JFrame {

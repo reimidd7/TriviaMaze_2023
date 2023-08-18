@@ -74,10 +74,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
      */
     private BufferedImage myFloorImage;
 
-    /**
-     * Image for the Flower.
-     */
-    private BufferedImage myFlowerImage;
 
     /**
      * Image for the Player.
@@ -111,7 +107,6 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
             myEntranceImage = ImageIO.read(new File("start.png"));
             myExitImage = ImageIO.read(new File("mirror.png"));
             myFloorImage = ImageIO.read(new File("floor.png"));
-            myFlowerImage = ImageIO.read(new File("flower.png"));
             myPlayerImage = ImageIO.read(new File("player.png"));
         } catch (final IOException e) {
             e.printStackTrace();
@@ -191,7 +186,8 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
                 if (myPlayer.getPlayerLoc().x == row && myPlayer.getPlayerLoc().y == col) {
                     final int playerX = x + GRID_SIZE / 4;
                     final int playerY = y + GRID_SIZE / 4;
-                    theG2D.drawImage(myPlayerImage, playerX, playerY, GRID_SIZE / 2, GRID_SIZE / 2, this);
+                    theG2D.drawImage(myPlayerImage, playerX, playerY, GRID_SIZE / 2,
+                            GRID_SIZE / 2, this);
                 }
             }
         }
@@ -243,6 +239,9 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Resets the Panel for new game.
+     */
     public void resetMazePanel() {
         myPlayer = myMaze.getPlayer();
         myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
@@ -251,9 +250,14 @@ public class MazePanel extends JPanel implements PropertyChangeListener {
         repaint();
     }
 
-    public void updateStateAfterLoadMaze(TriviaMaze loadedMaze) {
+    /**
+     * Updates the state of the panel after reload.
+     *
+     * @param theLoadedMaze the saved game.
+     */
+    public void updateStateAfterLoadMaze(final TriviaMaze theLoadedMaze) {
         removeAll();
-        this.myMaze = loadedMaze;
+        this.myMaze = theLoadedMaze;
         this.myPlayer = myMaze.getPlayer();
         this.myRoom = myMaze.getRoom(myPlayer.getPlayerLoc());
         this.myDoor = myRoom.getDoorByDirection(myPlayer.getPlayerDir());
