@@ -11,11 +11,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+
 import model.Direction;
 import model.Doors;
 import model.Player;
@@ -309,16 +306,22 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
             } else {
                 myMaze.updateDoors();
-
                 removeAll();
                 incorrectDisplay();
+                myPlayer.incrementWrongAnswers();
                 repaint();
                 revalidate();
+                checkForGameOver();
             }
             requestFocusInWindow();
         });
     }
-
+    private void checkForGameOver() {
+        if (myMaze.getPlayer().getWrongAnswers() >= 3) {
+            JOptionPane.showMessageDialog(this, "You have lost!", "Game Over", JOptionPane.WARNING_MESSAGE);
+            myMaze.getPlayer().resetWrongAnswers();
+        }
+        }
     private void questionFormatter(final String theQString) {
         if (theQString.length() > MAX_CHARS) {
             final int h = theQString.lastIndexOf(" ", MAX_CHARS);

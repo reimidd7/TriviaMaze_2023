@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @version Summer 2023
  */
 public class Player implements Serializable {
-
+    private int wrongAnswers;
     /**
      * Point of player's location in the Maze.
      */
@@ -37,4 +37,16 @@ public class Player implements Serializable {
     public void setPlayerDir(final Direction theDirection) {
         myPlayerDir = theDirection;
     }
+    public void incrementWrongAnswers() {
+        this.wrongAnswers++;
+    }
+
+    public int getWrongAnswers() {
+        return this.wrongAnswers;
+    }
+
+    public void resetWrongAnswers() {
+        this.wrongAnswers = 0;
+    }
 }
+
