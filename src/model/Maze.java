@@ -3,6 +3,7 @@ package model;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -74,37 +75,37 @@ public class Maze implements Serializable {
         return null;
     }
 
-//    /**
-//     * This method is the getter for the entrance of the maze.
-//     *
-//     * @return Returns the room of the entrance
-//     */
-//    public Point getEntrance() {
-//        for (int row = 0; row < myRows; row++) {
-//            for (int column = 0; column < myCols; column++) {
-//                if (myRooms[row][column].isEntrance()) {
-//                    return new Point(row, column);
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    /**
+     * This method is the getter for the entrance of the maze.
+     *
+     * @return Returns the room of the entrance
+     */
+    public Point getEntrance() {
+        for (int row = 0; row < myRows; row++) {
+            for (int column = 0; column < myCols; column++) {
+                if (myRooms[row][column].isEntrance()) {
+                    return new Point(row, column);
+                }
+            }
+        }
+        return null;
+    }
 
-//    /**
-//     * This method is the getter for the exit of the maze.
-//     *
-//     * @return Returns a room
-//     */
-//    public Point getExit() {
-//        for (int row = 0; row < myRows; row++) {
-//            for (int column = 0; column < myCols; column++) {
-//                if (myRooms[row][column].isExit()) {
-//                    return new Point(row, column);
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    /**
+     * This method is the getter for the exit of the maze.
+     *
+     * @return Returns a room
+     */
+    public Point getExit() {
+        for (int row = 0; row < myRows; row++) {
+            for (int column = 0; column < myCols; column++) {
+                if (myRooms[row][column].isExit()) {
+                    return new Point(row, column);
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Gets the number of rows in the maze.
@@ -169,7 +170,7 @@ public class Maze implements Serializable {
     }
 
     //This method creates all the doors of the maze.
-    private List<Doors> createAllDoors() {
+    public List<Doors> createAllDoors() {
         final int amtOfDoors = AMT_OF_DOORS;
         final List<Doors> allDoors = new ArrayList<>(amtOfDoors);
 
