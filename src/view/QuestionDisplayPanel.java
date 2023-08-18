@@ -275,7 +275,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
     private void incorrectDisplay() {
         int left = 2 - myMaze.getPlayer().getWrongAnswers();
-        final JLabel home = new JLabel("Incorrect :( choose a new door. You have " + left + " strike(s) left");
+        final JLabel home = new JLabel("Incorrect :( choose a new door. You have "
+                + left + " strike(s) left");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
         setBackground(new Color(255, 204, 92));
