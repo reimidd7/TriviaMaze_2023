@@ -1,14 +1,22 @@
 package view;
 
 import controller.TriviaMaze;
-
-import model.Question;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import model.Question;
 
 /**
  * This class create the frame for the Trivia Maze game to sit in.
@@ -18,9 +26,6 @@ import java.io.*;
  * @version Summer 2023
  */
 public class TriviaMazeFrame extends JFrame {
-
-    //private MazePanel gameState;
-
     /**
      * Default frame height.
      */
@@ -31,20 +36,20 @@ public class TriviaMazeFrame extends JFrame {
      */
     private static final int FRAME_WIDTH = 16 * 55; //880
 
+    /**
+     * An instance of the question display panel.
+     */
     private static QuestionDisplayPanel questionPanel;
+
+    /**
+     * An instance of the maze display panel.
+     */
     private static MazePanel mazePanel;
 
     /**
      * Trivia Maze object for gameplay.
      */
     private final TriviaMaze myMaze;
-
-    /**
-     * Current question.
-     */
-    final private Question myQuestion;
-
-
 
 
     /**
@@ -54,7 +59,6 @@ public class TriviaMazeFrame extends JFrame {
     public TriviaMazeFrame(final TriviaMaze theMaze) {
         super();
         myMaze = theMaze;
-        myQuestion = myMaze.getQuestion();
 
         createFrame();
 
@@ -89,7 +93,7 @@ public class TriviaMazeFrame extends JFrame {
 
         saveGame.addActionListener(theE -> {
             try {
-                save(myMaze, "gameState.ser");
+                save(myMaze, fileName);
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Saved!");
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -103,12 +107,12 @@ public class TriviaMazeFrame extends JFrame {
         loadGame.addActionListener(e -> {
             //load game when clicked.
             try {
-                TriviaMaze loadedMaze = (TriviaMaze) load("gameState.ser");
+                final TriviaMaze loadedMaze = (TriviaMaze) load("gameState.ser");
                 myMaze.copyStateFrom(loadedMaze);
                 questionPanel.updateStateAfterLoadQuestion(loadedMaze);
                 mazePanel.updateStateAfterLoadMaze(loadedMaze);
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Game Loaded!");
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(TriviaMazeFrame.this, "Error Loading");
             }
@@ -153,18 +157,20 @@ public class TriviaMazeFrame extends JFrame {
             System.exit(0);
         }
     }
-    private static void save(final Serializable data, final String fileName) throws Exception {
-        try (ObjectOutputStream saveData = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            saveData.writeObject(data);
+    private static void save(final Serializable theData, final String theFileName)
+            throws Exception {
+        try (ObjectOutputStream saveData =
+                     new ObjectOutputStream(new FileOutputStream(theFileName))) {
+            saveData.writeObject(theData);
         }
     }
 
-    private static Object load(final String fileName) throws Exception {
-        try (ObjectInputStream loadData = new ObjectInputStream(new FileInputStream(fileName))) {
+    private static Object load(final String theFileName) throws Exception {
+        try (ObjectInputStream loadData =
+                     new ObjectInputStream(new FileInputStream(theFileName))) {
             return loadData.readObject();
         }
     }
-
 
     private JMenuItem instructionSubMenu(final String theText, final String theCommand) {
         final JMenuItem item = new JMenuItem(theText);
@@ -177,6 +183,10 @@ public class TriviaMazeFrame extends JFrame {
         return item;
     }
 
+    /**
+     * The creation of the full GUI.
+     * Is called in the TriviaMazeAPP class.
+     */
     public static void createAndShowGui() {
         // Create the Maze object here
         final TriviaMaze maze = new TriviaMaze();
@@ -187,7 +197,6 @@ public class TriviaMazeFrame extends JFrame {
         // Pass the Maze object to the MazePanel constructor
         mazePanel = new MazePanel(maze);
         maze.addPropertyChangeListener(mazePanel);
-
 
         final UserControlsPanel controlsPanel = new UserControlsPanel();
 
@@ -203,6 +212,5 @@ public class TriviaMazeFrame extends JFrame {
         frame.add(eastInfo);
 
         frame.setVisible(true);
-
     }
 }
