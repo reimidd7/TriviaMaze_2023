@@ -226,9 +226,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
 
             } else {
                 myMaze.updateDoors();
-
+                myPlayer.incrementWrongAnswers();
                 removeAll();
                 incorrectDisplay();
+                checkForGameOver();
                 repaint();
                 revalidate();
             }
@@ -251,11 +252,17 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
      * Display a default message.
      */
     private void homeDisplay() {
-        final JLabel home = new JLabel("Choose a Doorway... Have fun!");
+        final JLabel home = new JLabel("Choose a Doorway... Have fun! ");
+        final JLabel home2 = new JLabel("3 wrong answers... you're out ");
+
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
+        home2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        home2.setFont(LARGE_FONT);
         setBackground(new Color(255, 204, 92)); //orange
         add(home);
+        add(home2);
+
     }
 
     private void correctDisplay() {
@@ -267,7 +274,8 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
 
     private void incorrectDisplay() {
-        final JLabel home = new JLabel("Incorrect :( choose a new door");
+        int left = 2 - myMaze.getPlayer().getWrongAnswers();
+        final JLabel home = new JLabel("Incorrect :( choose a new door. You have " + left + " strike(s) left");
         home.setAlignmentX(Component.CENTER_ALIGNMENT);
         home.setFont(LARGE_FONT);
         setBackground(new Color(255, 204, 92));
@@ -318,10 +326,21 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
     }
     private void checkForGameOver() {
         if (myMaze.getPlayer().getWrongAnswers() >= 3) {
-            JOptionPane.showMessageDialog(this, "You have lost!", "Game Over", JOptionPane.WARNING_MESSAGE);
-            myMaze.getPlayer().resetWrongAnswers();
+            final String[] options = {"Exit", "Leave"};
+            SwingUtilities.invokeLater(() -> {
+                final int choice = JOptionPane.showOptionDialog(this,
+                        "OH NO YOU LOST :(", "Lost Game",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        null, options, options[0]);
+                if (choice == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+                    System.exit(0);
+                }
+
+            });
         }
-        }
+    }
     private void questionFormatter(final String theQString) {
         if (theQString.length() > MAX_CHARS) {
             final int h = theQString.lastIndexOf(" ", MAX_CHARS);
