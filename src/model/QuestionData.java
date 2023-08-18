@@ -15,6 +15,7 @@ import java.sql.SQLException;
  * @version Summer 2023
  */
 public class QuestionData implements Serializable {
+    private final QuestionAbstractFactory questionAbstractFactory;
     /**
      * URL to the database file.
      */
@@ -29,6 +30,7 @@ public class QuestionData implements Serializable {
      */
     public QuestionData() {
         this.myDBConnection = connect();
+        this.questionAbstractFactory = new QuestionFactoryProducer();
     }
 
 
@@ -46,25 +48,10 @@ public class QuestionData implements Serializable {
                 final int questionID = rs.getInt("QuestionID");
                 final String questionText = rs.getString("Question");
                 final String questionType = rs.getString("QuestionType");
+                final String correctAnswer = getCorrectAnswerForQuestion(questionID);
 
-                switch (questionType) {
-                    case "MC" -> {
-                        final String correctAnswerMC = getCorrectAnswerForQuestion(questionID);
-                        question = new MCQuestion(questionID, questionText, correctAnswerMC);
-                    }
-                    case "TF" -> {
-                        final String correctAnswerTF = getCorrectAnswerForQuestion(questionID);
-                        question = new TFQuestion(questionID, questionText, correctAnswerTF);
-                    }
-                    case "SAns" -> {
-                        final String correctAnswerSAns =
-                                getCorrectAnswerForQuestion(questionID);
-                        question = new SAnsQuestion(questionID,
-                                questionText, correctAnswerSAns);
-                    }
-                    default -> {
-                    }
-                }
+                QuestionFactory questionFactory = questionAbstractFactory.createQuestionFactory(questionType);
+                question = questionFactory.createQuestion(questionID, questionText, correctAnswer);
             }
         } catch (final SQLException e) {
             e.printStackTrace();
