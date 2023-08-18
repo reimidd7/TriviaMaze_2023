@@ -1,46 +1,54 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * JUnit Test for the Maze class.
+ *
+ * @author Danie Oum
+ * @version Summer 2023
+ */
 class MazeTest {
-    private Maze maze;
+
+    /**
+     * Maze object for testing.
+     */
+    private Maze myMaze;
 
     @BeforeEach
     void setUp() {
-        maze = new Maze(5, 5);
+        myMaze = new Maze(5, 5);
     }
 
     @Test
     public void testCorrectNumberOfRoomsAndDoors() {
-        int expectedRooms = 5 * 5;
+        final int expectedRooms = 5 * 5;
 
-        assertEquals(expectedRooms, maze.getRows() * maze.getCols());
+        assertEquals(expectedRooms, myMaze.getRows() * myMaze.getCols());
     }
 
     @Test
     void testTotalDoorsCount() {
-        int expectedTotalDoors = 40;
+        final int expectedTotalDoors = 40;
 
-        assertEquals(expectedTotalDoors, maze.createAllDoors().size());
+        assertEquals(expectedTotalDoors, myMaze.createAllDoors().size());
     }
 
     @Test
     void getRows() {
-        assertEquals(5, maze.getRows());
+        assertEquals(5, myMaze.getRows());
     }
 
     @Test
     void getCols() {
-        assertEquals(5, maze.getCols());
+        assertEquals(5, myMaze.getCols());
     }
 
     @Test
     void getDoors() {
-        assertEquals(40, maze.createAllDoors().size());
+        assertEquals(40, myMaze.createAllDoors().size());
     }
 }

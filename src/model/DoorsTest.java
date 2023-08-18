@@ -1,62 +1,76 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * JUnit Tests for the Doors class.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
+ */
 public class DoorsTest {
 
-    private Doors lockedDoor;
+    /**
+     * Door for testing.
+     */
+    private Doors myLockedDoor;
 
     @BeforeEach
     public void setUp() {
-        lockedDoor = new Doors(1);
+        myLockedDoor = new Doors(1);
     }
 
     @Test
     public void testInitialDoorStatusIsLocked() {
-        lockedDoor.setLocked(false);
-        assertFalse(lockedDoor.getDoorStatus());
+        myLockedDoor.setLocked(false);
+        assertFalse(myLockedDoor.getDoorStatus());
     }
 
     @Test
     public void testSetQuestionTypeAndGetCurrentQuestion() {
         for (int i = 0; i < 5; i++) {
-            lockedDoor.setQuestionType();
-            Question question = lockedDoor.getCurrQuestion();
+            myLockedDoor.setQuestionType();
+            final Question question = myLockedDoor.getCurrQuestion();
             assertNotNull(question);
             assertNotNull(question.getQuestion());
             assertNotNull(question.getCorrectAnswer());
-            assertTrue(lockedDoor.getDoorStatus());
+            assertTrue(myLockedDoor.getDoorStatus());
         }
     }
 
     @Test
     public void testSetQuestionTypeMultipleTimes() {
-        lockedDoor.setQuestionType();
-        Question firstQuestion = lockedDoor.getCurrQuestion();
+        myLockedDoor.setQuestionType();
+        final Question firstQuestion = myLockedDoor.getCurrQuestion();
         assertNotNull(firstQuestion);
-        lockedDoor.setQuestionType();
-        Question secondQuestion = lockedDoor.getCurrQuestion();
+        myLockedDoor.setQuestionType();
+        final Question secondQuestion = myLockedDoor.getCurrQuestion();
         assertNotNull(secondQuestion);
         assertNotEquals(firstQuestion, secondQuestion);
     }
 
     @Test
     public void testGetDoorId() {
-        assertEquals(1, lockedDoor.getDoorId());
+        assertEquals(1, myLockedDoor.getDoorId());
     }
 
     @Test
     public void testSetQuestionTypeWithDifferentDoorNumbers() {
-        Doors door1 = new Doors(1);
+        final Doors door1 = new Doors(1);
         door1.setQuestionType();
-        Question question1 = door1.getCurrQuestion();
+        final Question question1 = door1.getCurrQuestion();
         assertNotNull(question1);
 
-        Doors door2 = new Doors(2);
+        final Doors door2 = new Doors(2);
         door2.setQuestionType();
-        Question question2 = door2.getCurrQuestion();
+        final Question question2 = door2.getCurrQuestion();
         assertNotNull(question2);
 
         assertNotEquals(question1, question2);
@@ -64,6 +78,6 @@ public class DoorsTest {
 
     @Test
     public void testGetCurrentQuestionInitially() {
-        assertNotNull(lockedDoor.getCurrQuestion());
+        assertNotNull(myLockedDoor.getCurrQuestion());
     }
 }

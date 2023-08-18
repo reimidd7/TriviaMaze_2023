@@ -13,7 +13,7 @@ public class SAnsQuestion extends Question implements Serializable {
     /**
      * Correct answer string.
      */
-    private String myCorrectAnswer;
+    private final String myCorrectAnswer;
 
     /**
      * Constructor to create short answer question.
@@ -38,12 +38,4 @@ public class SAnsQuestion extends Question implements Serializable {
         return myCorrectAnswer;
     }
 
-//    /**
-//     * set the correct answer for the short answer question.
-//     *
-//     * @param theCorrectAnswer the correct answer for the current question.
-//     */
-//    public void setCorrectAnswer(final String theCorrectAnswer) {
-//        this.myCorrectAnswer = theCorrectAnswer;
-//    }
 }

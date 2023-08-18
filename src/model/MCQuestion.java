@@ -10,6 +10,7 @@ import java.io.Serializable;
  * @version Summer 2023
  */
 public class MCQuestion extends Question implements Serializable {
+
     /**
      * Correct answer string.
      */
@@ -38,12 +39,4 @@ public class MCQuestion extends Question implements Serializable {
         return myCorrectAnswer;
     }
 
-//    /**
-//     * set the correct answer for the multiple choice question.
-//     *
-//     * @param theCorrectAnswer
-//     */
-//    public void setCorrectAnswer(final String theCorrectAnswer) {
-//        this.myCorrectAnswer = theCorrectAnswer;
-//    }
 }

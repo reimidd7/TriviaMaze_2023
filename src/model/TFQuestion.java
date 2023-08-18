@@ -10,10 +10,11 @@ import java.io.Serializable;
  * @version Summer 2023
  */
 public class TFQuestion extends Question implements Serializable {
+
     /**
      * Correct answer string.
      */
-    private String myCorrectAnswer;
+    private final String myCorrectAnswer;
 
     /**
      * Constructor to create True/False question.
@@ -38,12 +39,4 @@ public class TFQuestion extends Question implements Serializable {
         return myCorrectAnswer;
     }
 
-//    /**
-//     * set the correct answer for the TF question.
-//     *
-//     * @param theCorrectAnswer
-//     */
-//    public void setCorrectAnswer(final String theCorrectAnswer) {
-//        this.myCorrectAnswer = theCorrectAnswer;
-//    }
 }

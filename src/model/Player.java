@@ -4,13 +4,18 @@ import java.awt.Point;
 import java.io.Serializable;
 
 /**
- * Initilizes the Player object. Represents the user.
+ * Initializes the Player object. Represents the user.
  *
  * @author Reilly Middelbrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
 public class Player implements Serializable {
-    private int wrongAnswers;
+
+    /**
+     * The amount of wrong answers the user has made.
+     */
+    private int myWrongAnswers;
+
     /**
      * Point of player's location in the Maze.
      */
@@ -38,15 +43,12 @@ public class Player implements Serializable {
         myPlayerDir = theDirection;
     }
     public void incrementWrongAnswers() {
-        this.wrongAnswers++;
+        this.myWrongAnswers++;
     }
 
     public int getWrongAnswers() {
-        return this.wrongAnswers;
+        return this.myWrongAnswers;
     }
 
-    public void resetWrongAnswers() {
-        this.wrongAnswers = 0;
-    }
 }
 

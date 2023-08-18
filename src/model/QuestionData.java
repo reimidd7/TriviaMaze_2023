@@ -15,22 +15,28 @@ import java.sql.SQLException;
  * @version Summer 2023
  */
 public class QuestionData implements Serializable {
-    private final QuestionAbstractFactory questionAbstractFactory;
+
     /**
      * URL to the database file.
      */
     private static final String DB_URL = "jdbc:sqlite:questions.db";
+
+    /**
+     * Holds the Question Factory.
+     */
+    private final QuestionFactory myQuestionAbstractFactory;
+
     /**
      * Database connection used to interact with the question database.
      */
-    private transient final Connection myDBConnection;
+    private final transient Connection myDBConnection;
 
     /**
      * contractor to establishes a database connection.
      */
     public QuestionData() {
         this.myDBConnection = connect();
-        this.questionAbstractFactory = new QuestionFactoryProducer();
+        this.myQuestionAbstractFactory = new QuestionFactoryProducer();
     }
 
 
@@ -50,8 +56,10 @@ public class QuestionData implements Serializable {
                 final String questionType = rs.getString("QuestionType");
                 final String correctAnswer = getCorrectAnswerForQuestion(questionID);
 
-                QuestionFactory questionFactory = questionAbstractFactory.createQuestionFactory(questionType);
-                question = questionFactory.createQuestion(questionID, questionText, correctAnswer);
+                final AbstractQuestionFactory questionFactory =
+                        myQuestionAbstractFactory.createQuestionFactory(questionType);
+                question = questionFactory.createQuestion(questionID,
+                        questionText, correctAnswer);
             }
         } catch (final SQLException e) {
             e.printStackTrace();

@@ -207,18 +207,14 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 final Direction d = myMaze.getPlayer().getPlayerDir();
                 if (d.equals(Direction.SOUTH)) {
                     myMaze.down();
-
                 } else if (d.equals(Direction.NORTH)) {
                     myMaze.up();
-
                 } else if (d.equals(Direction.EAST)) {
                     myMaze.right();
-
                 } else if (d.equals(Direction.WEST)) {
                     myMaze.left();
 
                 }
-
                 removeAll();
                 correctDisplay();
                 repaint();

@@ -2,6 +2,12 @@ package controller;
 
 import java.beans.PropertyChangeListener;
 
+/**
+ * Contains the property change enabled property names and methods.
+ *
+ * @author Reilly Middlebrooks
+ * @version Summer 2023
+ */
 public interface PropertyChangeEnabledTriviaMazeControls extends TriviaMazeControls {
     /**
      * A property name for the location.

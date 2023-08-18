@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @version Summer 2023
  */
 public abstract class Question implements Serializable {
+
     /**
      * Question string.
      */
@@ -46,7 +47,9 @@ public abstract class Question implements Serializable {
     /**
      * Setter to set the question.
      */
-    public void setQuestion(String question) { this.myQuestion = question; }
+    public void setQuestion(final String theQuestion) {
+        this.myQuestion = theQuestion;
+    }
 
     /**
      * Getter to get the question type.
@@ -54,13 +57,6 @@ public abstract class Question implements Serializable {
     public String getQuestionTypeType() {
         return myQuestionType;
     }
-
-//    /**
-//     * Getter to get the questionID.
-//     */
-//    public int getQuestionID() {
-//        return myQuestionID;
-//    }
 
     /**
      * Abstract method to be implemented by subclass to get correct answer.

@@ -3,9 +3,7 @@ package model;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 
 /**
  * Class to organize the rooms and doors and create the maze functional.
@@ -14,10 +12,12 @@ import java.util.List;
  * @version Summer 2023
  */
 public class Maze implements Serializable {
+
     /**
      * The total amount of doors needed for our 5x5 maze.
      */
     private static final int AMT_OF_DOORS = 40;
+
     /**
      * Tha amount of rows that contain doors.
      * 4 so there is no doors on the outside of the maze.
@@ -71,38 +71,6 @@ public class Maze implements Serializable {
         final int col = thePlayerLoc.y;
         if (row >= 0 && row < myRows && col >= 0 && col < myCols) {
             return myRooms[row][col];
-        }
-        return null;
-    }
-
-    /**
-     * This method is the getter for the entrance of the maze.
-     *
-     * @return Returns the room of the entrance
-     */
-    public Point getEntrance() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isEntrance()) {
-                    return new Point(row, column);
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * This method is the getter for the exit of the maze.
-     *
-     * @return Returns a room
-     */
-    public Point getExit() {
-        for (int row = 0; row < myRows; row++) {
-            for (int column = 0; column < myCols; column++) {
-                if (myRooms[row][column].isExit()) {
-                    return new Point(row, column);
-                }
-            }
         }
         return null;
     }

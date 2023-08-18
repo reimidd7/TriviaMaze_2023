@@ -2,6 +2,12 @@ package controller;
 
 import model.Question;
 
+/**
+ * Interface to store the controls needed for the Trivia Game.
+ *
+ * @author Reilly Middlebrooks
+ * @version Summer 2023
+ */
 public interface TriviaMazeControls {
 
     /**

@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serial;
 import java.io.Serializable;
-
 import model.Direction;
 import model.Doors;
 import model.Maze;
@@ -21,7 +20,8 @@ import model.Room;
  * @author Reilly Middlebrooks, Kevin Than, Danie Oum
  * @version Summer 2023
  */
-public final class TriviaMaze extends Maze implements PropertyChangeEnabledTriviaMazeControls, Serializable {
+public final class TriviaMaze extends Maze
+        implements PropertyChangeEnabledTriviaMazeControls, Serializable {
     @Serial
     private static final long serialVersionUID = 123456789L;
 
@@ -66,7 +66,6 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
         myPcs = new PropertyChangeSupport(this);
     }
 
-    // Control Methods -------------
     @Override
     public void newGame() {
         createMaze();
@@ -201,9 +200,8 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
 
     public Doors getCurrentDoor() {
         final Room room = getRoom(myPlayer.getPlayerLoc());
-        final Doors door = room.getDoorByDirection(myPlayer.getPlayerDir());
 
-        return door;
+        return room.getDoorByDirection(myPlayer.getPlayerDir());
     }
 
     // Makes the property change call easier to read.
@@ -245,10 +243,14 @@ public final class TriviaMaze extends Maze implements PropertyChangeEnabledTrivi
     }
 
 
-    public void copyStateFrom(TriviaMaze loadedMaze) {
-        //this.myRooms = loadedMaze.myRooms;
-        this.myPlayer = loadedMaze.myPlayer;
-        this.myQues = loadedMaze.myQues;
+    /**
+     * Copies the state from the saved game to the in motion game.
+     * @param theLoadedMaze the saved game.
+     */
+    public void copyStateFrom(final TriviaMaze theLoadedMaze) {
+        //this.myRooms = theLoadedMaze.myRooms;
+        this.myPlayer = theLoadedMaze.myPlayer;
+        this.myQues = theLoadedMaze.myQues;
 
     }
 

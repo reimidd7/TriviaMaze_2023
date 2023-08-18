@@ -2,15 +2,21 @@ package model;
 
 import java.io.Serializable;
 
-public class QuestionFactoryProducer implements QuestionAbstractFactory, Serializable {
-    public QuestionFactory createQuestionFactory(String type) {
-        if (type == null) {
+/**
+ * Calls upon the Question Factory class to create the proper Questions.
+ *
+ * @author Kevin Than
+ * @version Summer 2023
+ */
+public class QuestionFactoryProducer implements QuestionFactory, Serializable {
+    public AbstractQuestionFactory createQuestionFactory(final String theType) {
+        if (theType == null) {
             return null;
-        } else if ("MC".equals(type)) {
+        } else if ("MC".equals(theType)) {
             return new MCQuestionFactory();
-        } else if ("SAns".equals(type)) {
+        } else if ("SAns".equals(theType)) {
             return new SAnsQuestionFactory();
-        } else if ("TF".equals(type)) {
+        } else if ("TF".equals(theType)) {
             return new TFQuestionFactory();
         }
         return null;
