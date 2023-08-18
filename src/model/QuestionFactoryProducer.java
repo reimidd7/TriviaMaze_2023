@@ -1,6 +1,9 @@
 package model;
 
-public class QuestionFactoryProducer implements QuestionAbstractFactory {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class QuestionFactoryProducer implements QuestionAbstractFactory, Serializable {
     public QuestionFactory createQuestionFactory(String type) {
         if (type == null) {
             return null;

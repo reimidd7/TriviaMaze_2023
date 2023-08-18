@@ -318,9 +318,10 @@ public class QuestionDisplayPanel extends JPanel implements PropertyChangeListen
                 removeAll();
                 incorrectDisplay();
                 myPlayer.incrementWrongAnswers();
+                checkForGameOver();
                 repaint();
                 revalidate();
-                checkForGameOver();
+
             }
             requestFocusInWindow();
         });
