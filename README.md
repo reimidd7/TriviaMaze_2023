@@ -1,4 +1,4 @@
-# Team13_TriviaMaze_TCSS360
+# Team13_TriviaMaze_2023
 ## Purpose:
 * building a project from scratch
 * coordinating code with team members
