@@ -8,6 +8,7 @@ Trivia Maze is a group project that focuses on building a maze game with trivia 
 - Kevin Than
 
 ## Game Description
+![Overview of UI](https://github.com/reimidd7/TriviaMaze_2023/assets/125395887/812e3242-0491-44fc-a5ce-86287ba6c241)
 
 In Trivia Maze, the user navigates through a maze composed of rooms from the entrance to the exit. Each room has one or more doors, and to pass through a door, the user must correctly answer a trivia question. The questions can be multiple choice, true/false, or short answer (one or two words/numbers) and are stored in a SQLite database.
 
